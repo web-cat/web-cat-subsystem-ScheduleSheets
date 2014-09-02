@@ -1,0 +1,108 @@
+<wo:org.webcat.core.WCPageWithNavigation title="$title">
+
+<wo:if condition="~offering.order == 0">
+
+<wo:org.webcat.core.WCPageModule
+  title="Your Initial Time Estimates and Deadlines">
+
+<table><thead><tr>
+  <th>Component / Feature</th>
+  <th>Activity</th>
+  <th>Estimated Time Needed to Finish</th>
+  <th>Personal Deadline</th>
+</tr></thead><tbody>
+
+<wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
+  <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
+    <wo:TableRow index="$rowIndex">
+      <wo:not condition="$aIndex">
+        <wo:WOGenericContainer elementName="td" rowspan="$componentFeature.entries.count">
+          <wo:str value="$componentFeature.name"/>
+        </wo:WOGenericContainer>
+      </wo:not>
+      <td><wo:str value="$entry.activityName"/></td>
+      <td class="c"><wo:str numberformat="0"
+        value="$entry.estimatedRemaining"/> hours</td>
+      <td><wo:str value="$entry.newDeadline" dateformat="$user.dateFormat"/></td>
+    </wo:TableRow>
+  </wo:loop>
+</wo:loop>
+
+</tbody></table>
+</wo:org.webcat.core.WCPageModule>
+
+</wo:if><wo:else><wo:if condition="~offering.order == offering.assignment.numberOfSheets - 1">
+
+<wo:org.webcat.core.WCPageModule title="Time You Reported">
+
+<table><thead><tr>
+  <th>Component / Feature</th>
+  <th>Activity</th>
+  <th>Time Spent Since Last Schedule</th>
+  <th>Component / Feature Now Finished?</th>
+</tr></thead><tbody>
+
+<wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
+  <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
+    <wo:TableRow index="$rowIndex">
+      <wo:not condition="$aIndex">
+        <wo:WOGenericContainer elementName="td" rowspan="$componentFeature.entries.count">
+          <wo:str value="$componentFeature.name"/>
+        </wo:WOGenericContainer>
+      </wo:not>
+      <td><wo:str value="$entry.activityName"/></td>
+      <td class="c"><wo:str numberformat="0"
+        value="$entry.timeInvested"/> hours</td>
+      <td><wo:checkbox checked="$entry.isComplete" disabled="~true"/></td>
+    </wo:TableRow>
+  </wo:loop>
+</wo:loop>
+
+</tbody></table>
+</wo:org.webcat.core.WCPageModule>
+
+</wo:if><wo:else>
+
+<wo:org.webcat.core.WCPageModule title="Time Spent with New Estimates">
+
+<table><thead><tr>
+  <th>Component / Feature</th>
+  <th>Activity</th>
+  <th>Previously Estimated Total Time</th>
+  <th>Previous Personal Deadline</th>
+  <th>Time Invested Since Last Schedule</th>
+  <th>Estimated Time Needed to Finish</th>
+  <th>Revised Personal Deadline</th>
+</tr></thead><tbody>
+
+<wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
+  <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
+    <wo:TableRow index="$rowIndex">
+      <wo:not condition="$aIndex">
+        <wo:WOGenericContainer elementName="td" rowspan="$componentFeature.entries.count">
+          <wo:str value="$componentFeature.name"/>
+        </wo:WOGenericContainer>
+      </wo:not>
+      <td><wo:str value="$entry.activityName"/></td>
+      <td><wo:str value="$entry.previousEstimatedTotal"/> hours</td>
+      <td><wo:str value="$entry.previousDeadline" dateformat="$user.dateFormat"/></td>
+      <td><wo:str value="$entry.timeInvested"/> hours</td>
+      <wo:if condition="$entry.isComplete">
+        <td colspan="2">-- completed --</td>
+      </wo:if><wo:else>
+        <td class="c"><wo:str numberformat="0"
+          value="$entry.estimatedRemaining"/> hours</td>
+        <td><wo:str value="$entry.newDeadline" dateformat="$user.dateFormat"/></td>
+      </wo:else>
+    </wo:TableRow>
+  </wo:loop>
+</wo:loop>
+
+</tbody></table>
+
+</wo:org.webcat.core.WCPageModule>
+
+</wo:else>
+</wo:else>
+
+</wo:org.webcat.core.WCPageWithNavigation>

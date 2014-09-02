@@ -1,0 +1,25 @@
+# ===================================================================
+# ScheduleSheets subsystem characteristics
+# ===================================================================
+subsystem.ScheduleSheets = org.webcat.schedulesheets.ScheduleSheets
+
+ScheduleSheets.version.major = 0
+ScheduleSheets.version.minor = 0
+ScheduleSheets.version.revision = 1
+ScheduleSheets.requires = Core, EOJDBCPrototypes, DBUpdateEngine, Grader
+
+ScheduleSheets.copyright =\
+    (c) 2014 Virginia Tech Department of Computer Science
+ScheduleSheets.provider = Virginia Tech Computer Science
+ScheduleSheets.provider.url = http\://web-cat.org/updates
+ScheduleSheets.info.url =\
+    http\://web-cat.org/WCWiki/ScheduleSheetsSubsystem
+ScheduleSheets.history.url =\
+    http\://web-cat.org/WCWiki/ScheduleSheetsSubsystem/ChangeHistory
+ScheduleSheets.license = GNU Affero General Public License v.3
+ScheduleSheets.license.url = http\://www.gnu.org/licenses/agpl.html
+
+ScheduleSheets.description =\
+    This subsystem supports scheduling assignments, where students are \
+    required to estimate out and schedule their time on an associated \
+    programming assignment.

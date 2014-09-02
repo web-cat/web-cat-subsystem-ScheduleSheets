@@ -1,0 +1,9 @@
+NameInfo: PopUpInfo {
+    title   = "Name";
+    message = "Use a short 1-3 word schedule name.  The name cannot be blank.";
+}
+
+NumberOfSheetsInfo: PopUpInfo {
+    title   = "NumberOfSheets";
+    message = "How many schedules should students complete for this assignment?";
+}

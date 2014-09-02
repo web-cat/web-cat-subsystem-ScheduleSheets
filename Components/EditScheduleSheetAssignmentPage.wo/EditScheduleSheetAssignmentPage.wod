@@ -1,0 +1,180 @@
+DueDate: WCDateTimePicker {
+     value      = dueDate;
+     dateformat = user.dateFormat;
+     timeformat = user.timeFormat;
+     timeZone   = timeZone;
+}
+
+EarlyBonusMaxPts: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.earlyBonusMaxPtsRaw;
+    style     = "text-align:right";
+}
+
+EarlyBonusUnitPts: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.earlyBonusUnitPtsRaw;
+    style     = "text-align:right";
+}
+
+EarlyBonusUnitTime: WOTextField {
+    numberformat = "0";
+    size         = 3;
+    value        = earlyBonusUnitTime;
+    style        = "text-align:right";
+}
+
+ExcessSubmissionsMaxPts: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.excessSubmissionsMaxPtsRaw;
+    style     = "text-align:right";
+}
+
+ExcessSubmissionsThreshold: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.excessSubmissionsThresholdRaw;
+    style     = "text-align:right";
+}
+
+ExcessSubmissionsUnitPts: WOTextField {
+    numberformat = "0";
+    size         = 3;
+    value        = assignment.submissionProfile.excessSubmissionsUnitPtsRaw;
+    style        = "text-align:right";
+}
+
+ExcessSubmissionsUnitSize: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.excessSubmissionsUnitSizeRaw;
+    style     = "text-align:right";
+}
+
+LatePenaltyMaxPts: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.latePenaltyMaxPtsRaw;
+    style     = "text-align:right";
+}
+
+LatePenaltyUnitPts: WOTextField {
+    formatter = doubleFormatter;
+    size      = 3;
+    value     = assignment.submissionProfile.latePenaltyUnitPtsRaw;
+    style     = "text-align:right";
+}
+
+LatePenaltyUnitTime: WOTextField {
+    numberformat = "0";
+    size         = 3;
+    value        = latePenaltyUnitTime;
+    style        = "text-align:right";
+}
+
+LockDueDates: WCImageButton {
+    filename  = "icons/lock-unlock.png";
+    framework = "Core";
+    action    = lockDueDates;
+    remote    = true;
+    title     = "Force all due dates to be the same";
+    alt       = "Force all due dates to be the same";
+}
+
+MaxSubmissions: WOTextField {
+    numberformat = "0";
+    size         = 7;
+    name         = "maxSubmissions";
+    value        = assignment.submissionProfile.maxSubmissionsRaw;
+    style        = "text-align:right";
+}
+
+NameInfo: org.webcat.core.PopUpInfo {
+    title   = "Name";
+    message = "Use a short 1-3 word schedule name.  The name cannot be blank.";
+}
+
+PopUpButton1: WOPopUpButton {
+    list = assignment.submissionProfile.timeUnits;
+    selection = availableTimeDeltaUnit;
+    displayString = unit.name;
+    item = unit;
+}
+
+PopUpButton2: WOPopUpButton {
+    list = assignment.submissionProfile.timeUnits;
+    selection = deadTimeDeltaUnit;
+    displayString = unit.name;
+    item = unit;
+}
+
+PopUpButton3: WOPopUpButton {
+    list = assignment.submissionProfile.timeUnits;
+    selection = earlyUnitTimeUnit;
+    displayString = unit.name;
+    item = unit;
+}
+
+PopUpButton4: WOPopUpButton {
+    list = assignment.submissionProfile.timeUnits;
+    selection = lateUnitTimeUnit;
+    displayString = unit.name;
+    item = unit;
+}
+
+StartAccepting: WOTextField {
+    numberformat = "0";
+    size         = 7;
+    name         = "startAccepting";
+    value        = availableTimeDelta;
+    style        = "text-align:right";
+}
+
+StopAccepting: WOTextField {
+    numberformat = "0";
+    size         = 7;
+    name         ="stopAccepting";
+    value        = deadTimeDelta;
+    style        = "text-align:right";
+}
+
+TaPoints: WOTextField {
+    formatter    = doubleFormatter;
+    size         = 7;
+    value        = assignment.submissionProfile.taPointsRaw;
+    name         = "taPoints";
+    onFocus      = "startCalc();";
+    onBlur       = "stopCalc();";
+    style        = "text-align:right";
+}
+
+ToolPoints: WOTextField {
+    formatter    = doubleFormatter;
+    size         = 7;
+    value        = assignment.submissionProfile.toolPointsRaw;
+    name         = "toolPoints";
+    onFocus      = "startCalc();";
+    onBlur       = "stopCalc();";
+    style        = "text-align:right";
+}
+
+TotalPoints: WOTextField {
+    formatter    = doubleFormatter;
+    size         = 7;
+    value        = assignment.submissionProfile.availablePointsRaw;
+    disabled     = true;
+    style        = "color:black;text-align:right";
+    name         = "total";
+}
+
+UnlockDueDates: WCImageButton {
+    filename  = "icons/lock.png";
+    framework = "Core";
+    action    = unlockDueDates;
+    remote    = true;
+    title     = "Allow offerings to have different due dates";
+    alt       = "Allow offerings to have different due dates";
+}

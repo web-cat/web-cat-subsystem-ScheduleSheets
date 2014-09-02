@@ -1,0 +1,51 @@
+{
+    attributes = (
+        {name = id; prototypeName = id; },
+        {columnName = name; name = name; prototypeName = tinyText; },
+        {columnName = sheetId; name = sheetId; prototypeName = foreignId; },
+        {
+            columnName = Corder;
+            name = order;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        }
+    );
+    attributesUsedForLocking = (
+    	name,
+    	order,
+    	sheetId
+    );
+    className = "org.webcat.schedulesheets.ComponentFeature";
+    classProperties = (
+        entries,
+    	name,
+    	order,
+    	sheet
+    );
+    externalName = ComponentFeature;
+    fetchSpecificationDictionary = {};
+    name = ComponentFeature;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = ScheduleSheet;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = sheetId; });
+            name = sheet;
+        },
+        {
+            destination = SheetEntry;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = componentFeatureId; sourceAttribute = id; });
+            name = entries;
+        }
+    );
+}

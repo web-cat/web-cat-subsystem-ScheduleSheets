@@ -1,0 +1,4 @@
+Page: PageWithCourseNavigation {
+    title = "Submit a Schedule Sheet";
+    allowsAllOfferingsForCourse = false;
+}

@@ -1,0 +1,61 @@
+<wo name="Page">
+
+<wo:not condition="$assignments.displayedObjects.count">
+<wo:org.webcat.core.WCPageModule title="No Schedule Sheet Assignments for Selected Course">
+<p>No schedule sheet assignments are available for
+  <wo:str value="$course.compactName"/>.</p>
+<p>Use the dropdown list(s) above to select the course offering
+with which your schedule sheet is associated.</p>
+</wo:org.webcat.core.WCPageModule>
+</wo:not>
+<wo:else>
+<wo:org.webcat.core.WCPageModule title="Select the Schedule to Enter">
+
+<p>Schedule sheets for
+  <span class="hl"><wo:str value="$course.compactName"/></span>.
+</p>
+
+<wo:loop list="$assignments.displayedObjects" item="$assignment">
+<h3><wo:str value="$assignment.name"/></h3>
+<table><thead>
+  <th>Sheet #</th>
+  <th>Opens at</th>
+  <th>Due</th>
+  <th>Action</th>
+</thead><tbody>
+  <wo:loop list="$sheets.displayedObjects" item="$sheet" index="$index">
+    <wo:org.webcat.core.TableRow index="$index">
+      <td><wo:str value="~1 + sheet.order"/>
+        <wo:str value="$sheet.courseOffering"/>
+      </td>
+      <td><wo:str value="$sheet.availableFrom" formatter="$session.timeFormatter"/></td>
+      <td><wo:str value="$sheet.dueDate" formatter="$session.timeFormatter"/></td>
+      <td><wo:if condition="~sheet.order == 0">
+          <wo:if condition="~sheet.mostRecentSubFor(user)">
+          <wo:link action="$view">view results</wo:link>
+            <wo:if condition="~sheet.userCanSubmit(user)">
+              |  <wo:link action="$submit">re-submit</wo:link>
+            </wo:if>
+          </wo:if><wo:else>
+            <wo:if condition="~sheet.userCanSubmit(user)">
+            <wo:link action="$submit">submit</wo:link>
+            </wo:if><wo:else>
+              <wo:if condition="~sheet.availableFrom.after(now)">
+              not yet open
+              </wo:if><wo:else>
+              closed
+              </wo:else>
+            </wo:else>
+          </wo:else>
+          </wo:if>
+      </td>
+    </wo:WCTableRow>
+  </wo:loop>
+</tbody>
+</table>
+</wo:loop>
+
+</wo:org.webcat.core.WCPageModule>
+</wo:else>
+
+</wo>

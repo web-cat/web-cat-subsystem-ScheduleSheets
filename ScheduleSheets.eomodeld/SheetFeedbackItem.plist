@@ -1,0 +1,53 @@
+{
+    attributes = (
+        {
+            allowsNull = N;
+            columnName = category;
+            name = category;
+            prototypeName = tinyInteger;
+        },
+        {allowsNull = N; columnName = code; name = code; prototypeName = integer; },
+        {
+            allowsNull = N;
+            columnName = sheetEntryId;
+            name = sheetEntryId;
+            prototypeName = foreignId;
+        },
+        {
+            columnName = isTransient;
+            allowsNull = N;
+            name = isTransient;
+            prototypeName = boolean;
+            userInfo = {isScalar = true; scalarDefault = false; type = boolean; };
+        },
+        {allowsNull = N; name = id; prototypeName = id; },
+        {columnName = message; name = message; prototypeName = mediumText; }
+    );
+    attributesUsedForLocking = (
+        category,
+        code,
+        sheetEntryId,
+        messag
+    );
+    className = "org.webcat.schedulesheets.SheetFeedbackItem";
+    classProperties = (
+        category,
+        code,
+        sheetEntry,
+        isTransient,
+        message
+    );
+    externalName = SheetFeedbackItem;
+    fetchSpecificationDictionary = {};
+    name = SheetFeedbackItem;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = SheetEntry;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = sheetEntryId; });
+            name = sheetEntry;
+        }
+    );
+}

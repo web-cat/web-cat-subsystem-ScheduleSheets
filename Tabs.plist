@@ -1,0 +1,60 @@
+{
+  staff = {
+    children = {
+      Assignments = {
+        children = {
+          "Sched Sheet Props" = {
+            accessLevel = 50;
+            priority = 120;
+            pageName = org.webcat.schedulesheets.EditScheduleSheetAssignmentPage;
+            id = ScheduleSheetProperties;
+          };
+          "New Sched Sheet" = {
+            accessLevel = 50;
+            priority = 130;
+            children = {
+                "Create a Schedule Assignment" = {
+                    pageName = org.webcat.schedulesheets.NewScheduleSheetAssignmentPage;
+                    accessLevel = 50;
+                    priority = 1;
+                };
+                "Edit Schedule Sheet Properties" = {
+                    accessLevel = 50;
+                    priority = 2;
+                    config = { jumpTo = ScheduleSheetProperties; };
+                };
+            };
+          };
+        };
+      };
+    };
+  };
+  student = {
+    children = {
+      Submit = {
+        priority = 200;
+        children = {
+          "Schedule Sheet" = {
+            priority   = 1;
+            wantsStart = YES;
+            children = {
+              "Select Your Schedule" = {
+                pageName = org.webcat.schedulesheets.PickSchedulePage;
+                priority = 3;
+                id     = PickSchedule;
+              };
+              "Enter Your Data" = {
+                pageName = org.webcat.schedulesheets.ScheduleEntryPage;
+                priority = 4;
+              };
+              "View Your Results" = {
+                config = { jumpTo = MostRecentSchedule; };
+                priority = 5;
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+}

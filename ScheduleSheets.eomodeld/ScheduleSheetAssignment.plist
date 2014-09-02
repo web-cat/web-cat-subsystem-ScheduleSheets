@@ -1,0 +1,85 @@
+{
+    attributes = (
+        {columnName = assignmentId; name = assignmentId; prototypeName = foreignId; },
+        {columnName = authorId; name = authorId; prototypeName = foreignId; },
+        {name = id; prototypeName = id; },
+        {columnName = name; name = name; prototypeName = tinyText; },
+        {
+            columnName = numberOfSheets;
+            name = numberOfSheets;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {
+            columnName = shortDescription;
+            name = shortDescription;
+            prototypeName = tinyText;
+        },
+        {
+            columnName = submissionProfileId;
+            name = submissionProfileId;
+            prototypeName = foreignId;
+        },
+        {columnName = url; name = url; prototypeName = tinyText; }
+    );
+    attributesUsedForLocking = (
+        assignmentId,
+        authorId,
+        name,
+        numberOfSheets,
+        shortDescription,
+        submissionProfileId,
+        url
+   	);
+    className = "org.webcat.schedulesheets.ScheduleSheetAssignment";
+    classProperties = (
+        assignment,
+        author,
+        name,
+        numberOfSheets,
+        offerings,
+        shortDescription,
+        submissionProfile,
+        url
+    );
+    externalName = ScheduleSheetAssignment;
+    fetchSpecificationDictionary = {};
+    name = ScheduleSheetAssignment;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = User;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = authorId; });
+            name = author;
+        },
+        {
+            destination = Assignment;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = assignmentId; });
+            name = assignment;
+        },
+        {
+            destination = ScheduleSheetAssignmentOffering;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = assignmentId; sourceAttribute = id; });
+            name = offerings;
+        },
+        {
+            destination = SubmissionProfile;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = submissionProfileId; });
+            name = submissionProfile;
+        }
+    );
+}

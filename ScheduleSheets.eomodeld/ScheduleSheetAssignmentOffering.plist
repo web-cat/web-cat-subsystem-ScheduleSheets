@@ -1,0 +1,76 @@
+{
+    attributes = (
+        {columnName = assignmentId; name = assignmentId; prototypeName = foreignId; },
+        {columnName = closedOnDate; name = closedOnDate; prototypeName = dateTime; },
+        {
+            columnName = courseOfferingId;
+            name = courseOfferingId;
+            prototypeName = foreignId;
+        },
+        {columnName = dueDate; name = dueDate; prototypeName = dateTime; },
+        {name = id; prototypeName = id; },
+        {
+            columnName = Corder;
+            name = order;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {
+            columnName = publish;
+            allowsNull = N;
+            name = publish;
+            prototypeName = boolean;
+            userInfo = {isScalar = true; scalarDefault = false; type = boolean; };
+        }
+    );
+    attributesUsedForLocking = (
+        assignmentId,
+        courseOfferingId,
+        order,
+        publish
+    );
+    className = "org.webcat.schedulesheets.ScheduleSheetAssignmentOffering";
+    classProperties = (
+        assignment,
+        closedOnDate,
+        courseOffering,
+        dueDate,
+        order,
+        publish,
+        submissions
+    );
+    externalName = ScheduleSheetAssignmentOffering;
+    fetchSpecificationDictionary = {};
+    name = ScheduleSheetAssignmentOffering;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = ScheduleSheetAssignment;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = assignmentId; });
+            name = assignment;
+        },
+        {
+            destination = CourseOffering;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = courseOfferingId; });
+            name = courseOffering;
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = ScheduleSheetSubmission;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = assignmentOfferingId; sourceAttribute = id; });
+            name = submissions;
+        }
+    );
+}

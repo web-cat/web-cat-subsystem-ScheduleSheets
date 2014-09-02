@@ -1,0 +1,38 @@
+<wo:org.webcat.grader.PageWithAssignmentNavigation
+  title="New Schedule Sheet Assignment">
+
+<wo:org.webcat.core.WCPageModule title="Create a New Schedule Sheet Assignment">
+<p>Create one assignment, which corresponds to a series of one or more
+schedule sheet entry deadlines for scheduling a single project:</p>
+<wo:WOForm multipleSubmit="true" enctype="multipart/form-data" action="$next">
+<table class="layout"><tbody>
+<wo:if condition="$assignment">
+<tr><td></td><td>
+      <wo:checkbox checked="$bindToAssignment" id="bindToAssignment"/>
+      <label for="bindToAssignment">Bind schedule sheet(s) to
+      assignment:
+      <span class="hl"><wo:str value="$prefs.assignment.name"/></span>
+      </label>
+      <webobject name="NameInfo"/>
+      </td></tr>
+</wo:if>
+<tr><td class="R"><label for="name">Name:</label></td>
+    <td><wo:textfield value="$aName" size="40" id="name"/>
+      <webobject name="NameInfo"/></td></tr>
+<tr><td class="R"><label for="numberOfSheets">Number of Schedules:</label></td>
+    <td><wo:WCTextBox value="$numberOfSheets" numberformat="0" size="5" id="numberOfSheets"/>
+      <webobject name="NumberOfSheetsInfo"/></td></tr>
+<wo:not condition="$coreSelections.course"><wo:if condition="$hasMultipleSections">
+<tr><td></td>
+    <td><wo:checkbox checked="$forAllSections"/> Create for all sections
+    of <wo:str value="$coreSelections.courseOffering.course.deptNumber"/>
+    in
+    <wo:str value="$coreSelections.courseOffering.semester"/>
+    </td></tr>
+</wo:if></wo:not>
+<tr><td></td><td><wo:WCButton action="$next" label="Create"/></td></tr>
+</tbody></table>
+</wo:WOForm>
+</wo:org.webcat.core.WCPageModule>
+
+</wo:org.webcat.grader.PageWithAssignmentNavigation>

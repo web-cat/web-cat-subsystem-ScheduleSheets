@@ -1,0 +1,187 @@
+<wo:org.webcat.core.WCPageWithNavigation title="$title">
+<wo:if condition="$canSubmit">
+<wo:WOForm multipleSubmit="true">
+<wo:if condition="$inReportElapsedPhase">
+
+<wo:org.webcat.core.WCPageModule title="Enter Time You Have Spent">
+<p>Enter the <strong>amount of time (in hours) you have spent</strong>
+on each task since you last completed a schedule sheet.  Times should be
+as whole numbers (e.g., 8) or decimal numbers rounded to the nearest
+half-hour (e.g., 6.5).
+</p>
+<p>Indicate <strong>which tasks you have completed</strong> by checking
+the corresponding box.
+</p>
+<table><thead><tr>
+  <th>Component / Feature</th>
+  <th>Activity</th>
+  <th>Time Spent Since Last Schedule</th>
+  <th>Component / Feature Now Finished?</th>
+</tr></thead><tbody>
+
+<wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
+  <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
+    <wo:TableRow index="$rowIndex">
+      <wo:not condition="$aIndex">
+        <wo:WOGenericContainer elementName="td" rowspan="$componentFeature.entries.count">
+          <wo:WCTextBox value="$componentFeature.name"/>
+        </wo:WOGenericContainer>
+      </wo:not>
+      <td><wo:str value="$entry.activityName"/></td>
+      <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
+        value="$entry.timeInvestedRaw"/></td>
+      <td><wo:checkbox checked="$entry.isComplete"/></td>
+    </wo:TableRow>
+  </wo:loop>
+</wo:loop>
+
+<tr style="border-top:1px solid #115">
+  <td colspan="4"><wo:WCButton action="$add" label="+ Add Component/Feature"/></td>
+</tr>
+
+</tbody></table>
+</wo:org.webcat.core.WCPageModule>
+
+</wo:if><wo:else>
+<wo:if condition="$previousSheet">
+
+<wo:org.webcat.core.WCPageModule title="Estimate Your Time Remaining">
+<p>Break your schedule up into tasks based on specific work units that
+you define.  These work units usually correspond to specific <strong>components
+or features</strong> of your project.  Add your components or features
+to the table below.</p>
+<p>Enter the <strong>amount of time (in hours)</strong> you estimate it
+will take you to complete each of your tasks.  Times should be as whole
+numbers (e.g., 8) or decimal numbers rounded to the nearest half-hour
+(e.g., 6.5).
+</p>
+<p>Assign <strong>personal due dates</strong> for each activity that
+represent <strong>your personal goal</strong> for when you plan to have
+that activity completed.
+</p>
+<table><thead><tr>
+  <th>Component / Feature</th>
+  <th>Activity</th>
+  <th>Previously Estimated Total Time</th>
+  <th>Previous Personal Deadline</th>
+  <th>Time Invested Since Last Schedule</th>
+  <th>Estimated Time Needed to Finish</th>
+  <th>Revised Personal Deadline</th>
+</tr></thead><tbody>
+
+<wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
+  <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
+    <wo:TableRow index="$rowIndex">
+      <wo:not condition="$aIndex">
+        <wo:WOGenericContainer elementName="td" rowspan="$componentFeature.entries.count">
+          <wo:WCTextBox value="$componentFeature.name"/>
+        </wo:WOGenericContainer>
+      </wo:not>
+      <td><wo:str value="$entry.activityName"/></td>
+      <td><wo:str value="$entry.previousEstimatedTotal"/></td>
+      <td><wo:str value="$entry.previousDeadline" formatter="$session.timeFormatter"/></td>
+      <td><wo:str value="$entry.timeInvested"/></td>
+      <wo:if condition="$entry.isComplete">
+        <td colspan="2">-- completed --</td>
+      </wo:if><wo:else>
+        <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
+          value="$entry.estimatedRemainingRaw"/></td>
+        <td><wo:WCDateTextBox value="$entry.newDeadline"/></td>
+      </wo:else>
+    </wo:TableRow>
+  </wo:loop>
+</wo:loop>
+
+<tr class="o" style="border-top:1px solid #115">
+  <td colspan="4"><wo:WCButton action="$add" label="+ Add Component/Feature"/></td>
+</tr>
+
+</tbody></table>
+
+</wo:org.webcat.core.WCPageModule>
+
+
+</wo:if><wo:else>
+
+<wo:org.webcat.core.WCPageModule title="Enter Your Initial Time Estimates and Deadlines">
+<p>Break your schedule up into tasks based on specific work units that
+you define.  These work units usually correspond to specific <strong>components
+or features</strong> of your project.  Add your components or features
+to the table below.</p>
+<p>Enter the <strong>amount of time (in hours)</strong> you estimate it
+will take you to complete each of your tasks.  Times should be as whole
+numbers (e.g., 8) or decimal numbers rounded to the nearest half-hour
+(e.g., 6.5).
+</p>
+<p>Assign <strong>personal due dates</strong> for each activity that
+represent <strong>your personal goal</strong> for when you plan to have
+that activity completed.
+</p>
+<table><thead><tr>
+  <th>Component / Feature</th>
+  <th>Activity</th>
+  <th>Estimated Time Needed to Finish</th>
+  <th>Personal Deadline</th>
+</tr></thead><tbody>
+
+<wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
+  <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
+    <wo:TableRow index="$rowIndex">
+      <wo:not condition="$aIndex">
+        <wo:WOGenericContainer elementName="td" rowspan="$componentFeature.entries.count">
+          <wo:WCTextBox value="$componentFeature.name"/>
+        </wo:WOGenericContainer>
+      </wo:not>
+      <td><wo:str value="$entry.activityName"/></td>
+      <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
+        value="$entry.estimatedRemainingRaw"/></td>
+      <td><wo:WCDateTextBox value="$entry.newDeadline"/></td>
+    </wo:TableRow>
+  </wo:loop>
+</wo:loop>
+
+<tr style="border-top:1px solid #115">
+  <td colspan="4"><wo:WCButton action="$add" label="+ Add Component/Feature"/></td>
+</tr>
+
+</tbody></table>
+</wo:org.webcat.core.WCPageModule>
+
+</wo:else>
+</wo:else>
+
+<wo:if condition="$feedback.count">
+<wo:org.webcat.core.WCPageModule title="Feedback on Your Schedule">
+
+<wo:WOGenericContainer elementName="ul" class="NoticePanel">
+  <wo:loop list="$feedback.allKeys" item="$msgKey">
+    <wo:WOGenericContainer elementName="li" class="~@org.webcat.core.Status@statusCssClass(feedback[msgKey].category)"><wo:str value="~feedback[msgKey].message" escapeHTML="false"/></wo:WOGenericContainer>
+  </wo:loop>
+</wo:WOGenericContainer>
+
+</wo:org.webcat.core.WCPageModule>
+</wo:if>
+
+<div class="module right">
+<wo:if condition="$requireCheck">
+  <wo:WCButton action="$check" class="pos" label="Check My Work"/>
+</wo:if><wo:else>
+  <wo:WCButton action="$check" label="Check My Work" style="display:none"/>
+  <wo:WCButton action="$next" class="pos" label="Submit Schedule Sheet"/>
+</wo:not>
+<wo:WCButton action="$cancel" class="neg" label="Cancel"/>
+</div>
+
+</wo:WOForm>
+</wo:if><wo:else>
+
+<wo:org.webcat.core.WCPageModule title="This Schedule Sheet Assignment is Now Closed">
+<p>This assignment closed on
+<wo:str value="$offering.closedOnDate" formatter="$session.timeFormatter"/>.
+No more submissions can be made at this time.
+</p>
+</wo:org.webcat.core.WCPageModule>
+
+</wo:else>
+
+</wo:org.webcat.core.WCPageWithNavigation>

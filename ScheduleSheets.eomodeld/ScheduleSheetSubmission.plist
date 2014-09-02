@@ -1,0 +1,117 @@
+{
+    attributes = (
+        {
+            columnName = assignmentOfferingId;
+            name = assignmentOfferingId;
+            prototypeName = foreignId;
+        },
+        {name = id; prototypeName = id; },
+        {
+            allowsNull = N;
+            columnName = isSubmissionForGrading;
+            name = isSubmissionForGrading;
+            prototypeName = boolean;
+            userInfo = {
+                isScalar = true;
+                scalarDefault = false;
+                type = boolean;
+            };
+        },
+        {
+            allowsNull = N;
+            columnName = partnerLink;
+            externalType = BIT;
+            name = partnerLink;
+            prototypeName = boolean;
+            userInfo = {
+                isScalar = true;
+                scalarDefault = false;
+                type = boolean;
+            };
+        },
+        {
+            allowsNull = Y;
+            columnName = primarySubmissionId;
+            name = primarySubmissionId;
+            prototypeName = id;
+        },
+        {columnName = sheetId; name = sheetId; prototypeName = foreignId; },
+        {
+            columnName = submitNumber;
+            name = submitNumber;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
+        {columnName = submitTime; name = submitTime; prototypeName = dateTime; },
+        {columnName = userId; name = userId; prototypeName = foreignId; }
+    );
+    attributesUsedForLocking = (
+        assignmentOfferingId,
+        isSubmissionForGrading,
+        partnerLink,
+        resultId,
+        submitNumber,
+        userId
+    );
+    className = "org.webcat.schedulesheets.ScheduleSheetSubmission";
+    classProperties = (
+        assignmentOffering,
+        isSubmissionForGrading,
+        partneredSubmissions,
+        partnerLink,
+        primarySubmission,
+        sheet,
+        submitNumber,
+        submitTime,
+        user
+    );
+    externalName = ScheduleSheetSubmission;
+    fetchSpecificationDictionary = {};
+    name = ScheduleSheetSubmission;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = ScheduleSheetAssignmentOffering;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = assignmentOfferingId; });
+            name = assignmentOffering;
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = ScheduleSheetSubmission;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = primarySubmissionId; sourceAttribute = id; });
+            name = partneredSubmissions;
+        },
+        {
+            destination = ScheduleSheetSubmission;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = primarySubmissionId; });
+            name = primarySubmission;
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = ScheduleSheet;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = sheetId; });
+            name = sheet;
+        },
+        {
+            destination = User;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = userId; });
+            name = user;
+        }
+    );
+}

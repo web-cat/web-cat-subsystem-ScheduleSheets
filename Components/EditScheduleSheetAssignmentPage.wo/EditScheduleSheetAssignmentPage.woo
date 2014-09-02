@@ -1,0 +1,21 @@
+{
+	"WebObjects Release" = "WebObjects 5.0";
+	encoding = "UTF-8";
+    variables = {
+        offerings = {
+            class = ERXDisplayGroup;
+            dataSource = {
+                class = EODetailDataSource;
+                detailKey = offerings;
+                masterClassDescription = ScheduleSheetAssignment;
+            };
+            fetchesOnLoad = YES;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            numberOfObjectsPerBatch = 0;
+            selectsFirstObjectAfterFetch = YES;
+            sortOrdering = ({class = EOSortOrdering; key = order; selectorName = "compareAscending:"; },
+                            {class = EOSortOrdering; key = courseOffering.compactName; selectorName = "compareAscending:"; });
+        };
+    };
+}

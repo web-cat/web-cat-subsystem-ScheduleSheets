@@ -1,0 +1,102 @@
+<wo:org.webcat.grader.PageWithAssignmentNavigation
+  title="Edit Schedule Sheet Assignment"
+  inlineHeaderContents="$inlineJavaScript">
+<wo:WCForm multipleSubmit="true" name="assignmentForm">
+
+<wo:WCPageModule title="Properties for All Schedule Sheets in This Assignment">
+<table class="layout">
+<tr><td class="R"><label for="name">Name:</label></td>
+    <td><wo:WCTextBox value="$assignment.name" id="name"/>
+      <webobject name="NameInfo"/></td></tr>
+<tr><td class="R"><label for="name">Number of Sheets:</label></td>
+    <td><wo:str value="$sheetNumbers.count"/></td></tr>
+<tr><td class="top R">Points available:</td>
+    <td><table class="layout">
+<tr><td><webobject name="TaPoints"/></td>
+    <td><label for="taPoints">from TA</label></td></tr>
+<tr><td><webobject name="ToolPoints"/></td>
+    <td><label for="toolPoints">from automatic scoring</label></td></tr>
+<tr style="border-top:1px solid black"><td><webobject name="TotalPoints"/></td>
+    <td>Total points available</td></tr>
+    </table></td></tr>
+<tr><td class="R"><label for="maxSubmissions">Max submissions:</label></td>
+    <td><webobject name="MaxSubmissions"/>
+    <font size="-1">(blank for unlimited)</font></td></tr>
+<tr><td class="R"><label for="startAccepting">Start accepting:</label></td>
+    <td><webobject name="StartAccepting"/>
+        <webobject name="PopUpButton1"/> before due date
+    <font size="-1">(blank for unlimited)</font></td></tr>
+<tr><td class="R"><label for="stopAccepting">Stop accepting:</label></td>
+    <td><webobject name="StopAccepting"/>
+        <webobject name="PopUpButton2"/> after due date</td></tr>
+</table>
+</wo:WCPageModule>
+
+<wo:WCPageModule title="Bonuses and Penalties for All Sheets">
+<table class="layout"><tbody>
+<tr><td colspan="2"><wo:checkbox name="awardEarlyBonus"
+    checked="$assignment.submissionProfile.awardEarlyBonus"/>
+    <label for="awardEarlyBonus">Award bonus points for early
+    submissions</label></td></tr>
+<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Award at most
+    <webobject name="EarlyBonusMaxPts"/> pts
+    in increments of <webobject name="EarlyBonusUnitPts"/>
+    for every <webobject name="EarlyBonusUnitTime"/>
+    <webobject name="PopUpButton3"/> early</td></tr>
+<tr><td colspan="2"><wo:checkbox name="deductLatePenalty"
+    checked="$assignment.submissionProfile.deductLatePenalty"/>
+    <label for="deductLatePenalty">Deduct penalty for late
+    submissions</label></td></tr>
+<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deduct at most
+    <webobject name="LatePenaltyMaxPts"/> pts
+    in increments of <webobject name="LatePenaltyUnitPts"/>
+    for every <webobject name="LatePenaltyUnitTime"/>
+    <webobject name="PopUpButton4"/> late</td></tr>
+<tr><td colspan="2"><wo:checkbox name="deductForExcess"
+    checked="$assignment.submissionProfile.deductExcessSubmissionPenalty"/>
+    <label for="deductForExcess">Deduct penalty for excess
+    submissions</label></td></tr>
+<tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deduct at most
+    <webobject name="ExcessSubmissionsMaxPts"/> pts
+    in increments of <webobject name="ExcessSubmissionsUnitPts"/>
+    for every <webobject name="ExcessSubmissionsUnitSize"/>
+    submission(s) over <webobject name="ExcessSubmissionsThreshold"/></td></tr>
+</tbody></table>
+</wo:WCPageModule>
+
+<wo:WCPageModule title="Due Dates">
+<wo:loop list="$sheetNumbers" item="$sheetNumber">
+<h3>Schedule Sheet <wo:str value="~sheetNumber + 1"/></h3>
+<wo:WCContentPane id="~'offerings' + sheetNumber">
+<table>
+    <thead><tr>
+        <th class="sm">Course Offering</th>
+        <th>Due Date <wo:if condition="$areDueDatesLocked"><wo name="UnlockDueDates"/></wo:if><wo:else><wo name="LockDueDates"/></wo:else></th>
+    </tr></thead>
+    <tbody>
+        <wo:loop list="$offerings.displayedObjects" item="$offering" index="$offeringIndex">
+        <wo:tr index="$offeringIndex">
+            <td><strong><wo:str value="$offering.courseOffering.compactName"/></strong></td>
+            <td><wo:if condition="$shouldShowDueDatePicker"><wo name="DueDate"/>
+              <wo:if condition="$offering.publish">
+                published
+                (<wo:WCLink action="$togglePublished" remote="~true">hide</wo:WCLink>)
+              </wo:if><wo:else>
+                <span class="alert">hidden</span>
+                (<wo:WCLink action="$togglePublished" remote="~true">publish</wo:WCLink>)
+              </wo:else>
+            </wo></td>
+        </wo:tr>
+        </wo:loop>
+    </tbody>
+</table>
+</wo:WCContentPane>
+</wo:loop>
+</wo:WCPageModule>
+
+<div class="module right">
+<wo:WCButton action="$apply" class="pos" label="Save All"/>
+<wo:WCButton action="$cancel" class="neg" label="Cancel"/>
+</div>
+</wo:WCForm>
+</wo:org.webcat.grader.PageWithAssignmentNavigation>

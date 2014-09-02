@@ -1,0 +1,79 @@
+{
+    attributes = (
+        {
+            columnName = commentFormat;
+            name = commentFormat;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {columnName = comments; name = comments; prototypeName = mediumText; },
+        {
+            columnName = score;
+            name = score;
+            prototypeName = double;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = doubleValue;
+                scalarDefault = "0.0";
+                type = double;
+                valueClassName = Double;
+            };
+        },
+        {name = id; prototypeName = id; },
+        {columnName = lastUpdated; name = lastUpdated; prototypeName = dateTime; },
+        {
+            columnName = status;
+            name = status;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = "org.webcat.core.Status.TO_DO";
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+    );
+    attributesUsedForLocking = (
+        commentFormat,
+        comments,
+        status
+    );
+    className = "org.webcat.schedulesheets.ScheduleSheet";
+    classProperties = (
+        commentFormat,
+        comments,
+        componentFeatures,
+        lastUpdated,
+        score,
+        status,
+        submissions
+    );
+    externalName = ScheduleSheet;
+    fetchSpecificationDictionary = {};
+    name = ScheduleSheet;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = ScheduleSheetSubmission;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = sheetId; sourceAttribute = id; });
+            name = submissions;
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = ComponentFeature;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = sheetId; sourceAttribute = id; });
+            name = componentFeatures;
+        }
+    );
+}

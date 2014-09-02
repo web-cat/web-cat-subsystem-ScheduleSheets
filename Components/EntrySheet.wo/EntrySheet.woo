@@ -1,0 +1,34 @@
+{
+    "WebObjects Release" = "WebObjects 5.0";
+    encoding = NSUTF8StringEncoding;
+    variables = {
+        componentFeatures = {
+            class = ERXDisplayGroup;
+            dataSource = {
+                class = EODetailDataSource;
+                detailKey = componentFeatures;
+                masterClassDescription = ScheduleSheet;
+            };
+            fetchesOnLoad = YES;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            numberOfObjectsPerBatch = 0;
+            selectsFirstObjectAfterFetch = YES;
+            sortOrdering = ({class = EOSortOrdering; key = order; selectorName = "compareAscending:"; });
+        };
+        entries = {
+            class = ERXDisplayGroup;
+            dataSource = {
+                class = EODetailDataSource;
+                detailKey = entries;
+                masterClassDescription = ComponentFeature;
+            };
+            fetchesOnLoad = YES;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            numberOfObjectsPerBatch = 0;
+            selectsFirstObjectAfterFetch = YES;
+            sortOrdering = ({class = EOSortOrdering; key = activity; selectorName = "compareAscending:"; });
+        };
+    };
+}
