@@ -88,6 +88,7 @@ public class EntrySheet
                     ScheduleSheetSubmission.assignmentOffering.is(offering)
                     .and(ScheduleSheetSubmission.user.is(user())),
                     ScheduleSheetSubmission.submitNumber.ascs());
+            // TODO: fix me!
             for (ScheduleSheetSubmission sub : submissions)
             {
                 sub.setIsSubmissionForGrading(false);
@@ -128,12 +129,23 @@ public class EntrySheet
                     }
                 }
             }
-            sheet = ScheduleSheet.create(localContext());
-            sheet.addToSubmissionsRelationship(submission);
+            if (sheet != null && submission.sheet() == sheet)
+            {
+                sheet = null;
+            }
+            if (sheet == null)
+            {
+                sheet = ScheduleSheet.create(localContext());
+                submission.setSheetRelationship(sheet);
+                if (mostRecent != null)
+                {
+                    sheet.setupFrom(mostRecent.sheet(),
+                        mostRecent.assignmentOffering() != offering);
+                }
+            }
             if (mostRecent != null)
             {
-                sheet.setupFrom(mostRecent.sheet(),
-                    mostRecent.assignmentOffering() != offering);
+                submission.partnerWith(mostRecent.allPartners());
             }
             componentFeatures.setMasterObject(sheet);
             inReportElapsedPhase = !isFirstSheet();
@@ -158,7 +170,14 @@ public class EntrySheet
             e.setActivity(activity);
             cf.addToEntriesRelationship(e);
         }
-        cf.setOrder((byte)sheet.componentFeatures().count());
+        if (sheet.componentFeatures() == null)
+        {
+            cf.setOrder((byte)0);
+        }
+        else
+        {
+            cf.setOrder((byte)sheet.componentFeatures().count());
+        }
         sheet.addToComponentFeaturesRelationship(cf);
         componentFeatures.qualifyDataSource();
         return null;

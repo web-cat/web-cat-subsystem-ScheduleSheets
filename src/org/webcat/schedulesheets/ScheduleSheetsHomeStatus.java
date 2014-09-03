@@ -118,6 +118,7 @@ public class ScheduleSheetsHomeStatus
     public WOComponent submit()
     {
         EntrySheet entrySheet = pageWithName(EntrySheet.class);
+        coreSelections().setCourseOfferingRelationship(sheet.courseOffering());
         entrySheet.offering = sheet;
         entrySheet.nextPage = this;
         return entrySheet;
@@ -128,6 +129,7 @@ public class ScheduleSheetsHomeStatus
     public WOComponent view()
     {
         SheetFeedbackPage feedback = pageWithName(SheetFeedbackPage.class);
+        coreSelections().setCourseOfferingRelationship(sheet.courseOffering());
         feedback.offering = sheet;
         feedback.nextPage = this;
         return feedback;

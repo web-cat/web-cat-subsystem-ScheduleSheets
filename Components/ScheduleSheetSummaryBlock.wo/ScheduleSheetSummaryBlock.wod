@@ -1,0 +1,15 @@
+PartnerSelector: FilteringUserSelector {
+    simpleLayout = true;
+    actionTitle = "Edit Partners";
+    dialogMessage = "Which students worked on this submission?";
+    hidesTableOnEmptySelection = true;
+    selectedListTitle = "Current Partners on This Submission";
+    availableListTitle = "Students Enrolled in Your Course";
+    selectedUsers = partnersForEditing;
+    qualifier = qualifierForStudentsInCourse;
+}
+
+TR: org.webcat.core.TableRow {
+    index = rowNumber;
+    increment = true;
+}

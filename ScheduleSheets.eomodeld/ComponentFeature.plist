@@ -24,6 +24,7 @@
     className = "org.webcat.schedulesheets.ComponentFeature";
     classProperties = (
         entries,
+        feedbackItems,
     	name,
     	order,
     	sheet
@@ -46,6 +47,13 @@
             joinSemantic = EOInnerJoin;
             joins = ({destinationAttribute = componentFeatureId; sourceAttribute = id; });
             name = entries;
+        },
+        {
+            destination = SheetFeedbackItem;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = componentFeatureId; sourceAttribute = id; });
+            name = feedbackItems;
         }
     );
 }

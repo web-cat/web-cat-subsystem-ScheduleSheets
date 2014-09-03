@@ -22,6 +22,7 @@
 package org.webcat.schedulesheets;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 import er.extensions.foundation.ERXArrayUtilities;
 
 //-------------------------------------------------------------------------
@@ -99,7 +100,7 @@ public class SheetEntry
     @SuppressWarnings("unchecked")
     public NSArray<SheetFeedbackItem> nontransientFeedback()
     {
-        return  ERXArrayUtilities.filteredArrayWithQualifierEvaluation(
+        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(
             feedbackItems(),
             SheetFeedbackItem.isTransient.isFalse());
     }
@@ -112,6 +113,33 @@ public class SheetEntry
         {
             i.setIsTransient(true);
         }
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isOverdue()
+    {
+        NSTimestamp submitTime =
+            componentFeature().sheet().submission().submitTime();
+        if (newDeadline() != null)
+        {
+            return submitTime.after(newDeadline());
+        }
+        else if (previousDeadline() != null)
+        {
+            return submitTime.after(previousDeadline());
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public double newEstimatedTotal()
+    {
+        return previousEstimatedTotal() + estimatedRemaining();
     }
 
 

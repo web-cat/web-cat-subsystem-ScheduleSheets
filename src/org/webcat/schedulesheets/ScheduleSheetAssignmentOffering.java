@@ -255,6 +255,23 @@ public class ScheduleSheetAssignmentOffering
 
     // ----------------------------------------------------------
     /**
+     * Return a list consisting of all the submissions for the given
+     * student, arranged first to last.
+     * @param user the user to look up
+     * @return an NSArray of Submission objects
+     */
+    public NSArray<ScheduleSheetSubmission> allSubsFor(User user)
+    {
+        return ScheduleSheetSubmission.objectsMatchingQualifier(
+            editingContext(),
+            ScheduleSheetSubmission.assignmentOffering.is(this)
+                .and(ScheduleSheetSubmission.user.is(user)),
+            ScheduleSheetSubmission.submitNumber.ascs());
+    }
+
+
+    // ----------------------------------------------------------
+    /**
      * Return a list consisting of the most recent submission for all
      * students who have submitted to this assignment offering.
      * @return an NSArray of Submission objects

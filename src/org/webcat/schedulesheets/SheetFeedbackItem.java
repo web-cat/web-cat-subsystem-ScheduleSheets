@@ -21,6 +21,10 @@
 
 package org.webcat.schedulesheets;
 
+import org.webcat.core.WCProperties;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+
 // -------------------------------------------------------------------------
 /**
  * Represents an automatically generated feedback message for a
@@ -51,9 +55,89 @@ public class SheetFeedbackItem
     public static final byte WARNING = org.webcat.core.Status.WARNING;
     public static final byte ERROR = org.webcat.core.Status.ERROR;
 
-    public static final int CODE1 = 0;
+    public static final int OK = 0;
 
-    //~ Methods ...............................................................
+
+    //~ Factory Methods .......................................................
+
+    // ----------------------------------------------------------
+    /**
+     * A static factory method for creating a new
+     * SheetFeedbackItem object given required
+     * attributes and relationships.
+     * @param editingContext The context in which the new object will be
+     * inserted
+     * @param codeValue
+     * @param aSheet
+     * @return The newly created object
+     */
+    public static SheetFeedbackItem create(
+        EOEditingContext editingContext,
+        int codeValue,
+        ScheduleSheet aSheet)
+    {
+        SheetFeedbackItem item = create(
+            editingContext,
+            TEMPLATES[codeValue].category,
+            codeValue,
+            false);
+        item.setSheetRelationship(aSheet);
+        return item;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * A static factory method for creating a new
+     * SheetFeedbackItem object given required
+     * attributes and relationships.
+     * @param editingContext The context in which the new object will be
+     * inserted
+     * @param codeValue
+     * @param aComponentFeature
+     * @return The newly created object
+     */
+    public static SheetFeedbackItem create(
+        EOEditingContext editingContext,
+        int codeValue,
+        ComponentFeature aComponentFeature)
+    {
+        SheetFeedbackItem item = create(
+            editingContext,
+            codeValue,
+            aComponentFeature.sheet());
+        item.setComponentFeatureRelationship(aComponentFeature);
+        return item;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * A static factory method for creating a new
+     * SheetFeedbackItem object given required
+     * attributes and relationships.
+     * @param editingContext The context in which the new object will be
+     * inserted
+     * @param categoryValue
+     * @param codeValue
+     * @param isTransientValue
+     * @return The newly created object
+     */
+    public static SheetFeedbackItem create(
+        EOEditingContext editingContext,
+        int codeValue,
+        SheetEntry entry)
+    {
+        SheetFeedbackItem item = create(
+            editingContext,
+            codeValue,
+            entry.componentFeature());
+        item.setSheetEntryRelationship(entry);
+        return item;
+    }
+
+
+    //~ Public Methods ........................................................
 
     // ----------------------------------------------------------
     public String categoryString()
@@ -63,22 +147,64 @@ public class SheetFeedbackItem
 
 
     // ----------------------------------------------------------
-    public String renderedMessage()
+    public Message renderedMessage()
     {
         if (message() == null)
         {
-            return TEMPLATES[code()];
+            Message template = TEMPLATES[code()];
+            return new Message(category(), formatMessage(template.body));
         }
         else
         {
-            return message();
+            return new Message(category(), formatMessage(message()));
         }
+    }
+
+
+    // ----------------------------------------------------------
+    public static class Message
+    {
+        public final int category;
+        public final String body;
+        public Message(int category, String body)
+        {
+            this.category = category;
+            this.body = body;
+        }
+    }
+
+
+    //~ Private Methods .......................................................
+
+    // ----------------------------------------------------------
+    private WCProperties properties()
+    {
+        WCProperties props = new WCProperties();
+        if (componentFeature() != null)
+        {
+            props.takeValueForKey(
+                componentFeature().name(), "componentFeature");
+        }
+        if (sheetEntry() != null)
+        {
+            props.takeValueForKey(sheetEntry().activityName(), "activity");
+        }
+        return props;
+    }
+
+
+    // ----------------------------------------------------------
+    private String formatMessage(String template)
+    {
+        return properties().substitutePropertyReferences(template);
     }
 
 
     //~ Instance/static fields ................................................
 
-    private static final String[] TEMPLATES = {
-        "hello"
+    private static final Message[] TEMPLATES = {
+        // OK
+        new Message(INFORMATION,
+            "Your entries do not contain any obvious inconsistencies")
     };
 }

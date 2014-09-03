@@ -8,7 +8,19 @@
         },
         {allowsNull = N; columnName = code; name = code; prototypeName = integer; },
         {
-            allowsNull = N;
+            allowsNull = Y;
+            columnName = componentFeatureId;
+            name = componentFeatureId;
+            prototypeName = foreignId;
+        },
+        {
+            allowsNull = Y;
+            columnName = sheetId;
+            name = sheetId;
+            prototypeName = foreignId;
+        },
+        {
+            allowsNull = Y;
             columnName = sheetEntryId;
             name = sheetEntryId;
             prototypeName = foreignId;
@@ -26,13 +38,17 @@
     attributesUsedForLocking = (
         category,
         code,
+        componentFeatureId,
+        sheetId,
         sheetEntryId,
-        messag
+        message
     );
     className = "org.webcat.schedulesheets.SheetFeedbackItem";
     classProperties = (
         category,
         code,
+        componentFeature,
+        sheet,
         sheetEntry,
         isTransient,
         message
@@ -42,6 +58,20 @@
     name = SheetFeedbackItem;
     primaryKeyAttributes = (id);
     relationships = (
+        {
+            destination = ScheduleSheet;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = sheetId; });
+            name = sheet;
+        },
+        {
+            destination = ComponentFeature;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = componentFeatureId; });
+            name = componentFeature;
+        },
         {
             destination = SheetEntry;
             isToMany = N;

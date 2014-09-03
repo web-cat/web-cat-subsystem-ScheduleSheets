@@ -152,6 +152,9 @@ public abstract class _ComponentFeature
     public static final String ENTRIES_KEY = "entries";
     public static final ERXKey<org.webcat.schedulesheets.SheetEntry> entries =
         new ERXKey<org.webcat.schedulesheets.SheetEntry>(ENTRIES_KEY);
+    public static final String FEEDBACK_ITEMS_KEY = "feedbackItems";
+    public static final ERXKey<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems =
+        new ERXKey<org.webcat.schedulesheets.SheetFeedbackItem>(FEEDBACK_ITEMS_KEY);
     // Fetch specifications ---
     public static final String ENTITY_NAME = "ComponentFeature";
 
@@ -534,6 +537,184 @@ public abstract class _ComponentFeature
         for (org.webcat.schedulesheets.SheetEntry object : entries())
         {
             deleteEntriesRelationship(object);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entities pointed to by the <code>feedbackItems</code>
+     * relationship.
+     * @return an NSArray of the entities in the relationship
+     */
+    @SuppressWarnings("unchecked")
+    public NSArray<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems()
+    {
+        return (NSArray)storedValueForKey( "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Replace the list of entities pointed to by the
+     * <code>feedbackItems</code> relationship.
+     *
+     * @param value The new set of entities to relate to
+     */
+    public void setFeedbackItems( NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setFeedbackItems("
+                + value + "): was " + feedbackItems() );
+        }
+        takeStoredValueForKey( value, "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>feedbackItems</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>addToFeedbackItemsRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToFeedbackItems( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToFeedbackItems("
+                + value + "): was " + feedbackItems() );
+        }
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem> array =
+            (NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>)feedbackItems();
+        willChange();
+        array.addObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>feedbackItems</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>removeFromFeedbackItemsRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromFeedbackItems( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "RemoveFromFeedbackItems("
+                + value + "): was " + feedbackItems() );
+        }
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem> array =
+            (NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>)feedbackItems();
+        willChange();
+        array.removeObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>feedbackItems</code>
+     * relationship.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToFeedbackItemsRelationship( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToFeedbackItemsRelationship("
+                + value + "): was " + feedbackItems() );
+        }
+        addObjectToBothSidesOfRelationshipWithKey(
+            value, "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>feedbackItems</code>
+     * relationship.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromFeedbackItemsRelationship( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "removeFromFeedbackItemsRelationship("
+                + value + "): was " + feedbackItems() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create a brand new object that is a member of the
+     * <code>feedbackItems</code> relationship.
+     *
+     * @return The new entity
+     */
+    public org.webcat.schedulesheets.SheetFeedbackItem createFeedbackItemsRelationship()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "createFeedbackItemsRelationship()" );
+        }
+        EOClassDescription eoClassDesc = EOClassDescription
+            .classDescriptionForEntityName( "SheetFeedbackItem" );
+        EOEnterpriseObject eoObject = eoClassDesc
+            .createInstanceWithEditingContext( editingContext(), null );
+        editingContext().insertObject( eoObject );
+        addObjectToBothSidesOfRelationshipWithKey(
+            eoObject, "feedbackItems" );
+        return (org.webcat.schedulesheets.SheetFeedbackItem)eoObject;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove and then delete a specific entity that is a member of the
+     * <code>feedbackItems</code> relationship.
+     *
+     * @param value The entity to remove from the relationship and then delete
+     */
+    public void deleteFeedbackItemsRelationship( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteFeedbackItemsRelationship("
+                + value + "): was " + feedbackItems() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "feedbackItems" );
+        editingContext().deleteObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove (and then delete, if owned) all entities that are members of the
+     * <code>feedbackItems</code> relationship.
+     */
+    public void deleteAllFeedbackItemsRelationships()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteAllFeedbackItemsRelationships(): was "
+                + feedbackItems() );
+        }
+        for (org.webcat.schedulesheets.SheetFeedbackItem object : feedbackItems())
+        {
+            deleteFeedbackItemsRelationship(object);
         }
     }
 

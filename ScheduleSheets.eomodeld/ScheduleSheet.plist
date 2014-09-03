@@ -39,21 +39,50 @@
                 valueClassName = Byte;
             };
         },
+        {
+            columnName = taScore;
+            name = taScore;
+            prototypeName = double;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = doubleValue;
+                scalarDefault = "0.0";
+                type = double;
+                valueClassName = Double;
+            };
+        },
+        {
+            columnName = toolScore;
+            name = toolScore;
+            prototypeName = double;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = doubleValue;
+                scalarDefault = "0.0";
+                type = double;
+                valueClassName = Double;
+            };
+        },
     );
     attributesUsedForLocking = (
         commentFormat,
         comments,
-        status
+        status,
+        taScore,
+        toolScore
     );
     className = "org.webcat.schedulesheets.ScheduleSheet";
     classProperties = (
         commentFormat,
         comments,
         componentFeatures,
+        feedbackItems,
         lastUpdated,
         score,
         status,
-        submissions
+        submissions,
+        taScore,
+        toolScore
     );
     externalName = ScheduleSheet;
     fetchSpecificationDictionary = {};
@@ -74,6 +103,13 @@
             joinSemantic = EOInnerJoin;
             joins = ({destinationAttribute = sheetId; sourceAttribute = id; });
             name = componentFeatures;
+        },
+        {
+            destination = SheetFeedbackItem;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = sheetId; sourceAttribute = id; });
+            name = feedbackItems;
         }
     );
 }

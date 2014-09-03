@@ -153,11 +153,20 @@ public abstract class _ScheduleSheet
     public static final String STATUS_KEY = "status";
     public static final ERXKey<Integer> status =
         new ERXKey<Integer>(STATUS_KEY);
+    public static final String TA_SCORE_KEY = "taScore";
+    public static final ERXKey<Double> taScore =
+        new ERXKey<Double>(TA_SCORE_KEY);
+    public static final String TOOL_SCORE_KEY = "toolScore";
+    public static final ERXKey<Double> toolScore =
+        new ERXKey<Double>(TOOL_SCORE_KEY);
     // To-one relationships ---
     // To-many relationships ---
     public static final String COMPONENT_FEATURES_KEY = "componentFeatures";
     public static final ERXKey<org.webcat.schedulesheets.ComponentFeature> componentFeatures =
         new ERXKey<org.webcat.schedulesheets.ComponentFeature>(COMPONENT_FEATURES_KEY);
+    public static final String FEEDBACK_ITEMS_KEY = "feedbackItems";
+    public static final ERXKey<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems =
+        new ERXKey<org.webcat.schedulesheets.SheetFeedbackItem>(FEEDBACK_ITEMS_KEY);
     public static final String SUBMISSIONS_KEY = "submissions";
     public static final ERXKey<org.webcat.schedulesheets.ScheduleSheetSubmission> submissions =
         new ERXKey<org.webcat.schedulesheets.ScheduleSheetSubmission>(SUBMISSIONS_KEY);
@@ -467,6 +476,134 @@ public abstract class _ScheduleSheet
 
     // ----------------------------------------------------------
     /**
+     * Retrieve this object's <code>taScore</code> value.
+     * @return the value of the attribute
+     */
+    public double taScore()
+    {
+        Double returnValue =
+            (Double)storedValueForKey( "taScore" );
+        return ( returnValue == null )
+            ? 0.0
+            : returnValue.doubleValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>taScore</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setTaScore( double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setTaScore("
+                + value + "): was " + taScore() );
+        }
+        Double actual =
+            new Double( value );
+            setTaScoreRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>taScore</code> value.
+     * @return the value of the attribute
+     */
+    public Double taScoreRaw()
+    {
+        return (Double)storedValueForKey( "taScore" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>taScore</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setTaScoreRaw( Double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setTaScoreRaw("
+                + value + "): was " + taScoreRaw() );
+        }
+        takeStoredValueForKey( value, "taScore" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>toolScore</code> value.
+     * @return the value of the attribute
+     */
+    public double toolScore()
+    {
+        Double returnValue =
+            (Double)storedValueForKey( "toolScore" );
+        return ( returnValue == null )
+            ? 0.0
+            : returnValue.doubleValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>toolScore</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setToolScore( double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setToolScore("
+                + value + "): was " + toolScore() );
+        }
+        Double actual =
+            new Double( value );
+            setToolScoreRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>toolScore</code> value.
+     * @return the value of the attribute
+     */
+    public Double toolScoreRaw()
+    {
+        return (Double)storedValueForKey( "toolScore" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>toolScore</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setToolScoreRaw( Double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setToolScoreRaw("
+                + value + "): was " + toolScoreRaw() );
+        }
+        takeStoredValueForKey( value, "toolScore" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
      * Retrieve the entities pointed to by the <code>componentFeatures</code>
      * relationship.
      * @return an NSArray of the entities in the relationship
@@ -639,6 +776,184 @@ public abstract class _ScheduleSheet
         for (org.webcat.schedulesheets.ComponentFeature object : componentFeatures())
         {
             deleteComponentFeaturesRelationship(object);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entities pointed to by the <code>feedbackItems</code>
+     * relationship.
+     * @return an NSArray of the entities in the relationship
+     */
+    @SuppressWarnings("unchecked")
+    public NSArray<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems()
+    {
+        return (NSArray)storedValueForKey( "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Replace the list of entities pointed to by the
+     * <code>feedbackItems</code> relationship.
+     *
+     * @param value The new set of entities to relate to
+     */
+    public void setFeedbackItems( NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setFeedbackItems("
+                + value + "): was " + feedbackItems() );
+        }
+        takeStoredValueForKey( value, "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>feedbackItems</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>addToFeedbackItemsRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToFeedbackItems( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToFeedbackItems("
+                + value + "): was " + feedbackItems() );
+        }
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem> array =
+            (NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>)feedbackItems();
+        willChange();
+        array.addObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>feedbackItems</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>removeFromFeedbackItemsRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromFeedbackItems( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "RemoveFromFeedbackItems("
+                + value + "): was " + feedbackItems() );
+        }
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem> array =
+            (NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>)feedbackItems();
+        willChange();
+        array.removeObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>feedbackItems</code>
+     * relationship.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToFeedbackItemsRelationship( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToFeedbackItemsRelationship("
+                + value + "): was " + feedbackItems() );
+        }
+        addObjectToBothSidesOfRelationshipWithKey(
+            value, "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>feedbackItems</code>
+     * relationship.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromFeedbackItemsRelationship( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "removeFromFeedbackItemsRelationship("
+                + value + "): was " + feedbackItems() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "feedbackItems" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create a brand new object that is a member of the
+     * <code>feedbackItems</code> relationship.
+     *
+     * @return The new entity
+     */
+    public org.webcat.schedulesheets.SheetFeedbackItem createFeedbackItemsRelationship()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "createFeedbackItemsRelationship()" );
+        }
+        EOClassDescription eoClassDesc = EOClassDescription
+            .classDescriptionForEntityName( "SheetFeedbackItem" );
+        EOEnterpriseObject eoObject = eoClassDesc
+            .createInstanceWithEditingContext( editingContext(), null );
+        editingContext().insertObject( eoObject );
+        addObjectToBothSidesOfRelationshipWithKey(
+            eoObject, "feedbackItems" );
+        return (org.webcat.schedulesheets.SheetFeedbackItem)eoObject;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove and then delete a specific entity that is a member of the
+     * <code>feedbackItems</code> relationship.
+     *
+     * @param value The entity to remove from the relationship and then delete
+     */
+    public void deleteFeedbackItemsRelationship( org.webcat.schedulesheets.SheetFeedbackItem value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteFeedbackItemsRelationship("
+                + value + "): was " + feedbackItems() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "feedbackItems" );
+        editingContext().deleteObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove (and then delete, if owned) all entities that are members of the
+     * <code>feedbackItems</code> relationship.
+     */
+    public void deleteAllFeedbackItemsRelationships()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteAllFeedbackItemsRelationships(): was "
+                + feedbackItems() );
+        }
+        for (org.webcat.schedulesheets.SheetFeedbackItem object : feedbackItems())
+        {
+            deleteFeedbackItemsRelationship(object);
         }
     }
 

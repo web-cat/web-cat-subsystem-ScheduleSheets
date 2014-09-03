@@ -21,6 +21,9 @@
 
 package org.webcat.schedulesheets;
 
+import com.webobjects.foundation.NSArray;
+import er.extensions.foundation.ERXArrayUtilities;
+
 //-------------------------------------------------------------------------
 /**
  * Represents one work unit (component, feature, etc.) in a schedule.
@@ -74,6 +77,89 @@ public class ComponentFeature
     }
 
 
-    //~ Instance/static fields ................................................
+    // ----------------------------------------------------------
+    @SuppressWarnings("unchecked")
+    public NSArray<SheetFeedbackItem> nontransientFeedback()
+    {
+        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(
+            feedbackItems(),
+            SheetFeedbackItem.isTransient.isFalse());
+    }
 
+
+    // ----------------------------------------------------------
+    public void moveNonTransientToTransient()
+    {
+        for (SheetFeedbackItem i : nontransientFeedback())
+        {
+            i.setIsTransient(true);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isOverdue()
+    {
+        for (SheetEntry entry : entries())
+        {
+            if (entry.isOverdue())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    // ----------------------------------------------------------
+    public double estimatedRemaining()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.estimatedRemaining();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double previousEstimatedTotal()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.previousEstimatedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newEstimatedTotal()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.newEstimatedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isComplete()
+    {
+        for (SheetEntry entry : entries())
+        {
+            if (!entry.isComplete())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    //~ Instance/static fields ................................................
 }

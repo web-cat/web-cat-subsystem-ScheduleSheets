@@ -160,6 +160,12 @@ public abstract class _SheetFeedbackItem
     public static final ERXKey<String> message =
         new ERXKey<String>(MESSAGE_KEY);
     // To-one relationships ---
+    public static final String COMPONENT_FEATURE_KEY = "componentFeature";
+    public static final ERXKey<org.webcat.schedulesheets.ComponentFeature> componentFeature =
+        new ERXKey<org.webcat.schedulesheets.ComponentFeature>(COMPONENT_FEATURE_KEY);
+    public static final String SHEET_KEY = "sheet";
+    public static final ERXKey<org.webcat.schedulesheets.ScheduleSheet> sheet =
+        new ERXKey<org.webcat.schedulesheets.ScheduleSheet>(SHEET_KEY);
     public static final String SHEET_ENTRY_KEY = "sheetEntry";
     public static final ERXKey<org.webcat.schedulesheets.SheetEntry> sheetEntry =
         new ERXKey<org.webcat.schedulesheets.SheetEntry>(SHEET_ENTRY_KEY);
@@ -366,6 +372,128 @@ public abstract class _SheetFeedbackItem
                 + value + "): was " + message() );
         }
         takeStoredValueForKey( value, "message" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entity pointed to by the <code>componentFeature</code>
+     * relationship.
+     * @return the entity in the relationship
+     */
+    public org.webcat.schedulesheets.ComponentFeature componentFeature()
+    {
+        return (org.webcat.schedulesheets.ComponentFeature)storedValueForKey( "componentFeature" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the entity pointed to by the <code>componentFeature</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>setComponentFeatureRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void setComponentFeature( org.webcat.schedulesheets.ComponentFeature value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setComponentFeature("
+                + value + "): was " + componentFeature() );
+        }
+        takeStoredValueForKey( value, "componentFeature" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the entity pointed to by the <code>componentFeature</code>
+     * relationship.  This method is a type-safe version of
+     * <code>addObjectToBothSidesOfRelationshipWithKey()</code>.
+     *
+     * @param value The new entity to relate to
+     */
+    public void setComponentFeatureRelationship(
+        org.webcat.schedulesheets.ComponentFeature value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setComponentFeatureRelationship("
+                + value + "): was " + componentFeature() );
+        }
+        if ( value == null )
+        {
+            org.webcat.schedulesheets.ComponentFeature object = componentFeature();
+            if ( object != null )
+                removeObjectFromBothSidesOfRelationshipWithKey( object, "componentFeature" );
+        }
+        else
+        {
+            addObjectToBothSidesOfRelationshipWithKey( value, "componentFeature" );
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entity pointed to by the <code>sheet</code>
+     * relationship.
+     * @return the entity in the relationship
+     */
+    public org.webcat.schedulesheets.ScheduleSheet sheet()
+    {
+        return (org.webcat.schedulesheets.ScheduleSheet)storedValueForKey( "sheet" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the entity pointed to by the <code>sheet</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>setSheetRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void setSheet( org.webcat.schedulesheets.ScheduleSheet value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setSheet("
+                + value + "): was " + sheet() );
+        }
+        takeStoredValueForKey( value, "sheet" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the entity pointed to by the <code>sheet</code>
+     * relationship.  This method is a type-safe version of
+     * <code>addObjectToBothSidesOfRelationshipWithKey()</code>.
+     *
+     * @param value The new entity to relate to
+     */
+    public void setSheetRelationship(
+        org.webcat.schedulesheets.ScheduleSheet value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setSheetRelationship("
+                + value + "): was " + sheet() );
+        }
+        if ( value == null )
+        {
+            org.webcat.schedulesheets.ScheduleSheet object = sheet();
+            if ( object != null )
+                removeObjectFromBothSidesOfRelationshipWithKey( object, "sheet" );
+        }
+        else
+        {
+            addObjectToBothSidesOfRelationshipWithKey( value, "sheet" );
+        }
     }
 
 

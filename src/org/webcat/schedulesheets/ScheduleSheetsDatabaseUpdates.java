@@ -68,6 +68,38 @@ public class ScheduleSheetsDatabaseUpdates
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Add sheet and component feature ids to sheet feedback items.
+     * @throws SQLException on error
+     */
+    public void updateIncrement1() throws SQLException
+    {
+        database().executeSQL(
+            "alter table SheetFeedbackItem add sheetId INTEGER");
+        database().executeSQL(
+            "alter table SheetFeedbackItem add componentFeatureId INTEGER");
+        createIndexFor("SheetFeedbackItem", "sheetId");
+        createIndexFor("SheetFeedbackItem", "componentFeatureId");
+        // TODO: remove!
+        createIndexFor("SheetFeedbackItem", "sheetEntryId");
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add score columns to schedule sheet table.
+     * @throws SQLException on error
+     */
+    public void updateIncrement2() throws SQLException
+    {
+        database().executeSQL(
+            "alter table ScheduleSheet add taScore DOUBLE");
+        database().executeSQL(
+            "alter table ScheduleSheet add toolScore DOUBLE");
+    }
+
+
     //~ Private Methods .......................................................
 
     // ----------------------------------------------------------
@@ -268,7 +300,7 @@ public class ScheduleSheetsDatabaseUpdates
             );
             database().executeSQL(
                 "ALTER TABLE SheetFeedbackItem ADD PRIMARY KEY (OID)");
-            createIndexFor("SheetFeedbackItem", "componentFeatureId");
+            createIndexFor("SheetFeedbackItem", "sheetEntryId");
         }
     }
 }

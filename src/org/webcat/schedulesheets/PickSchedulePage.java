@@ -78,6 +78,11 @@ public class PickSchedulePage
         super.beforeAppendToResponse(response, context);
 
         course = coreSelections().courseOffering();
+        if (course == null)
+        {
+            return;
+        }
+
         if (course.isStaff(user()) || user().hasAdminPrivileges())
         {
             allOfferings =
@@ -116,6 +121,7 @@ public class PickSchedulePage
     public WOComponent submit()
     {
         EntrySheet entrySheet = pageWithName(EntrySheet.class);
+        coreSelections().setCourseOfferingRelationship(sheet.courseOffering());
         entrySheet.offering = sheet;
         entrySheet.nextPage = this;
         return entrySheet;
@@ -126,6 +132,7 @@ public class PickSchedulePage
     public WOComponent view()
     {
         SheetFeedbackPage feedback = pageWithName(SheetFeedbackPage.class);
+        coreSelections().setCourseOfferingRelationship(sheet.courseOffering());
         feedback.offering = sheet;
         feedback.nextPage = this;
         return feedback;

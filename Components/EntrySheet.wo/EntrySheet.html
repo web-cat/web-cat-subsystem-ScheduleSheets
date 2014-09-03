@@ -1,6 +1,11 @@
 <wo:org.webcat.core.WCPageWithNavigation title="$title">
 <wo:if condition="$canSubmit">
 <wo:WOForm multipleSubmit="true">
+
+<wo:org.webcat.core.WCPageModule title="Schedule Sheet Summary">
+<wo name="Summary"/>
+</wo:org.webcat.core.WCPageModule>
+
 <wo:if condition="$inReportElapsedPhase">
 
 <wo:org.webcat.core.WCPageModule title="Enter Time You Have Spent">

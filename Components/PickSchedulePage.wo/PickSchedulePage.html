@@ -1,6 +1,10 @@
 <wo name="Page">
-
-<wo:not condition="$assignments.displayedObjects.count">
+<wo:not condition="$course">
+<wo:org.webcat.core.WCPageModule title="No Course Offering Selected">
+<p>Use the dropdown list(s) above to select the course offering
+with which your schedule sheet is associated.</p>
+</wo:org.webcat.core.WCPageModule>
+</wo:not><wo:else><wo:not condition="$assignments.displayedObjects.count">
 <wo:org.webcat.core.WCPageModule title="No Schedule Sheet Assignments for Selected Course">
 <p>No schedule sheet assignments are available for
   <wo:str value="$course.compactName"/>.</p>
@@ -56,6 +60,6 @@ with which your schedule sheet is associated.</p>
 </wo:loop>
 
 </wo:org.webcat.core.WCPageModule>
-</wo:else>
+</wo:else></wo:else>
 
 </wo>
