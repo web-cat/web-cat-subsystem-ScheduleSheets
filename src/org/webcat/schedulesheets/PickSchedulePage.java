@@ -43,7 +43,7 @@ import org.webcat.grader.GraderCourseComponent;
 public class PickSchedulePage
     extends GraderCourseComponent
 {
-    //~ Constructors ..........................................................
+    //~ Constructor ...........................................................
 
     // ----------------------------------------------------------
     /**
@@ -120,8 +120,8 @@ public class PickSchedulePage
     // ----------------------------------------------------------
     public WOComponent submit()
     {
-        EntrySheet entrySheet = pageWithName(EntrySheet.class);
         coreSelections().setCourseOfferingRelationship(sheet.courseOffering());
+        EntrySheet entrySheet = pageWithName(EntrySheet.class);
         entrySheet.offering = sheet;
         entrySheet.nextPage = this;
         return entrySheet;
@@ -131,8 +131,8 @@ public class PickSchedulePage
     // ----------------------------------------------------------
     public WOComponent view()
     {
-        SheetFeedbackPage feedback = pageWithName(SheetFeedbackPage.class);
         coreSelections().setCourseOfferingRelationship(sheet.courseOffering());
+        SheetFeedbackPage feedback = pageWithName(SheetFeedbackPage.class);
         feedback.offering = sheet;
         feedback.nextPage = this;
         return feedback;
@@ -150,7 +150,7 @@ public class PickSchedulePage
     public void setAssignment(ScheduleSheetAssignment newValue)
     {
         assignment = newValue;
-        sheets.queryBindings().takeValueForKey(newValue,
+        sheets.queryMatch().takeValueForKey(newValue,
             ScheduleSheetAssignmentOffering.ASSIGNMENT_KEY);
         sheets.qualifyDisplayGroup();
     }

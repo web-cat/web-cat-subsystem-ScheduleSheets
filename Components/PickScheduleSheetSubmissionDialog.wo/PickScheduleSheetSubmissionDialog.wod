@@ -1,0 +1,31 @@
+OK: WCButton {
+    action = viewSubmission;
+    label = "OK";
+    class = "pos";
+}
+Dialog : WCContentPane {
+    dojoType = "webcat.Dialog";
+    id = "pickSubmissionDialog";
+    title = "View Another Submission";
+    style = "display: none";
+    refreshOnShow = true;
+    alwaysDynamic = true;
+}
+
+SubmissionTable: WCTable {
+    displayGroup = submissions;
+    canSelectRows = true;
+    fixedPageSize = true;
+    style = "width: 100%;";
+}
+
+SubmitTime: WOString {
+    value     = aSubmission.submitTime;
+    formatter = session.timeFormatter;
+}
+
+SubmitTimeSpan: WOGenericContainer {
+    elementName = "span";
+    class = "~aSubmission.isLate ? 'warn' : ''";
+    title = aSubmission.earlyLateStatus;
+}

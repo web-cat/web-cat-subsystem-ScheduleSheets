@@ -30,5 +30,19 @@
             selectsFirstObjectAfterFetch = YES;
             sortOrdering = ({class = EOSortOrdering; key = activity; selectorName = "compareAscending:"; });
         };
+        feedback = {
+            class = ERXDisplayGroup;
+            dataSource = {
+                class = EODetailDataSource;
+                detailKey = currentFeedback;
+                masterClassDescription = ScheduleSheet;
+            };
+            fetchesOnLoad = YES;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            numberOfObjectsPerBatch = 0;
+            selectsFirstObjectAfterFetch = YES;
+            sortOrdering = ({class = EOSortOrdering; key = category; selectorName = "compareAscending:"; });
+        };
     };
 }

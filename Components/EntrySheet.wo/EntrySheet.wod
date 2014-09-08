@@ -1,3 +1,11 @@
+ScoreSummaryBlock: org.webcat.grader.ScoreSummaryBlock {
+    submission = submission;
+    allowScoreEdit = false;
+    includeGraph = false;
+    taLabel = "Manual Evaluation";
+    toolLabel = "Automated Checks";
+}
+
 Summary:org.webcat.schedulesheets.ScheduleSheetSummaryBlock {
     submission = submission;
     allowPartnerEdit = true;

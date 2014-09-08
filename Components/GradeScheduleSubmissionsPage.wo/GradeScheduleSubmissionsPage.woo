@@ -1,0 +1,48 @@
+{
+	"WebObjects Release" = "WebObjects 5.0";
+	encoding = "UTF-8";
+    variables = {
+        offerings = {
+            class = ERXDisplayGroup;
+            fetchesOnLoad = NO;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            sortOrdering = (
+                {
+                    class = EOSortOrdering;
+                    key = order;
+                    selectorName = "compareAscending:";
+                },
+                {
+                    class = EOSortOrdering;
+                    key = titleString;
+                    selectorName = "compareCaseInsensitiveAscending:";
+                }
+            );
+        };
+        staffPairs = {
+            class = ERXDisplayGroup;
+            fetchesOnLoad = NO;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            sortOrdering = (
+                {
+                    class = EOSortOrdering;
+                    key = user.name_LF;
+                    selectorName = "compareCaseInsensitiveAscending:";
+                },
+                {
+                    class = EOSortOrdering;
+                    key = user.userName;
+                    selectorName = "compareCaseInsensitiveAscending:";
+                }
+            );
+        };
+        studentNewerSubmissions = {
+            class = ERXDisplayGroup;
+            fetchesOnLoad = NO;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+        };
+    };
+}

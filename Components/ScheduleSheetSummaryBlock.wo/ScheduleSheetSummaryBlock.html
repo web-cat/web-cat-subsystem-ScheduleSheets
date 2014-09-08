@@ -1,16 +1,14 @@
 <table class="floatLeft"><tbody>
 <wo name="TR">
   <th class="R top">Assignment</th>
-  <td><wo:str value="$submission.assignmentOffering.courseOffering.compactName"/>:
-    <wo:str value="$submission.assignmentOffering.assignment.name"/><wo:if condition="$submission.assignmentOffering.assignment.numberOfSheets">,
-    Sheet <wo:str value="~submission.assignmentOffering.order + 1"/></wo:if>
+  <td><wo:str value="$submission.assignmentOffering.titleString"/>
      try #<wo:str value="$submission.submitNumber"/></td>
 </wo>
 <wo name="TR">
   <th class="R top">Name</th>
   <td><wo:str value="$submission.user.nameAndUid"/></td>
 </wo>
-<wo:if condition="~submission.assignmentOffering.assignment.submissionProfile.allowPartners || partnersForEditing.count || submission.sheet.submissions.count">
+<wo:if condition="~submission.assignmentOffering.assignment.submissionProfile.allowPartners || partnersForEditing.count">
 <wo name="TR">
   <th class="R">Partners</th>
   <td>
@@ -33,9 +31,9 @@
 </wo>
 <wo name="TR">
   <th class="R top">Total Score</th>
-  <td><wo:str value="$submission.sheet.scoreModifiers"/><b><wo:if condition="~submission.sheet.status == @org.webcat.core.Status@CHECK"><wo:str
+  <td><wo:str value="$submission.sheet.scoreModifiers"/><b><wo:if condition="$submission.sheet.staffFeedbackIsReady"><wo:str
     value="~submission.sheet.finalScoreVisibleTo(user)"
-    numberformat="0.0"/></wo:if><wo:else>&lt;Awaiting TA&gt;</wo:else></b>/<wo:str
+    numberformat="0.0"/></wo:if><wo:else>&lt;Awaiting Staff&gt;</wo:else></b>/<wo:str
     value="$submission.assignmentOffering.assignment.submissionProfile.availablePoints"/></td>
 </wo>
 </tbody></table>

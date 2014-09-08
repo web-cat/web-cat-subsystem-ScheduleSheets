@@ -1,7 +1,23 @@
 <wo:org.webcat.core.WCPageWithNavigation title="$title">
+<wo:WCForm multipleSubmit="true">
+<wo:org.webcat.schedulesheets.PickScheduleSheetSubmissionDialog
+  currentSubmission="$submission"
+  targetPageName="org.webcat.schedulesheets.SheetFeedbackPage"
+  pass.edit="$edit"
+  pass.nextPage="$nextPage"/>
 
 <wo:org.webcat.core.WCPageModule title="Schedule Sheet Summary">
-<wo:org.webcat.schedulesheets.ScheduleSheetSummaryBlock submission="$submission"/>
+<wo:org.webcat.schedulesheets.ScheduleSheetSummaryBlock
+  submission="$submission" allowPartnerEdit="$edit"/>
+<wo name="ScoreSummaryBlock"/>
+<p class="clear">
+  <wo:if condition="$edit">
+    <wo:checkbox checked="$gradingDone"
+      alt="Show grade to student and send e-mail"
+      id="done"/> <label for="done">Show grade to student?</label>
+    <wo:WCButton action="$regrade" label="Regrade Submission"/></wo:if>
+  <wo:WCButton remote="true" action="$pickOtherSubmission"
+    label="View Other Submissions"/></p>
 </wo:org.webcat.core.WCPageModule>
 
 <wo:if condition="~offering.order == 0">
@@ -12,8 +28,8 @@
 <table><thead><tr>
   <th>Component / Feature</th>
   <th>Activity</th>
-  <th>Estimated Time Needed to Finish</th>
-  <th>Personal Deadline</th>
+  <th>Estimated Time<br/>Needed to Finish</th>
+  <th>Personal<br/>Deadline</th>
 </tr></thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
@@ -25,8 +41,8 @@
         </wo:WOGenericContainer>
       </wo:not>
       <td><wo:str value="$entry.activityName"/></td>
-      <td class="c"><wo:str numberformat="0"
-        value="$entry.estimatedRemaining"/> hours</td>
+      <td><wo:if condition="~entry.newEstimatedRemainingRaw != null"><wo:str numberformat="#.#"
+        value="$entry.newEstimatedRemainingRaw"/> hours</wo:if></td>
       <td><wo:str value="$entry.newDeadline" dateformat="$user.dateFormat"/></td>
     </wo:TableRow>
   </wo:loop>
@@ -42,8 +58,8 @@
 <table><thead><tr>
   <th>Component / Feature</th>
   <th>Activity</th>
-  <th>Time Spent Since Last Schedule</th>
-  <th>Component / Feature Now Finished?</th>
+  <th>Time Spent<br/>Since Last Schedule</th>
+  <th>Component / Feature<br/>Now Finished?</th>
 </tr></thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
@@ -55,8 +71,8 @@
         </wo:WOGenericContainer>
       </wo:not>
       <td><wo:str value="$entry.activityName"/></td>
-      <td class="c"><wo:str numberformat="0"
-        value="$entry.timeInvested"/> hours</td>
+      <td><wo:if condition="~entry.newTimeInvestedRaw ~= null"><wo:str numberformat="#.#"
+        value="$entry.newTimeInvestedRaw"/> hours</wo:if></td>
       <td><wo:checkbox checked="$entry.isComplete" disabled="~true"/></td>
     </wo:TableRow>
   </wo:loop>
@@ -72,11 +88,11 @@
 <table><thead><tr>
   <th>Component / Feature</th>
   <th>Activity</th>
-  <th>Previously Estimated Total Time</th>
-  <th>Previous Personal Deadline</th>
-  <th>Time Invested Since Last Schedule</th>
-  <th>Estimated Time Needed to Finish</th>
-  <th>Revised Personal Deadline</th>
+  <th>Previously Estimated<br/>Total Time</th>
+  <th>Previous<br/>Personal Deadline</th>
+  <th>Time Invested<br/>Since Last Schedule</th>
+  <th>Estimated Time<br/>Needed to Finish</th>
+  <th>Revised<br/>Personal Deadline</th>
 </tr></thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
@@ -88,14 +104,14 @@
         </wo:WOGenericContainer>
       </wo:not>
       <td><wo:str value="$entry.activityName"/></td>
-      <td><wo:str value="$entry.previousEstimatedTotal"/> hours</td>
+      <td><wo:str value="$entry.previousEstimatedTotal" numberformat="#.#"/> hours</td>
       <td><wo:str value="$entry.previousDeadline" dateformat="$user.dateFormat"/></td>
-      <td><wo:str value="$entry.timeInvested"/> hours</td>
+      <td><wo:if condition="~entry.newTimeInvestedRaw != null"><wo:str value="$entry.newTimeInvestedRaw" numberformat="#.#"/> hours</wo:if></td>
       <wo:if condition="$entry.isComplete">
         <td colspan="2">-- completed --</td>
       </wo:if><wo:else>
-        <td class="c"><wo:str numberformat="0"
-          value="$entry.estimatedRemaining"/> hours</td>
+        <td><wo:if condition="~entry.newEstimatedRemainingRaw != null"><wo:str numberformat="#.#"
+          value="$entry.newEstimatedRemainingRaw"/> hours</wo:if></td>
         <td><wo:str value="$entry.newDeadline" dateformat="$user.dateFormat"/></td>
       </wo:else>
     </wo:TableRow>
@@ -109,4 +125,41 @@
 </wo:else>
 </wo:else>
 
+<wo:if condition="$feedback.displayedObjects.count">
+<wo:org.webcat.core.WCPageModule title="Feedback on Your Schedule">
+
+<wo:WOGenericContainer elementName="ul" class="NoticePanel">
+  <wo:loop list="$feedback.displayedObjects" item="$msg">
+    <wo:WOGenericContainer elementName="li" class="$msg.cssClass"><wo:str value="$msg.text" escapeHTML="false"/></wo:WOGenericContainer>
+  </wo:loop>
+</wo:WOGenericContainer>
+
+</wo:org.webcat.core.WCPageModule>
+</wo:if>
+
+
+<wo:if condition="$edit">
+<wo:org.webcat.core.WCPageModule title="TA/Instructor Comments">
+  <div><wo name="Comments"/></div>
+  <div class="belowInput">Format: <wo name="CommentFormat"/>
+    <wo:if condition="$sheet.lastUpdated">feedback last updated:
+      <wo:str value="$sheet.lastUpdated"
+        formatter="$session.timeFormatter"/></wo:if></div>
+</wo:org.webcat.core.WCPageModule>
+
+<div class="module right">
+  <wo:WCButton action="$next" class="pos" label="Save"/>
+  <wo:WCButton action="$cancel" class="neg" label="Cancel"/>
+</div>
+
+</wo:if><wo:else>
+<wo:if condition="$studentCanSeeResults"><wo:if condition="$sheet.comments">
+  <wo:org.webcat.core.WCPageModule title="TA/Instructor Comments">
+    <wo:org.webcat.core.FormattedString
+      value="$sheet.comments" format="$sheet.commentFormat"/>
+  </wo:org.webcat.core.WCPageModule>
+</wo:if></wo:if>
+</wo:else>
+
+</wo:WCForm>
 </wo:org.webcat.core.WCPageWithNavigation>

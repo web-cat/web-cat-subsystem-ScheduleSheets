@@ -23,7 +23,6 @@ package org.webcat.schedulesheets;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
-import er.extensions.foundation.ERXArrayUtilities;
 
 //-------------------------------------------------------------------------
 /**
@@ -55,23 +54,44 @@ public class SheetEntry
     public void setupFrom(SheetEntry other, boolean newAssignment)
     {
         setActivity(other.activity());
-        setIsComplete(other.isComplete());
         if (newAssignment)
         {
-            setPreviousEstimatedTotal(other.previousEstimatedTotal()
-                + other.estimatedRemaining());
+            if (other.previousEstimatedTotalRaw() != null)
+            {
+                setPreviousEstimatedTotal(other.newEstimatedTotal());
+            }
+            else
+            {
+                setPreviousEstimatedTotalRaw(other.newEstimatedRemainingRaw());
+            }
+            if (other.newTimeInvestedRaw() != null)
+            {
+                setPreviousTimeInvestedTotal(other.newTimeInvestedTotal());
+            }
+            else
+            {
+                setPreviousTimeInvestedTotalRaw(
+                    other.previousTimeInvestedTotalRaw());
+            }
             setPreviousDeadline(other.newDeadline());
-            setNewDeadline(other.newDeadline());
+            setPreviousEstimatedRemainingRaw(other.newEstimatedRemainingRaw());
         }
         else
         {
             // resubmission
-            setPreviousEstimatedTotal(other.previousEstimatedTotal());
+            setPreviousEstimatedRemainingRaw(
+                other.previousEstimatedRemainingRaw());
+            setPreviousEstimatedTotalRaw(other.previousEstimatedTotalRaw());
             setPreviousDeadline(other.previousDeadline());
-            setTimeInvested(other.timeInvested());
-            setEstimatedRemaining(other.estimatedRemaining());
-            setNewDeadline(other.newDeadline());
+            setPreviousTimeInvestedTotalRaw(
+                other.previousTimeInvestedTotalRaw());
+
+            setNewTimeInvestedRaw(other.newTimeInvestedRaw());
+            setNewEstimatedRemainingRaw(other.newEstimatedRemainingRaw());
         }
+        setNewDeadline(other.newDeadline());
+        setIsCompleteRaw(other.isCompleteRaw());
+        setPreviousWasCompleteRaw(other.previousWasCompleteRaw());
     }
 
 
@@ -97,21 +117,29 @@ public class SheetEntry
 
 
     // ----------------------------------------------------------
-    @SuppressWarnings("unchecked")
-    public NSArray<SheetFeedbackItem> nontransientFeedback()
+    public NSTimestamp currentDeadline()
     {
-        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(
-            feedbackItems(),
-            SheetFeedbackItem.isTransient.isFalse());
+        NSTimestamp deadline = newDeadline();
+        if (deadline == null)
+        {
+            deadline = previousDeadline();
+        }
+        return deadline;
     }
 
 
     // ----------------------------------------------------------
-    public void moveNonTransientToTransient()
+    private long msAfterDeadline()
     {
-        for (SheetFeedbackItem i : nontransientFeedback())
+        NSTimestamp deadline = currentDeadline();
+        if (deadline == null)
         {
-            i.setIsTransient(true);
+            return -DAY - 1L;
+        }
+        else
+        {
+            return componentFeature().sheet().submission().submitTime()
+                .getTime() - deadline.getTime();
         }
     }
 
@@ -119,27 +147,91 @@ public class SheetEntry
     // ----------------------------------------------------------
     public boolean isOverdue()
     {
-        NSTimestamp submitTime =
-            componentFeature().sheet().submission().submitTime();
-        if (newDeadline() != null)
-        {
-            return submitTime.after(newDeadline());
-        }
-        else if (previousDeadline() != null)
-        {
-            return submitTime.after(previousDeadline());
-        }
-        else
-        {
-            return false;
-        }
+        return msAfterDeadline() > DAY;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isDueToday()
+    {
+        long ms = msAfterDeadline();
+        return ms >= 0 && ms < DAY;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isDueTomorrow()
+    {
+        long ms = msAfterDeadline();
+        return ms < 0 && ms >= -DAY;
     }
 
 
     // ----------------------------------------------------------
     public double newEstimatedTotal()
     {
-        return previousEstimatedTotal() + estimatedRemaining();
+        return previousEstimatedTotal() + newEstimatedRemaining();
+    }
+
+
+    // ----------------------------------------------------------
+    public double newTimeInvestedTotal()
+    {
+        return previousTimeInvestedTotal() + newTimeInvested();
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isEmpty()
+    {
+        return !isComplete()
+            && newEstimatedRemaining() == 0
+            && newDeadline() == null
+            && newTimeInvested() == 0
+            && previousEstimatedRemaining() == 0
+            && previousDeadline() == null
+            && previousTimeInvestedTotal() == 0;
+    }
+
+
+    // ----------------------------------------------------------
+    public void runAutomaticChecks(int round)
+    {
+        // No estimated time to complete an entry
+        if (!isComplete()
+            && (previousDeadline() != null
+                || previousEstimatedRemaining() > 0
+                || previousTimeInvestedTotal() > 0)
+            && newEstimatedRemainingRaw() == null)
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_MISSING_ESTIMATED_REMAINING, this);
+        }
+
+        if (!isComplete()
+            && newEstimatedRemaining() > 0
+            && newDeadline() == null)
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_MISSING_NEW_DEADLINE, this);
+        }
+
+        // An entry is overdue
+        if (isOverdue())
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_IS_OVERDUE, this);
+        }
+        else if (isDueToday())
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_IS_DUE_TODAY, this);
+        }
+        else if (isDueTomorrow())
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_IS_DUE_TOMORROW, this);
+        }
     }
 
 
@@ -148,6 +240,7 @@ public class SheetEntry
     public static final byte DESIGN = 0;
     public static final byte CODE   = 1;
     public static final byte TEST   = 2;
+    private static final long DAY = 1000 * 60 * 60 * 24;
 
     public static final NSArray<Byte> ACTIVITIES = new NSArray<Byte>(
         new Byte[] {

@@ -6,7 +6,32 @@
             name = category;
             prototypeName = tinyInteger;
         },
-        {allowsNull = N; columnName = code; name = code; prototypeName = integer; },
+        {
+            allowsNull = N;
+            columnName = checkRound;
+            name = checkRound;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
+        {
+            allowsNull = N;
+            columnName = code;
+            name = code;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
         {
             allowsNull = Y;
             columnName = componentFeatureId;
@@ -25,18 +50,12 @@
             name = sheetEntryId;
             prototypeName = foreignId;
         },
-        {
-            columnName = isTransient;
-            allowsNull = N;
-            name = isTransient;
-            prototypeName = boolean;
-            userInfo = {isScalar = true; scalarDefault = false; type = boolean; };
-        },
         {allowsNull = N; name = id; prototypeName = id; },
         {columnName = message; name = message; prototypeName = mediumText; }
     );
     attributesUsedForLocking = (
         category,
+        checkRound,
         code,
         componentFeatureId,
         sheetId,
@@ -46,11 +65,11 @@
     className = "org.webcat.schedulesheets.SheetFeedbackItem";
     classProperties = (
         category,
+        checkRound,
         code,
         componentFeature,
         sheet,
         sheetEntry,
-        isTransient,
         message
     );
     externalName = SheetFeedbackItem;

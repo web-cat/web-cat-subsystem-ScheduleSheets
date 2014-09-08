@@ -147,6 +147,9 @@ public abstract class _ScheduleSheet
     public static final String LAST_UPDATED_KEY = "lastUpdated";
     public static final ERXKey<NSTimestamp> lastUpdated =
         new ERXKey<NSTimestamp>(LAST_UPDATED_KEY);
+    public static final String NUM_CHECK_ROUNDS_KEY = "numCheckRounds";
+    public static final ERXKey<Integer> numCheckRounds =
+        new ERXKey<Integer>(NUM_CHECK_ROUNDS_KEY);
     public static final String SCORE_KEY = "score";
     public static final ERXKey<Double> score =
         new ERXKey<Double>(SCORE_KEY);
@@ -343,6 +346,70 @@ public abstract class _ScheduleSheet
                 + value + "): was " + lastUpdated() );
         }
         takeStoredValueForKey( value, "lastUpdated" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>numCheckRounds</code> value.
+     * @return the value of the attribute
+     */
+    public int numCheckRounds()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "numCheckRounds" );
+        return ( returnValue == null )
+            ? 0
+            : returnValue.intValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>numCheckRounds</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setNumCheckRounds( int value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setNumCheckRounds("
+                + value + "): was " + numCheckRounds() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value );
+            setNumCheckRoundsRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>numCheckRounds</code> value.
+     * @return the value of the attribute
+     */
+    public Integer numCheckRoundsRaw()
+    {
+        return (Integer)storedValueForKey( "numCheckRounds" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>numCheckRounds</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setNumCheckRoundsRaw( Integer value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setNumCheckRoundsRaw("
+                + value + "): was " + numCheckRoundsRaw() );
+        }
+        takeStoredValueForKey( value, "numCheckRounds" );
     }
 
 

@@ -21,8 +21,7 @@
 
 package org.webcat.schedulesheets;
 
-import com.webobjects.foundation.NSArray;
-import er.extensions.foundation.ERXArrayUtilities;
+import com.webobjects.foundation.NSTimestamp;
 
 //-------------------------------------------------------------------------
 /**
@@ -56,7 +55,8 @@ public class ComponentFeature
         setOrder(other.order());
         for (SheetEntry entry : other.entries())
         {
-            SheetEntry myEntry = SheetEntry.create(editingContext(), false);
+            SheetEntry myEntry = SheetEntry.create(editingContext(),
+                entry.isComplete(), entry.previousWasComplete());
             addToEntriesRelationship(myEntry);
             myEntry.setupFrom(entry, newAssignment);
         }
@@ -64,7 +64,7 @@ public class ComponentFeature
 
 
     // ----------------------------------------------------------
-    public SheetEntry entryForActivity(byte activity)
+    public SheetEntry entryFor(byte activity)
     {
         for (SheetEntry entry : entries())
         {
@@ -74,26 +74,6 @@ public class ComponentFeature
             }
         }
         return null;
-    }
-
-
-    // ----------------------------------------------------------
-    @SuppressWarnings("unchecked")
-    public NSArray<SheetFeedbackItem> nontransientFeedback()
-    {
-        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(
-            feedbackItems(),
-            SheetFeedbackItem.isTransient.isFalse());
-    }
-
-
-    // ----------------------------------------------------------
-    public void moveNonTransientToTransient()
-    {
-        for (SheetFeedbackItem i : nontransientFeedback())
-        {
-            i.setIsTransient(true);
-        }
     }
 
 
@@ -112,24 +92,24 @@ public class ComponentFeature
 
 
     // ----------------------------------------------------------
-    public double estimatedRemaining()
+    public double newEstimatedRemaining()
     {
         double result = 0.0;
         for (SheetEntry entry : entries())
         {
-            result += entry.estimatedRemaining();
+            result += entry.newEstimatedRemaining();
         }
         return result;
     }
 
 
     // ----------------------------------------------------------
-    public double previousEstimatedTotal()
+    public double previousEstimatedRemaining()
     {
         double result = 0.0;
         for (SheetEntry entry : entries())
         {
-            result += entry.previousEstimatedTotal();
+            result += entry.previousEstimatedRemaining();
         }
         return result;
     }
@@ -148,6 +128,54 @@ public class ComponentFeature
 
 
     // ----------------------------------------------------------
+    public double previousEstimatedTotal()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.previousEstimatedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newTimeInvested()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.newTimeInvested();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newTimeInvestedTotal()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.newTimeInvestedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double previousTimeInvestedTotal()
+    {
+        double result = 0.0;
+        for (SheetEntry entry : entries())
+        {
+            result += entry.previousTimeInvestedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
     public boolean isComplete()
     {
         for (SheetEntry entry : entries())
@@ -158,6 +186,136 @@ public class ComponentFeature
             }
         }
         return true;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean previousWasComplete()
+    {
+        for (SheetEntry entry : entries())
+        {
+            if (!entry.previousWasComplete())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // ----------------------------------------------------------
+    public NSTimestamp newDeadline()
+    {
+        NSTimestamp result = null;
+        for (SheetEntry entry : entries())
+        {
+            if (result == null
+                || (entry.newDeadline() != null
+                    && entry.newDeadline().after(result)))
+            {
+                result = entry.newDeadline();
+            }
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public NSTimestamp previousDeadline()
+    {
+        NSTimestamp result = null;
+        for (SheetEntry entry : entries())
+        {
+            if (result == null
+                || (entry.previousDeadline() != null
+                    && entry.previousDeadline().after(result)))
+            {
+                result = entry.previousDeadline();
+            }
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isEmpty()
+    {
+        if (name() != null && !name().isEmpty())
+        {
+            return false;
+        }
+        for (SheetEntry entry : entries())
+        {
+            if (!entry.isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // ----------------------------------------------------------
+    public void runAutomaticChecks(int round)
+    {
+        for (SheetEntry entry : entries())
+        {
+            entry.runAutomaticChecks(round);
+        }
+
+        // Component-level checks
+        SheetEntry design = entryFor(SheetEntry.DESIGN);
+        SheetEntry code = entryFor(SheetEntry.CODE);
+        SheetEntry test = entryFor(SheetEntry.TEST);
+
+        // No design time estimated
+        if (!code.isComplete()
+            && code.newEstimatedRemaining() > 4
+            && design.newTimeInvestedTotal() == 0
+            && design.newEstimatedRemaining() == 0)
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.CF_INSUFFICIENT_DESIGN, this);
+        }
+
+        // No test time estimated
+        if (!code.isComplete()
+            && code.newEstimatedRemaining() > 0)
+        {
+            if (test.newEstimatedRemaining() == 0)
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.CF_INSUFFICIENT_TEST, this);
+            }
+            else if (test.newEstimatedRemaining()
+                < code.newEstimatedRemaining() / 5)
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.CF_INSUFFICIENT_TEST2, this);
+            }
+        }
+
+        // Design deadline falls after code deadline
+        if (!design.isComplete()
+            && !code.isComplete()
+            && code.newDeadline() != null
+            && design.newDeadline() != null
+            && design.newDeadline().after(code.newDeadline()))
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.CF_DESIGN_AFTER_CODE, this);
+        }
+
+        // Code deadline falls after test deadline
+        if (!code.isComplete()
+            && !test.isComplete()
+            && test.newDeadline() != null
+            && code.newDeadline() != null
+            && code.newDeadline().after(test.newDeadline()))
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.CF_CODE_AFTER_TEST, this);
+        }
     }
 
 

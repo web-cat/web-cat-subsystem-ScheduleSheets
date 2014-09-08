@@ -17,18 +17,6 @@
             name = componentFeatureId;
             prototypeName = foreignId;
         },
-        {
-            columnName = estimatedRemaining;
-            name = estimatedRemaining;
-            prototypeName = double;
-            userInfo = {
-                isScalar = true;
-                scalarConversionMethodName = doubleValue;
-                scalarDefault = "0.0";
-                type = double;
-                valueClassName = Double;
-            };
-        },
         {name = id; prototypeName = id; },
         {
             columnName = isComplete;
@@ -45,11 +33,47 @@
             valueClassName = NSCalendarDate;
         },
         {
+            columnName = newEstimatedRemaining;
+            name = newEstimatedRemaining;
+            prototypeName = double;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = doubleValue;
+                scalarDefault = "0.0";
+                type = double;
+                valueClassName = Double;
+            };
+        },
+        {
+            columnName = newTimeInvested;
+            name = newTimeInvested;
+            prototypeName = double;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = doubleValue;
+                scalarDefault = "0.0";
+                type = double;
+                valueClassName = Double;
+            };
+        },
+        {
             columnName = previousDeadline;
             name = previousDeadline;
             allowsNull = Y;
             externalType = DATE;
             valueClassName = NSCalendarDate;
+        },
+        {
+            columnName = previousEstimatedRemaining;
+            name = previousEstimatedRemaining;
+            prototypeName = double;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = doubleValue;
+                scalarDefault = "0.0";
+                type = double;
+                valueClassName = Double;
+            };
         },
         {
             columnName = previousEstimatedTotal;
@@ -64,8 +88,8 @@
             };
         },
         {
-            columnName = timeInvested;
-            name = timeInvested;
+            columnName = previousTimeInvestedTotal;
+            name = previousTimeInvestedTotal;
             prototypeName = double;
             userInfo = {
                 isScalar = true;
@@ -75,27 +99,40 @@
                 valueClassName = Double;
             };
         },
+        {
+            columnName = previousWasComplete;
+            allowsNull = N;
+            name = previousWasComplete;
+            prototypeName = boolean;
+            userInfo = {isScalar = true; scalarDefault = false; type = boolean; };
+        },
     );
     attributesUsedForLocking = (
         activity,
         componentFeatureId,
-        estimatedRemaining,
         isComplete,
+        newEstimatedRemaining,
+        newTimeInvested,
         previousEstimatedTotal,
-        timeInvested
+        previousEstimatedRemaining,
+        previousTimeInvestedTotal,
+        previousWasComplete
     );
     className = "org.webcat.schedulesheets.SheetEntry";
     classProperties = (
         activity,
         componentFeature,
-        estimatedRemaining,
         feedbackItems,
         finished,
         isComplete,
         newDeadline,
-        previousEstimatedTotal,
+        newEstimatedRemaining,
+        newTimeInvested,
         previousDeadline,
-        timeInvested
+        previousEstimatedTotal,
+        previousEstimatedRemaining,
+        previousTimeInvestedTotal,
+        previousWasComplete
     );
     externalName = SheetEntry;
     fetchSpecificationDictionary = {};

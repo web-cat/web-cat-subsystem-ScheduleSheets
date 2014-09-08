@@ -40,6 +40,18 @@
             };
         },
         {
+            columnName = numCheckRounds;
+            name = numCheckRounds;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
+        {
             columnName = taScore;
             name = taScore;
             prototypeName = double;
@@ -67,6 +79,7 @@
     attributesUsedForLocking = (
         commentFormat,
         comments,
+        numCheckRounds,
         status,
         taScore,
         toolScore
@@ -78,6 +91,7 @@
         componentFeatures,
         feedbackItems,
         lastUpdated,
+        numCheckRounds,
         score,
         status,
         submissions,

@@ -65,11 +65,13 @@ public abstract class _SheetEntry
      * @param editingContext The context in which the new object will be
      * inserted
      * @param isCompleteValue
+     * @param previousWasCompleteValue
      * @return The newly created object
      */
     public static SheetEntry create(
         EOEditingContext editingContext,
-        boolean isCompleteValue
+        boolean isCompleteValue,
+        boolean previousWasCompleteValue
         )
     {
         SheetEntry eoObject = (SheetEntry)
@@ -77,6 +79,7 @@ public abstract class _SheetEntry
                 editingContext,
                 _SheetEntry.ENTITY_NAME);
         eoObject.setIsComplete(isCompleteValue);
+        eoObject.setPreviousWasComplete(previousWasCompleteValue);
         return eoObject;
     }
 
@@ -144,24 +147,33 @@ public abstract class _SheetEntry
     public static final String ACTIVITY_KEY = "activity";
     public static final ERXKey<Integer> activity =
         new ERXKey<Integer>(ACTIVITY_KEY);
-    public static final String ESTIMATED_REMAINING_KEY = "estimatedRemaining";
-    public static final ERXKey<Double> estimatedRemaining =
-        new ERXKey<Double>(ESTIMATED_REMAINING_KEY);
     public static final String IS_COMPLETE_KEY = "isComplete";
     public static final ERXKey<Integer> isComplete =
         new ERXKey<Integer>(IS_COMPLETE_KEY);
     public static final String NEW_DEADLINE_KEY = "newDeadline";
     public static final ERXKey<NSTimestamp> newDeadline =
         new ERXKey<NSTimestamp>(NEW_DEADLINE_KEY);
+    public static final String NEW_ESTIMATED_REMAINING_KEY = "newEstimatedRemaining";
+    public static final ERXKey<Double> newEstimatedRemaining =
+        new ERXKey<Double>(NEW_ESTIMATED_REMAINING_KEY);
+    public static final String NEW_TIME_INVESTED_KEY = "newTimeInvested";
+    public static final ERXKey<Double> newTimeInvested =
+        new ERXKey<Double>(NEW_TIME_INVESTED_KEY);
     public static final String PREVIOUS_DEADLINE_KEY = "previousDeadline";
     public static final ERXKey<NSTimestamp> previousDeadline =
         new ERXKey<NSTimestamp>(PREVIOUS_DEADLINE_KEY);
+    public static final String PREVIOUS_ESTIMATED_REMAINING_KEY = "previousEstimatedRemaining";
+    public static final ERXKey<Double> previousEstimatedRemaining =
+        new ERXKey<Double>(PREVIOUS_ESTIMATED_REMAINING_KEY);
     public static final String PREVIOUS_ESTIMATED_TOTAL_KEY = "previousEstimatedTotal";
     public static final ERXKey<Double> previousEstimatedTotal =
         new ERXKey<Double>(PREVIOUS_ESTIMATED_TOTAL_KEY);
-    public static final String TIME_INVESTED_KEY = "timeInvested";
-    public static final ERXKey<Double> timeInvested =
-        new ERXKey<Double>(TIME_INVESTED_KEY);
+    public static final String PREVIOUS_TIME_INVESTED_TOTAL_KEY = "previousTimeInvestedTotal";
+    public static final ERXKey<Double> previousTimeInvestedTotal =
+        new ERXKey<Double>(PREVIOUS_TIME_INVESTED_TOTAL_KEY);
+    public static final String PREVIOUS_WAS_COMPLETE_KEY = "previousWasComplete";
+    public static final ERXKey<Integer> previousWasComplete =
+        new ERXKey<Integer>(PREVIOUS_WAS_COMPLETE_KEY);
     // To-one relationships ---
     public static final String COMPONENT_FEATURE_KEY = "componentFeature";
     public static final ERXKey<org.webcat.schedulesheets.ComponentFeature> componentFeature =
@@ -290,70 +302,6 @@ public abstract class _SheetEntry
 
     // ----------------------------------------------------------
     /**
-     * Retrieve this object's <code>estimatedRemaining</code> value.
-     * @return the value of the attribute
-     */
-    public double estimatedRemaining()
-    {
-        Double returnValue =
-            (Double)storedValueForKey( "estimatedRemaining" );
-        return ( returnValue == null )
-            ? 0.0
-            : returnValue.doubleValue();
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Change the value of this object's <code>estimatedRemaining</code>
-     * property.
-     *
-     * @param value The new value for this property
-     */
-    public void setEstimatedRemaining( double value )
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug( "setEstimatedRemaining("
-                + value + "): was " + estimatedRemaining() );
-        }
-        Double actual =
-            new Double( value );
-            setEstimatedRemainingRaw( actual );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Retrieve this object's <code>estimatedRemaining</code> value.
-     * @return the value of the attribute
-     */
-    public Double estimatedRemainingRaw()
-    {
-        return (Double)storedValueForKey( "estimatedRemaining" );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Change the value of this object's <code>estimatedRemaining</code>
-     * property.
-     *
-     * @param value The new value for this property
-     */
-    public void setEstimatedRemainingRaw( Double value )
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug( "setEstimatedRemainingRaw("
-                + value + "): was " + estimatedRemainingRaw() );
-        }
-        takeStoredValueForKey( value, "estimatedRemaining" );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
      * Retrieve this object's <code>isComplete</code> value.
      * @return the value of the attribute
      */
@@ -447,6 +395,134 @@ public abstract class _SheetEntry
 
     // ----------------------------------------------------------
     /**
+     * Retrieve this object's <code>newEstimatedRemaining</code> value.
+     * @return the value of the attribute
+     */
+    public double newEstimatedRemaining()
+    {
+        Double returnValue =
+            (Double)storedValueForKey( "newEstimatedRemaining" );
+        return ( returnValue == null )
+            ? 0.0
+            : returnValue.doubleValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>newEstimatedRemaining</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setNewEstimatedRemaining( double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setNewEstimatedRemaining("
+                + value + "): was " + newEstimatedRemaining() );
+        }
+        Double actual =
+            new Double( value );
+            setNewEstimatedRemainingRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>newEstimatedRemaining</code> value.
+     * @return the value of the attribute
+     */
+    public Double newEstimatedRemainingRaw()
+    {
+        return (Double)storedValueForKey( "newEstimatedRemaining" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>newEstimatedRemaining</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setNewEstimatedRemainingRaw( Double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setNewEstimatedRemainingRaw("
+                + value + "): was " + newEstimatedRemainingRaw() );
+        }
+        takeStoredValueForKey( value, "newEstimatedRemaining" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>newTimeInvested</code> value.
+     * @return the value of the attribute
+     */
+    public double newTimeInvested()
+    {
+        Double returnValue =
+            (Double)storedValueForKey( "newTimeInvested" );
+        return ( returnValue == null )
+            ? 0.0
+            : returnValue.doubleValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>newTimeInvested</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setNewTimeInvested( double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setNewTimeInvested("
+                + value + "): was " + newTimeInvested() );
+        }
+        Double actual =
+            new Double( value );
+            setNewTimeInvestedRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>newTimeInvested</code> value.
+     * @return the value of the attribute
+     */
+    public Double newTimeInvestedRaw()
+    {
+        return (Double)storedValueForKey( "newTimeInvested" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>newTimeInvested</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setNewTimeInvestedRaw( Double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setNewTimeInvestedRaw("
+                + value + "): was " + newTimeInvestedRaw() );
+        }
+        takeStoredValueForKey( value, "newTimeInvested" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
      * Retrieve this object's <code>previousDeadline</code> value.
      * @return the value of the attribute
      */
@@ -471,6 +547,70 @@ public abstract class _SheetEntry
                 + value + "): was " + previousDeadline() );
         }
         takeStoredValueForKey( value, "previousDeadline" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>previousEstimatedRemaining</code> value.
+     * @return the value of the attribute
+     */
+    public double previousEstimatedRemaining()
+    {
+        Double returnValue =
+            (Double)storedValueForKey( "previousEstimatedRemaining" );
+        return ( returnValue == null )
+            ? 0.0
+            : returnValue.doubleValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>previousEstimatedRemaining</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setPreviousEstimatedRemaining( double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setPreviousEstimatedRemaining("
+                + value + "): was " + previousEstimatedRemaining() );
+        }
+        Double actual =
+            new Double( value );
+            setPreviousEstimatedRemainingRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>previousEstimatedRemaining</code> value.
+     * @return the value of the attribute
+     */
+    public Double previousEstimatedRemainingRaw()
+    {
+        return (Double)storedValueForKey( "previousEstimatedRemaining" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>previousEstimatedRemaining</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setPreviousEstimatedRemainingRaw( Double value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setPreviousEstimatedRemainingRaw("
+                + value + "): was " + previousEstimatedRemainingRaw() );
+        }
+        takeStoredValueForKey( value, "previousEstimatedRemaining" );
     }
 
 
@@ -540,13 +680,13 @@ public abstract class _SheetEntry
 
     // ----------------------------------------------------------
     /**
-     * Retrieve this object's <code>timeInvested</code> value.
+     * Retrieve this object's <code>previousTimeInvestedTotal</code> value.
      * @return the value of the attribute
      */
-    public double timeInvested()
+    public double previousTimeInvestedTotal()
     {
         Double returnValue =
-            (Double)storedValueForKey( "timeInvested" );
+            (Double)storedValueForKey( "previousTimeInvestedTotal" );
         return ( returnValue == null )
             ? 0.0
             : returnValue.doubleValue();
@@ -555,50 +695,114 @@ public abstract class _SheetEntry
 
     // ----------------------------------------------------------
     /**
-     * Change the value of this object's <code>timeInvested</code>
+     * Change the value of this object's <code>previousTimeInvestedTotal</code>
      * property.
      *
      * @param value The new value for this property
      */
-    public void setTimeInvested( double value )
+    public void setPreviousTimeInvestedTotal( double value )
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setTimeInvested("
-                + value + "): was " + timeInvested() );
+            log.debug( "setPreviousTimeInvestedTotal("
+                + value + "): was " + previousTimeInvestedTotal() );
         }
         Double actual =
             new Double( value );
-            setTimeInvestedRaw( actual );
+            setPreviousTimeInvestedTotalRaw( actual );
     }
 
 
     // ----------------------------------------------------------
     /**
-     * Retrieve this object's <code>timeInvested</code> value.
+     * Retrieve this object's <code>previousTimeInvestedTotal</code> value.
      * @return the value of the attribute
      */
-    public Double timeInvestedRaw()
+    public Double previousTimeInvestedTotalRaw()
     {
-        return (Double)storedValueForKey( "timeInvested" );
+        return (Double)storedValueForKey( "previousTimeInvestedTotal" );
     }
 
 
     // ----------------------------------------------------------
     /**
-     * Change the value of this object's <code>timeInvested</code>
+     * Change the value of this object's <code>previousTimeInvestedTotal</code>
      * property.
      *
      * @param value The new value for this property
      */
-    public void setTimeInvestedRaw( Double value )
+    public void setPreviousTimeInvestedTotalRaw( Double value )
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setTimeInvestedRaw("
-                + value + "): was " + timeInvestedRaw() );
+            log.debug( "setPreviousTimeInvestedTotalRaw("
+                + value + "): was " + previousTimeInvestedTotalRaw() );
         }
-        takeStoredValueForKey( value, "timeInvested" );
+        takeStoredValueForKey( value, "previousTimeInvestedTotal" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>previousWasComplete</code> value.
+     * @return the value of the attribute
+     */
+    public boolean previousWasComplete()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "previousWasComplete" );
+        return ( returnValue == null )
+            ? false
+            : ( returnValue.intValue() > 0 );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>previousWasComplete</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setPreviousWasComplete( boolean value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setPreviousWasComplete("
+                + value + "): was " + previousWasComplete() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value ? 1 : 0 );
+            setPreviousWasCompleteRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>previousWasComplete</code> value.
+     * @return the value of the attribute
+     */
+    public Integer previousWasCompleteRaw()
+    {
+        return (Integer)storedValueForKey( "previousWasComplete" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>previousWasComplete</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setPreviousWasCompleteRaw( Integer value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setPreviousWasCompleteRaw("
+                + value + "): was " + previousWasCompleteRaw() );
+        }
+        takeStoredValueForKey( value, "previousWasComplete" );
     }
 
 

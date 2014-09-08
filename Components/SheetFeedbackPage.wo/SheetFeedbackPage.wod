@@ -1,0 +1,25 @@
+CommentFormat: WCFilteringSelect {
+    list              = formats;
+    item              = aFormat;
+    selection         = sheet.commentFormat;
+    displayString     = formatLabel;
+//  noSelectionString = "Select from your files ...";
+}
+
+Comments: WCSimpleTextArea {
+    rows  = 15;
+    cols  = 80;
+    value = sheet.comments;
+    name  = "source";
+    id    = "source";
+    class = "fixed";
+//  style = "width:100%;";
+}
+
+ScoreSummaryBlock: org.webcat.grader.ScoreSummaryBlock {
+    submission = submission;
+    allowScoreEdit = edit;
+    includeGraph = false;
+    taLabel = "Manual Evaluation";
+    toolLabel = "Automated Checks";
+}

@@ -65,15 +65,15 @@ public abstract class _SheetFeedbackItem
      * @param editingContext The context in which the new object will be
      * inserted
      * @param categoryValue
+     * @param checkRoundValue
      * @param codeValue
-     * @param isTransientValue
      * @return The newly created object
      */
     public static SheetFeedbackItem create(
         EOEditingContext editingContext,
         Integer categoryValue,
-        Integer codeValue,
-        boolean isTransientValue
+        int checkRoundValue,
+        int codeValue
         )
     {
         SheetFeedbackItem eoObject = (SheetFeedbackItem)
@@ -81,8 +81,8 @@ public abstract class _SheetFeedbackItem
                 editingContext,
                 _SheetFeedbackItem.ENTITY_NAME);
         eoObject.setCategory(categoryValue);
+        eoObject.setCheckRound(checkRoundValue);
         eoObject.setCode(codeValue);
-        eoObject.setIsTransient(isTransientValue);
         return eoObject;
     }
 
@@ -150,12 +150,12 @@ public abstract class _SheetFeedbackItem
     public static final String CATEGORY_KEY = "category";
     public static final ERXKey<Integer> category =
         new ERXKey<Integer>(CATEGORY_KEY);
+    public static final String CHECK_ROUND_KEY = "checkRound";
+    public static final ERXKey<Integer> checkRound =
+        new ERXKey<Integer>(CHECK_ROUND_KEY);
     public static final String CODE_KEY = "code";
     public static final ERXKey<Integer> code =
         new ERXKey<Integer>(CODE_KEY);
-    public static final String IS_TRANSIENT_KEY = "isTransient";
-    public static final ERXKey<Integer> isTransient =
-        new ERXKey<Integer>(IS_TRANSIENT_KEY);
     public static final String MESSAGE_KEY = "message";
     public static final ERXKey<String> message =
         new ERXKey<String>(MESSAGE_KEY);
@@ -255,10 +255,109 @@ public abstract class _SheetFeedbackItem
 
     // ----------------------------------------------------------
     /**
+     * Retrieve this object's <code>checkRound</code> value.
+     * @return the value of the attribute
+     */
+    public int checkRound()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "checkRound" );
+        return ( returnValue == null )
+            ? 0
+            : returnValue.intValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>checkRound</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setCheckRound( int value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setCheckRound("
+                + value + "): was " + checkRound() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value );
+            setCheckRoundRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>checkRound</code> value.
+     * @return the value of the attribute
+     */
+    public Integer checkRoundRaw()
+    {
+        return (Integer)storedValueForKey( "checkRound" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>checkRound</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setCheckRoundRaw( Integer value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setCheckRoundRaw("
+                + value + "): was " + checkRoundRaw() );
+        }
+        takeStoredValueForKey( value, "checkRound" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
      * Retrieve this object's <code>code</code> value.
      * @return the value of the attribute
      */
-    public Integer code()
+    public int code()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "code" );
+        return ( returnValue == null )
+            ? 0
+            : returnValue.intValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>code</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setCode( int value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setCode("
+                + value + "): was " + code() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value );
+            setCodeRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>code</code> value.
+     * @return the value of the attribute
+     */
+    public Integer codeRaw()
     {
         return (Integer)storedValueForKey( "code" );
     }
@@ -271,78 +370,14 @@ public abstract class _SheetFeedbackItem
      *
      * @param value The new value for this property
      */
-    public void setCode( Integer value )
+    public void setCodeRaw( Integer value )
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setCode("
-                + value + "): was " + code() );
+            log.debug( "setCodeRaw("
+                + value + "): was " + codeRaw() );
         }
         takeStoredValueForKey( value, "code" );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Retrieve this object's <code>isTransient</code> value.
-     * @return the value of the attribute
-     */
-    public boolean isTransient()
-    {
-        Integer returnValue =
-            (Integer)storedValueForKey( "isTransient" );
-        return ( returnValue == null )
-            ? false
-            : ( returnValue.intValue() > 0 );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Change the value of this object's <code>isTransient</code>
-     * property.
-     *
-     * @param value The new value for this property
-     */
-    public void setIsTransient( boolean value )
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug( "setIsTransient("
-                + value + "): was " + isTransient() );
-        }
-        Integer actual =
-            er.extensions.eof.ERXConstant.integerForInt( value ? 1 : 0 );
-            setIsTransientRaw( actual );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Retrieve this object's <code>isTransient</code> value.
-     * @return the value of the attribute
-     */
-    public Integer isTransientRaw()
-    {
-        return (Integer)storedValueForKey( "isTransient" );
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Change the value of this object's <code>isTransient</code>
-     * property.
-     *
-     * @param value The new value for this property
-     */
-    public void setIsTransientRaw( Integer value )
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug( "setIsTransientRaw("
-                + value + "): was " + isTransientRaw() );
-        }
-        takeStoredValueForKey( value, "isTransient" );
     }
 
 

@@ -86,6 +86,13 @@ public class ScheduleSheetAssignment
 
 
     // ----------------------------------------------------------
+    public boolean usesTestingScore()
+    {
+        return false;
+    }
+
+
+    // ----------------------------------------------------------
     public boolean usesBonusesOrPenalties()
     {
         SubmissionProfile profile = submissionProfile();

@@ -42,6 +42,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 public class ScheduleSheet
     extends _ScheduleSheet
+    implements org.webcat.grader.Scorable
 {
     //~ Constructor ...........................................................
 
@@ -60,7 +61,11 @@ public class ScheduleSheet
     public static final byte FORMAT_TEXT =
         org.webcat.grader.SubmissionResult.FORMAT_TEXT;
     public static final byte FORMAT_HTML =
-        org.webcat.grader.SubmissionResult.FORMAT_TEXT;
+        org.webcat.grader.SubmissionResult.FORMAT_HTML;
+    public static final NSArray<Byte> FORMATS =
+        org.webcat.grader.SubmissionResult.formats;
+    public static final NSArray<String> FORMAT_STRINGS =
+        org.webcat.grader.SubmissionResult.formatStrings;
 
 
     //~ Public Methods ........................................................
@@ -79,21 +84,16 @@ public class ScheduleSheet
 
     // ----------------------------------------------------------
     @SuppressWarnings("unchecked")
-    public NSArray<SheetFeedbackItem> nontransientFeedback()
+    public NSArray<SheetFeedbackItem> currentFeedback()
     {
-        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(
-            feedbackItems(),
-            SheetFeedbackItem.isTransient.isFalse());
-    }
-
-
-    // ----------------------------------------------------------
-    public void moveNonTransientToTransient()
-    {
-        for (SheetFeedbackItem i : nontransientFeedback())
+        if (currentFeedback == null)
         {
-            i.setIsTransient(true);
+            currentFeedback = ERXArrayUtilities
+                .filteredArrayWithQualifierEvaluation(
+                    feedbackItems(),
+                    SheetFeedbackItem.checkRound.is(numCheckRounds()));
         }
+        return currentFeedback;
     }
 
 
@@ -558,12 +558,314 @@ public class ScheduleSheet
             }
             if (isNewest)
             {
-                submission().markAsSubmissionForGrading();
+                submission().markBestSubmissionForGrading();
             }
         }
     }
 
 
+    // ----------------------------------------------------------
+    public boolean staffFeedbackIsReady()
+    {
+        return status() == org.webcat.core.Status.CHECK;
+    }
+
+
+    // ----------------------------------------------------------
+    public ComponentFeature componentFeatureFor(String name)
+    {
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if ((name == null && cf.name() == null)
+                || (name != null && name.equals(cf.name())))
+            {
+                return cf;
+            }
+        }
+        return null;
+    }
+
+
+    // ----------------------------------------------------------
+    public SheetEntry entryFor(String name, byte activity)
+    {
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if ((name == null && cf.name() == null)
+                || (name != null && name.equals(cf.name())))
+            {
+                return cf.entryFor(activity);
+            }
+        }
+        return null;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newEstimatedRemaining()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.newEstimatedRemaining();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double previousEstimatedRemaining()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.previousEstimatedRemaining();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newEstimatedTotal()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.newEstimatedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double previousEstimatedTotal()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.previousEstimatedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newTimeInvested()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.newTimeInvested();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double newTimeInvestedTotal()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.newTimeInvestedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public double previousTimeInvestedTotal()
+    {
+        double result = 0.0;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            result += cf.previousTimeInvestedTotal();
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isComplete()
+    {
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if (!cf.isComplete())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean previousWasComplete()
+    {
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if (!cf.previousWasComplete())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // ----------------------------------------------------------
+    public NSTimestamp newDeadline()
+    {
+        NSTimestamp result = null;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if (result == null
+                || (cf.newDeadline() != null
+                    && cf.newDeadline().after(result)))
+            {
+                result = cf.newDeadline();
+            }
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public NSTimestamp previousDeadline()
+    {
+        NSTimestamp result = null;
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if (result == null
+                || (cf.previousDeadline() != null
+                    && cf.previousDeadline().after(result)))
+            {
+                result = cf.previousDeadline();
+            }
+        }
+        return result;
+    }
+
+
+    // ----------------------------------------------------------
+    @Override
+    public void setNumCheckRounds(int value)
+    {
+        currentFeedback = null;
+        super.setNumCheckRounds(value);
+    }
+
+
+    // ----------------------------------------------------------
+    @Override
+    public void flushCaches()
+    {
+        currentFeedback = null;
+        super.flushCaches();
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isEmpty()
+    {
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if (!cf.isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // ----------------------------------------------------------
+    public void runAutomaticChecks()
+    {
+        int round = numCheckRounds() + 1;
+        setNumCheckRounds(round);
+        for (ComponentFeature cf : componentFeatures())
+        {
+            if (cf.isEmpty())
+            {
+                cf.editingContext().deleteObject(cf);
+            }
+            else
+            {
+                cf.runAutomaticChecks(round);
+            }
+        }
+
+        // Sheet-level checks
+        if (componentFeatures().count() == 1)
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.SHEET_ONLY_ONE_FEATURE, this);
+        }
+        else
+        {
+            double totalTime = newEstimatedRemaining();
+            for (ComponentFeature cf : componentFeatures())
+            {
+                if (cf.newEstimatedRemaining() > 16
+                    || (componentFeatures().count() > 3
+                        && (cf.newEstimatedRemaining() > totalTime / 2
+                            || cf.newEstimatedRemaining() > 5 * totalTime /
+                                componentFeatures().count())))
+                {
+                    SheetFeedbackItem.create(editingContext(), round,
+                        SheetFeedbackItem.CF_TOO_LARGE, cf);
+                }
+            }
+        }
+
+        if (currentFeedback().count() == 0)
+        {
+            SheetFeedbackItem.create(
+                editingContext(), round, SheetFeedbackItem.OK, this);
+        }
+        currentFeedback = null;
+        recalculateAutomatedScore();
+    }
+
+
+    // ----------------------------------------------------------
+    public void recalculateAutomatedScore()
+    {
+        ScheduleSheetAssignment assignment =
+            submission().assignmentOffering().assignment();
+        if (!assignment.usesToolCheckScore())
+        {
+            return;
+        }
+
+        int deductions = 0;  // relative to 100-points
+        for (SheetFeedbackItem i : currentFeedback())
+        {
+            if (i.category() == SheetFeedbackItem.ERROR)
+            {
+                if (i.sheetEntry() != null)
+                {
+                    deductions += 4;
+                }
+                else if (i.componentFeature() != null)
+                {
+                    deductions += 8;
+                }
+                else
+                {
+                    deductions += 50;
+                }
+            }
+        }
+        deductions = Math.min(100, deductions);
+
+        setToolScore(assignment.submissionProfile().toolPoints()
+            * (100 - deductions) / 100.0);
+    }
+
+
     //~ Instance/static fields ................................................
 
+    private NSArray<SheetFeedbackItem> currentFeedback;
 }

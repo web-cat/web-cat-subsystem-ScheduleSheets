@@ -2,8 +2,9 @@
 <wo:org.webcat.core.WCPageModule title="Schedule Sheet Assignments">
 
 <wo:loop list="$assignments.displayedObjects" item="$assignment">
-<h3><wo:str value="$assignment.name"/></h3>
-<table><thead>
+<div class="assignments">
+<p class="course" style="margin-bottom: 0"><b><wo:str value="$assignment.name"/></b></p>
+<table class="clear"><thead>
   <th>Sheet #</th>
   <th>Opens at</th>
   <th>Due</th>
@@ -39,6 +40,7 @@
   </wo:loop>
 </tbody>
 </table>
+</div>
 </wo:loop>
 
 </wo:org.webcat.core.WCPageModule>

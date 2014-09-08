@@ -81,8 +81,6 @@ public class ScheduleSheetsDatabaseUpdates
             "alter table SheetFeedbackItem add componentFeatureId INTEGER");
         createIndexFor("SheetFeedbackItem", "sheetId");
         createIndexFor("SheetFeedbackItem", "componentFeatureId");
-        // TODO: remove!
-        createIndexFor("SheetFeedbackItem", "sheetEntryId");
     }
 
 
@@ -97,6 +95,45 @@ public class ScheduleSheetsDatabaseUpdates
             "alter table ScheduleSheet add taScore DOUBLE");
         database().executeSQL(
             "alter table ScheduleSheet add toolScore DOUBLE");
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add more columns to sheet entries.
+     * @throws SQLException on error
+     */
+    public void updateIncrement3() throws SQLException
+    {
+        database().executeSQL(
+            "alter table SheetEntry add previousEstimatedRemaining DOUBLE");
+        database().executeSQL(
+            "alter table SheetEntry add previousTimeInvestedTotal DOUBLE");
+        database().executeSQL(
+            "alter table SheetEntry add previousWasComplete BIT NOT NULL");
+
+        database().executeSQL(
+            "alter table SheetEntry change estimatedRemaining "
+            + "newEstimatedRemaining DOUBLE");
+        database().executeSQL(
+            "alter table SheetEntry change timeInvested "
+            + "newTimeInvested DOUBLE");
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add score columns to schedule sheet table.
+     * @throws SQLException on error
+     */
+    public void updateIncrement4() throws SQLException
+    {
+        database().executeSQL(
+            "alter table ScheduleSheet add numCheckRounds INTEGER");
+        database().executeSQL(
+            "alter table SheetFeedbackItem add checkRound INTEGER NOT NULL");
+        database().executeSQL(
+            "alter table SheetFeedbackItem drop isTransient");
     }
 
 

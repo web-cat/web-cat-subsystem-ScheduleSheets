@@ -1,0 +1,155 @@
+<wo:PageWithAssignmentNavigation>
+
+<wo:if condition="~assignment != null and offerings.displayedObjects.count gt 0">
+
+<div class="module">
+<wo:WCForm><table class="actionlist"><tbody><tr>
+    <td><wo name="RegradeSubmissionsIcon"/></td>
+    <td><wo:WCLink action="$regradeSubmissions">Regrade all
+      submissions.</wo:WCLink></td>
+</tr></tbody></table></wo:WCForm>
+</div>
+
+<wo:loop list="$offerings.displayedObjects" item="$offering">
+<wo:org.webcat.core.WCPageModule title="~ 'Submissions for ' + offering.titleString"
+  open="$offering.courseOffering.generateKey.user.preferences.GradeScheduleSubmissionsPage_open">
+  <wo:if condition="$studentSubPairs.allObjects.count">
+    <p><b>Score Summary:</b>
+    High:   <span class="hl"><wo:str value="$studentStats.max" numberformat="0.0"/></span>
+    Mean:   <span class="hl"><wo:str value="$studentStats.mean" numberformat="0.0"/></span>
+    Median: <span class="hl"><wo:str value="$studentStats.median" numberformat="0.0"/></span>
+    Low:    <span class="hl"><wo:str value="$studentStats.min" numberformat="0.0"/></span>
+    Box plot: <wo:BoxAndWhiskerChart submissionStats="$studentStats"
+      maxScale="$offering.assignment.submissionProfile.availablePoints"
+      style="vertical-align: middle;"/>
+    </p>
+    <p><b>Component/Feature Count:</b>
+    High:   <span class="hl"><wo:str value="$componentStats.max" numberformat="0.#"/></span>
+    Mean:   <span class="hl"><wo:str value="$componentStats.mean" numberformat="0.#"/></span>
+    Median: <span class="hl"><wo:str value="$componentStats.median" numberformat="0.#"/></span>
+    Low:    <span class="hl"><wo:str value="$componentStats.min" numberformat="0.#"/></span>
+    Box plot: <wo:BoxAndWhiskerChart submissionStats="$componentStats"
+      style="vertical-align: middle;"/>
+    </p>
+    <p><b>Total Time Invested:</b>
+    High:   <span class="hl"><wo:str value="$timeInvestedStats.max" numberformat="0.0"/></span>
+    Mean:   <span class="hl"><wo:str value="$timeInvestedStats.mean" numberformat="0.0"/></span>
+    Median: <span class="hl"><wo:str value="$timeInvestedStats.median" numberformat="0.0"/></span>
+    Low:    <span class="hl"><wo:str value="$timeInvestedStats.min" numberformat="0.0"/></span>
+    Box plot: <wo:BoxAndWhiskerChart submissionStats="$timeInvestedStats"
+      style="vertical-align: middle;"/>
+    </p>
+    <p><b>Estimated Time Remaining:</b>
+    High:   <span class="hl"><wo:str value="$estimatedRemainingStats.max" numberformat="0.0"/></span>
+    Mean:   <span class="hl"><wo:str value="$estimatedRemainingStats.mean" numberformat="0.0"/></span>
+    Median: <span class="hl"><wo:str value="$estimatedRemainingStats.median" numberformat="0.0"/></span>
+    Low:    <span class="hl"><wo:str value="$estimatedRemainingStats.min" numberformat="0.0"/></span>
+    Box plot: <wo:BoxAndWhiskerChart submissionStats="$estimatedRemainingStats"
+      style="vertical-align: middle;"/>
+    </p>
+    <wo:WCForm multipleSubmit="true">
+      <wo:WCTable id="$tableId" displayGroup="$studentSubPairs"
+        searchOnKeyPaths="lastName,firstName,username,email">
+        <wo:WCTableHeadings>
+          <wo:WCTableHeading title="Done?" class="sm" sortOnKeyPaths="submission.sheet.status"/>
+          <wo:WCTableHeading title="Name" sortOnKeyPaths="user.name_LF,user.userName"/>
+          <wo:WCTableHeading title="Sub #" class="sm" sortOnKeyPaths="submission.submitNumber"/>
+          <wo:WCTableHeading title="Time" sortOnKeyPaths="submission.submitTime"/>
+          <wo:WCTableHeading sortOnKeyPaths="submission.sheet.componentFeatures.count">Component/<br/>Features</wo:WCTableHeading>
+          <wo:WCTableHeading sortOnKeyPaths="submission.sheet.newTimeInvestedTotal">Total Time<br/>Invested</wo:WCTableHeading>
+          <wo:WCTableHeading sortOnKeyPaths="submission.sheet.newEstimatedRemaining">Time<br/>Remaining</wo:WCTableHeading>
+          <wo:if condition="$offering.assignment.usesToolCheckScore"><wo:WCTableHeading title="Tool Checks" class="sm" sortOnKeyPaths="submission.sheet.toolScore"/></wo:if>
+          <wo:WCTableHeading title="Staff"/>
+          <wo:if condition="$offering.assignment.usesBonusesOrPenalties"><wo:WCTableHeading title="Early/Late" class="sm" sortOnKeyPaths="submission.sheet.scoreAdjustment"/></wo:if>
+          <wo:WCTableHeading title="Score" class="sm" sortOnKeyPaths="submission.sheet.finalScore"/>
+        </wo:WCTableHeadings>
+        <wo:WCTableRows item="$pair" noRowsMessage="No submissions matching your criteria have been found.">
+          <wo:WCTableRow>
+                <wo:if condition="$pair.userHasSubmission">
+                    <td><wo:if condition="~aSubmission.sheet.status == @org.webcat.core.Status@TO_DO"><wo name="StatusToDo"/></wo:if><wo:else><wo:if condition="~aSubmission.sheet.status == @org.webcat.core.Status@UNFINISHED"><wo name="StatusUnfinished"/></wo:if><wo:else><wo:if condition="~aSubmission.sheet.status == @org.webcat.core.Status@CHECK"><wo name="StatusDone"/></wo:if><wo:else><webobject name="Status"/></wo:else></wo:else></wo:else></td>
+                    <td><wo:tstr value="$aSubmission.sheet.submission.namesOfAllUsers_LF"/>
+                      <wo:not condition="$isMostRecentSubmission">
+                        <wo:loop list="$studentNewerSubmissions.filteredObjects" item="$aNewerSubmission">
+                          <br/>&nbsp;&nbsp;&nbsp;&nbsp;<wo:link action="$editNewerSubmissionScore">try #<wo:str value="$aNewerSubmission.submitNumber"/>,
+                          <wo name="NewerSubmitTimeSpan"><wo name="NewerSubmitTime"/></wo></wo:link>:&nbsp;<span class="caution"><wo:str value="$newerSubmissionStatus"/></span>
+                        </wo:loop>
+                      </wo:not></td>
+                    <td class="n"><wo name="PickSubmissionLink"><wo:str value="$aSubmission.submitNumber"/><wo:not condition="$isMostRecentSubmission">
+                    (of <wo:str value="$mostRecentSubmissionNo"/>)</wo:not></wo></td>
+                    <td class="sm"><wo name="SubmitTimeSpan"><wo:str value="$aSubmission.submitTime" formatter="$session.timeFormatter"/></wo></td>
+                    <td class="n"><wo:str value="$aSubmission.sheet.componentFeatures.count"/></td>
+                    <td class="n"><wo:str value="$aSubmission.sheet.newTimeInvestedTotal" numberformat="#.#"/></td>
+                    <td class="n"><wo:str value="$aSubmission.sheet.newEstimatedRemaining" numberformat="#.#"/></td>
+                    <wo:if condition="$offering.assignment.usesToolCheckScore"><td class="n"><wo:str value="$aSubmission.sheet.toolScoreRaw" numberformat="#.#"/></td></wo:if>
+                    <td class="n"><wo name="EditScore"><wo:if condition="~aSubmission.sheet.taScoreRaw != null"><wo:str value="$aSubmission.sheet.taScore" numberformat="#.#"/></wo:if><wo:else>&lt;edit&gt;</wo:else></wo></td>
+                    <wo:if condition="$offering.assignment.usesBonusesOrPenalties"><td class="n"><wo:str value="$aSubmission.sheet.scoreAdjustment" numberformat="#.#"/></td></wo:if>
+                    <td class="n"><wo:str value="$aSubmission.sheet.finalScore" numberformat="#.#"/></td>
+                </wo:if><wo:else>
+                    <td><wo name="StatusBlank"/></td>
+                    <td><wo:tstr value="$pair.user.name_LF"/></td>
+                    <wo name="NoSubmissionsPlaceholder">No submissions</wo>
+                </wo:else>
+          </wo:WCTableRow>
+        </wo:WCTableRows>
+      </wo:WCTable>
+      <wo name="MarkAsComplete"/>
+    </wo:WCForm>
+  </wo:if><wo:else>
+    <p>No submissions matching your criteria have been found.</p>
+  </wo:else>
+</wo:org.webcat.core.WCPageModule>
+</wo:loop>
+
+<wo:if condition="$staffPairs.allObjects.count">
+<wo:org.webcat.core.WCPageModule title="Staff Submissions">
+
+    <table><thead>
+    <tr class="batchnav"><td colspan="6"><wo:org.webcat.core.WCBatchNavigator
+      displayGroup="$staffPairs"
+      persistentKey="GradeScheduleSubmissionsPage.batchSize"/></td>
+        <wo:if condition="$offering.assignment.usesToolCheckScore"><td></td></wo:if>
+        <wo:if condition="$offering.assignment.usesBonusesOrPenalties"><td></td></wo:if>
+    </tr>
+    <tr><th class="sm">Done?<wo name="SortOrderStaffStatus"/></th>
+        <th>Name<wo name="SortOrderStaffUserNameLF"/></th>
+        <th class="sm">Sub No.</th>
+        <th>Time<wo name="SortOrderStaffSubmitTime"/></th>
+        <wo:if condition="$offering.assignment.usesToolCheckScore"><th class="sm">Tool Checks</th></wo:if>
+        <th>Staff</th>
+        <wo:if condition="$offering.assignment.usesBonusesOrPenalties"><th class="sm">Early/Late</th></wo:if>
+        <th class="sm">Score<wo name="SortOrderStaffFinalScore"/></th>
+    </tr></thead><tbody class="top">
+    <wo:loop list="$staffPairs.displayedObjects" item="$pair" index="$staffIndex"><wo:TableRow index="$staffIndex">
+        <td><wo:if condition="~aSubmission.sheet.status == @org.webcat.core.Status@TO_DO"><wo name="StatusToDo"/></wo:if><wo:else><wo:if condition="~aSubmission.sheet.status == @org.webcat.core.Status@UNFINISHED"><wo name="StatusUnfinished"/></wo:if><wo:else><wo:if condition="~aSubmission.sheet.status == @org.webcat.core.Status@CHECK"><wo name="StatusDone"/></wo:if><wo:else><webobject name="Status"/></wo:else></wo:else></wo:else></td>
+        <td><wo:str value="$aSubmission.sheet.submission.namesOfAllUsers_LF"/>
+              <wo:not condition="$isMostRecentSubmission">
+                <wo:loop list="$studentNewerSubmissions.filteredObjects" item="$aNewerSubmission">
+                  <br/>&nbsp;&nbsp;&nbsp;&nbsp;<wo:link action="$editNewerSubmissionScore">try #<wo:str value="$aNewerSubmission.submitNumber"/>,
+                  <wo name="NewerSubmitTimeSpan"><wo name="NewerSubmitTime"/></wo></wo:link>:&nbsp;<span class="caution"><wo:str value="$newerSubmissionStatus"/></span>
+                </wo:loop>
+              </wo:not></td>
+        <td class="n"><wo:str value="$aSubmission.submitNumber"/><wo:not condition="$isMostRecentSubmission">
+        (of <wo:str value="$mostRecentSubmissionNo"/>)</wo:not></td>
+        <td class="sm"><wo:str value="$aSubmission.submitTime" formatter="$session.timeFormatter"/></td>
+        <wo:if condition="$offering.assignment.usesToolCheckScore"><td class="n"><wo:str value="$aSubmission.sheet.toolScoreRaw" numberformat="#.#"/></td></wo:if>
+        <td class="n"><wo name="EditScore"><wo:if condition="$aSubmission.sheet.taScoreRaw"><wo:str value="$aSubmission.sheet.taScore" numberformat="#.#"/></wo:if><wo:else>&lt;edit&gt;</wo:else></wo></td>
+        <wo:if condition="$offering.assignment.usesBonusesOrPenalties"><td class="n"><wo:str value="$aSubmission.sheet.scoreAdjustment" numberformat="#.#"/></td></wo:if>
+        <td class="n"><wo:str value="$aSubmission.sheet.finalScore" numberformat="#.#"/></td>
+    </wo:TableRow></wo:loop>
+    </tbody></table>
+
+</wo:org.webcat.core.WCPageModule>
+</wo:if>
+
+</wo:if><wo:else>
+
+<wo:org.webcat.core.WCPageModule title="No Schedule Sheeet Assignment Found">
+<p>Please use the dropdown lists above to choose an assignment that has
+a schedule sheet activity associated with it.
+</p>
+</wo:org.webcat.core.WCPageModule>
+
+
+</wo:else>
+
+</wo:PageWithAssignmentNavigation>

@@ -4,6 +4,7 @@
 
 <wo:org.webcat.core.WCPageModule title="Schedule Sheet Summary">
 <wo name="Summary"/>
+<wo name="ScoreSummaryBlock"/>
 </wo:org.webcat.core.WCPageModule>
 
 <wo:if condition="$inReportElapsedPhase">
@@ -20,8 +21,8 @@ the corresponding box.
 <table><thead><tr>
   <th>Component / Feature</th>
   <th>Activity</th>
-  <th>Time Spent Since Last Schedule</th>
-  <th>Component / Feature Now Finished?</th>
+  <th>Time Spent<br/>Since Last Schedule</th>
+  <th>Component / Feature<br/>Now Finished?</th>
 </tr></thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
@@ -34,7 +35,7 @@ the corresponding box.
       </wo:not>
       <td><wo:str value="$entry.activityName"/></td>
       <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
-        value="$entry.timeInvestedRaw"/></td>
+        value="$entry.newTimeInvestedRaw"/></td>
       <td><wo:checkbox checked="$entry.isComplete"/></td>
     </wo:TableRow>
   </wo:loop>
@@ -67,11 +68,11 @@ that activity completed.
 <table><thead><tr>
   <th>Component / Feature</th>
   <th>Activity</th>
-  <th>Previously Estimated Total Time</th>
-  <th>Previous Personal Deadline</th>
-  <th>Time Invested Since Last Schedule</th>
-  <th>Estimated Time Needed to Finish</th>
-  <th>Revised Personal Deadline</th>
+  <th>Previously Estimated<br/>Total Time</th>
+  <th>Previous<br/>Personal Deadline</th>
+  <th>Time Invested<br/>Since Last Schedule</th>
+  <th>Estimated Time<br/>Needed to Finish</th>
+  <th>Revised<br/>Personal Deadline</th>
 </tr></thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
@@ -85,12 +86,12 @@ that activity completed.
       <td><wo:str value="$entry.activityName"/></td>
       <td><wo:str value="$entry.previousEstimatedTotal"/></td>
       <td><wo:str value="$entry.previousDeadline" formatter="$session.timeFormatter"/></td>
-      <td><wo:str value="$entry.timeInvested"/></td>
+      <td><wo:str value="$entry.newTimeInvestedRaw"/></td>
       <wo:if condition="$entry.isComplete">
         <td colspan="2">-- completed --</td>
       </wo:if><wo:else>
         <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
-          value="$entry.estimatedRemainingRaw"/></td>
+          value="$entry.newEstimatedRemainingRaw"/></td>
         <td><wo:WCDateTextBox value="$entry.newDeadline"/></td>
       </wo:else>
     </wo:TableRow>
@@ -125,8 +126,8 @@ that activity completed.
 <table><thead><tr>
   <th>Component / Feature</th>
   <th>Activity</th>
-  <th>Estimated Time Needed to Finish</th>
-  <th>Personal Deadline</th>
+  <th>Estimated Time<br/>Needed to Finish</th>
+  <th>Personal<br/>Deadline</th>
 </tr></thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
@@ -139,7 +140,7 @@ that activity completed.
       </wo:not>
       <td><wo:str value="$entry.activityName"/></td>
       <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
-        value="$entry.estimatedRemainingRaw"/></td>
+        value="$entry.newEstimatedRemainingRaw"/></td>
       <td><wo:WCDateTextBox value="$entry.newDeadline"/></td>
     </wo:TableRow>
   </wo:loop>
@@ -155,12 +156,12 @@ that activity completed.
 </wo:else>
 </wo:else>
 
-<wo:if condition="$feedback.count">
+<wo:if condition="$feedback.displayedObjects.count">
 <wo:org.webcat.core.WCPageModule title="Feedback on Your Schedule">
 
 <wo:WOGenericContainer elementName="ul" class="NoticePanel">
-  <wo:loop list="$feedback.allKeys" item="$msgKey">
-    <wo:WOGenericContainer elementName="li" class="~@org.webcat.core.Status@statusCssClass(feedback[msgKey].category)"><wo:str value="~feedback[msgKey].message" escapeHTML="false"/></wo:WOGenericContainer>
+  <wo:loop list="$feedback.displayedObjects" item="$msg">
+    <wo:WOGenericContainer elementName="li" class="$msg.cssClass"><wo:str value="$msg.text" escapeHTML="false"/></wo:WOGenericContainer>
   </wo:loop>
 </wo:WOGenericContainer>
 
@@ -171,7 +172,7 @@ that activity completed.
 <wo:if condition="$requireCheck">
   <wo:WCButton action="$check" class="pos" label="Check My Work"/>
 </wo:if><wo:else>
-  <wo:WCButton action="$check" label="Check My Work" style="display:none"/>
+  <wo:WCButton action="$check" label="Check My Work"/>
   <wo:WCButton action="$next" class="pos" label="Submit Schedule Sheet"/>
 </wo:not>
 <wo:WCButton action="$cancel" class="neg" label="Cancel"/>

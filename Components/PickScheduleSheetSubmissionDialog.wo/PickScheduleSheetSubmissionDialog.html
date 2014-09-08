@@ -1,0 +1,53 @@
+<wo name="Dialog"><wo:WCForm>
+<div>
+    <p>Submissions by <span class="hl"><wo:str value="$currentSubmission.user.nameAndUid"/></span>:</p>
+    <wo name="SubmissionTable">
+        <wo:WCTableHeadings>
+            <wo:WCTableHeading title="No."/>
+            <wo:WCTableHeading title="Time"/>
+            <wo:WCTableHeading title="Score"/>
+    <wo:if condition="~extraColumnCount gt 1">
+      <wo:if condition="$currentSubmission.assignmentOffering.assignment.usesToolCheckScore"><th class="sm">Automatic Checks</th></wo:if>
+      <wo:if condition="$currentSubmission.assignmentOffering.assignment.usesTAScore"><th class="sm">Staff Evaluation</th></wo:if>
+      <wo:if condition="$currentSubmission.assignmentOffering.assignment.usesBonusesOrPenalties"><th class="sm">Bonus/<br/>Penalty</th></wo:if>
+    </wo:if>
+            <wo:WCTableHeading title="Student and Partners"/>
+        </wo:WCTableHeadings>
+        <wo:WCTableRows item="$aSubmission">
+            <wo:WCTableRow>
+                <td class="n"><wo:str value="$aSubmission.submitNumber"/></td>
+                <td class="sm"><wo name="SubmitTimeSpan"><wo name="SubmitTime"/></wo></td>
+                <td class="n"><wo:if condition="$aSubmission.isSubmissionForGrading"><wo:if condition="~aSubmission.sheet.staffFeedbackIsReady || !aSubmission.assignmentOffering.assignment.usesTAScore || aSubmission.assignmentOffering.courseOffering.isStaff(user)"><wo:str numberformat="0.0" value="$aSubmission.sheet.finalScore"/></wo:if><wo:else>&lt;Awaiting Staff&gt;</wo:else></wo:if></td>
+    <wo:if condition="~extraColumnCount gt 1">
+      <wo:if condition="$currentSubmission.assignmentOffering.assignment.usesToolCheckScore"><td class="n"><wo:str value="$aSubmission.sheet.toolScoreRaw" numberformat="0.0"/></td></wo:if>
+      <wo:if condition="$currentSubmission.assignmentOffering.assignment.usesTAScore"><td class="n">
+        <wo:if condition="$aSubmission.isSubmissionForGrading">
+          <wo:if condition="~aSubmission.sheet.staffFeedbackIsReady || !aSubmission.assignmentOffering.assignment.usesTAScore || aSubmission.assignmentOffering.courseOffering.isStaff(user)">
+            <wo:if condition="$aSubmission.sheet.taScoreRaw">
+              <wo:str value="$aSubmission.sheet.taScore" numberformat="0.0"/>
+            </wo:if>
+            <wo:else>
+              &lt;Awaiting Staff&gt;
+            </wo:else>
+          </wo:if><wo:else>&lt;Awaiting Staff&gt;</wo:else>
+        </wo:if></td></wo:if>
+      <wo:if condition="$currentSubmission.assignmentOffering.assignment.usesBonusesOrPenalties"><td class="n"><wo:str value="$aSubmission.sheet.scoreAdjustment" numberformat="0.0"/></td></wo:if>
+    </wo:if>
+              <td><wo:str value="$aSubmission.sheet.submission.namesOfAllUsers"/></td>
+            </wo:WCTableRow>
+        </wo:WCTableRows>
+    </wo>
+</div>
+<div style="text-align: center">
+    <wo:WCButton label="OK" class="pos" action="$viewSubmission">
+        <script type="dojo/connect" event="onClick">
+        dijit.byId('pickSubmissionDialog').hide();
+        </script>
+    </wo:WCButton>
+    <wo:WCButton label="Cancel" class="neg">
+        <script type="dojo/connect" event="onClick">
+        dijit.byId('pickSubmissionDialog').hide();
+        </script>
+    </wo:WCButton>
+</div>
+</wo:Form></wo>

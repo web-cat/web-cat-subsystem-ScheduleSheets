@@ -1,0 +1,115 @@
+EditScore: WOHyperlink {
+    action = editSubmissionScore;
+    alt    = "View, score, or make comments on submission";
+    title  = "View, score, or make comments on submission";
+}
+
+MarkAsComplete: WCButton {
+    label  = "Show All Scores to Students";
+    action = markAsComplete;
+    alt    = "Make all entered scores visible to students and send e-mail";
+    title  = "Make all entered scores visible to students and send e-mail";
+}
+
+NewerSubmitTime: WOString {
+    value     = aNewerSubmission.submitTime;
+    formatter = session.timeFormatter;
+}
+
+NewerSubmitTimeSpan: WOGenericContainer {
+    elementName = "span";
+    class = newerSubmitTimeSpanClass;
+    title = aNewerSubmission.earlyLateStatus;
+}
+
+NoSubmissionsPlaceholder: WOGenericContainer {
+    elementName = "td";
+    colSpan = "~ 7 + (offering.assignment.usesToolCheckScore ? 1 : 0) + (offering.assignment.usesBonusesOrPenalties ? 1 : 0)";
+    class = "sm";
+}
+
+PickSubmissionLink: WCLink {
+    remote = true;
+    action = pickOtherSubmission;
+    disabled = "~mostRecentSubmissionNo eq 1";
+    title = "View a different submission";
+}
+
+RegradeSubmissionsIcon: WCImageButton {
+    action = regradeSubmissions;
+    framework = "Grader";
+    filename = "icons/regrade.png";
+    alt = "Regrade submissions";
+    title = "Regrade submissions";
+    class = "icon";
+}
+
+SortOrderStaffFinalScore: org.webcat.woextensions.WCSortOrder {
+    displayGroup = staffPairs;
+    displayKey = "Final Score";
+    key = "result.finalScore";
+}
+
+SortOrderStaffStatus: org.webcat.woextensions.WCSortOrder {
+    displayGroup = staffPairs;
+    displayKey = "Grading Status";
+    key = "result.status";
+}
+
+SortOrderStaffSubmitTime: org.webcat.woextensions.WCSortOrder {
+    displayGroup = staffPairs;
+    displayKey = "Submission Time";
+    key = "submitTime";
+}
+
+SortOrderStaffUserNameLF: org.webcat.woextensions.WCSortOrder {
+    displayGroup = staffPairs;
+    displayKey = "Name";
+    key = "user.name_LF";
+}
+
+Status: WOImage {
+    border    = "0";
+    filename  = pair.submission.sheet.statusURL;
+    framework = "Core";
+    height    = "16";
+    width     = "16";
+}
+
+StatusBlank: WOImage {
+    border    = "0";
+    filename  = "icons/blank.png";
+    framework = "Grader";
+    height    = "16";
+    width     = "16";
+}
+
+StatusDone: WOImage {
+    border    = "0";
+    filename  = "icons/pb-full2.png";
+    framework = "Grader";
+    height    = "16";
+    width     = "16";
+}
+
+StatusToDo: WOImage {
+    border    = "0";
+    filename  = "icons/pb-empty.png";
+    framework = "Grader";
+    height    = "16";
+    width     = "16";
+}
+
+StatusUnfinished: WOImage {
+    border    = "0";
+    filename  = "icons/pb-partial.png";
+    framework = "Grader";
+    height    = "16";
+    width     = "16";
+}
+
+SubmitTimeSpan: WOGenericContainer {
+    elementName = "span";
+    class = submitTimeSpanClass;
+    title = aSubmission.earlyLateStatus;
+}

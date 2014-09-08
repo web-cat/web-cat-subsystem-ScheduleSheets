@@ -21,12 +21,11 @@
 
 package org.webcat.schedulesheets;
 
-import org.webcat.grader.GraderAssignmentComponent;
+import org.webcat.grader.GraderComponent;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 import er.extensions.appserver.ERXDisplayGroup;
 
@@ -39,13 +38,13 @@ import er.extensions.appserver.ERXDisplayGroup;
  * @version $Revision$, $Date$
  */
 public class EntrySheet
-    extends GraderAssignmentComponent
+    extends GraderComponent
 {
-    //~ Constructors ..........................................................
+    //~ Constructor ...........................................................
 
     // ----------------------------------------------------------
     /**
-     * Create a new EstimateEntrySheet object.
+     * Create a new object.
      * @param context
      */
     public EntrySheet(WOContext context)
@@ -62,12 +61,13 @@ public class EntrySheet
 
     public ScheduleSheetSubmission previousSheet;
     public boolean inReportElapsedPhase;
-    public boolean requireCheck = false; /* true; */
-    public String msgKey;
 
     public ERXDisplayGroup<ComponentFeature> componentFeatures;
     public ERXDisplayGroup<SheetEntry> entries;
     public SheetEntry entry;
+    public boolean requireCheck = true;
+    public ERXDisplayGroup<SheetFeedbackItem> feedback;
+    public SheetFeedbackItem msg;
     public int cfIndex;
     public int aIndex;
 
@@ -79,7 +79,6 @@ public class EntrySheet
     protected void beforeAppendToResponse(
         WOResponse response, WOContext context)
     {
-        super.beforeAppendToResponse(response, context);
         if (submission == null && offering != null)
         {
             NSArray<ScheduleSheetSubmission> submissions =
@@ -88,14 +87,9 @@ public class EntrySheet
                     ScheduleSheetSubmission.assignmentOffering.is(offering)
                     .and(ScheduleSheetSubmission.user.is(user())),
                     ScheduleSheetSubmission.submitNumber.ascs());
-            // TODO: fix me!
-            for (ScheduleSheetSubmission sub : submissions)
-            {
-                sub.setIsSubmissionForGrading(false);
-            }
 
             submission = ScheduleSheetSubmission.create(
-                localContext(), true, false);
+                localContext(), false, false);
             submission.setSubmitNumber(submissions.count() + 1);
             submission.setUserRelationship(user());
             submission.setAssignmentOfferingRelationship(offering);
@@ -148,8 +142,10 @@ public class EntrySheet
                 submission.partnerWith(mostRecent.allPartners());
             }
             componentFeatures.setMasterObject(sheet);
+            feedback.setMasterObject(sheet);
             inReportElapsedPhase = !isFirstSheet();
         }
+        super.beforeAppendToResponse(response, context);
     }
 
 
@@ -166,7 +162,7 @@ public class EntrySheet
         ComponentFeature cf = ComponentFeature.create(localContext());
         for (Byte activity : SheetEntry.ACTIVITIES)
         {
-            SheetEntry e = SheetEntry.create(localContext(), false);
+            SheetEntry e = SheetEntry.create(localContext(), false, false);
             e.setActivity(activity);
             cf.addToEntriesRelationship(e);
         }
@@ -199,7 +195,16 @@ public class EntrySheet
         if (canSubmit())
         {
             submission.setSubmitTime(new NSTimestamp());
+            for (ScheduleSheetSubmission sub :
+                submission.partneredSubmissions())
+            {
+                sub.markBestSubmissionForGrading();
+            }
+            sheet.runAutomaticChecks();
             applyLocalChanges();
+            requireCheck = false;
+            feedback.qualifyDataSource();
+            return this;
         }
         else
         {
@@ -212,8 +217,14 @@ public class EntrySheet
     // ----------------------------------------------------------
     public WOComponent next()
     {
-        check();
-        return null;
+        WOComponent result = check();
+        if (result != null && !hasMessages())
+        {
+            SheetFeedbackPage page = pageWithName(SheetFeedbackPage.class);
+            page.submission = submission;
+            result = page;
+        }
+        return result;
     }
 
 
@@ -249,27 +260,6 @@ public class EntrySheet
 
 
     // ----------------------------------------------------------
-    /**
-     * Get the current message dictionary for this page, creating one
-     * if necessary.  If no messages have been registered yet and no
-     * dictionary exists, one is created first.
-     * @return the message dictionary
-     */
-    public NSMutableDictionary<String, Object> feedback()
-    {
-        if (feedback == null)
-        {
-            feedback = new NSMutableDictionary<String, Object>();
-//            feedback.put("hello", new ErrorDictionaryPanel.ErrorMessage(
-//                org.webcat.core.Status.INFORMATION,
-//                "hello!",
-//                false));
-        }
-        return feedback;
-    }
-
-
-    // ----------------------------------------------------------
     public ComponentFeature componentFeature()
     {
         return componentFeature;
@@ -286,6 +276,5 @@ public class EntrySheet
 
     //~ Instance/static fields ................................................
 
-    private NSMutableDictionary<String, Object> feedback;
     private ComponentFeature componentFeature;
 }

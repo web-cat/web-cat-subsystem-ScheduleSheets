@@ -21,10 +21,17 @@
 
 package org.webcat.schedulesheets;
 
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 import er.extensions.appserver.ERXDisplayGroup;
-import org.webcat.grader.GraderAssignmentsComponent;
+import org.apache.log4j.Logger;
+import org.webcat.core.Status;
+import org.webcat.grader.GraderComponent;
+import org.webcat.ui.generators.JavascriptGenerator;
 
 //-------------------------------------------------------------------------
 /**
@@ -35,7 +42,7 @@ import org.webcat.grader.GraderAssignmentsComponent;
  * @version $Revision$, $Date$
  */
 public class SheetFeedbackPage
-    extends GraderAssignmentsComponent
+    extends GraderComponent
 {
     //~ Constructors ..........................................................
 
@@ -59,9 +66,15 @@ public class SheetFeedbackPage
     public ERXDisplayGroup<ComponentFeature> componentFeatures;
     public ERXDisplayGroup<SheetEntry> entries;
     public SheetEntry entry;
+    public ERXDisplayGroup<SheetFeedbackItem> feedback;
+    public SheetFeedbackItem msg;
     public int cfIndex;
     public int aIndex;
 
+    public boolean edit = false;
+
+    public NSArray<Byte> formats = ScheduleSheet.FORMATS;
+    public byte aFormat;
 
     //~ Methods ...............................................................
 
@@ -74,9 +87,15 @@ public class SheetFeedbackPage
         if (submission == null)
         {
             submission = offering.mostRecentSubFor(user());
-            sheet = submission.sheet();
-            componentFeatures.setMasterObject(sheet);
         }
+        else if (offering == null)
+        {
+            offering = submission.assignmentOffering();
+        }
+        sheet = submission.sheet();
+        priorComments = sheet.comments();
+        componentFeatures.setMasterObject(sheet);
+        feedback.setMasterObject(sheet);
     }
 
 
@@ -102,7 +121,125 @@ public class SheetFeedbackPage
     }
 
 
+    // ----------------------------------------------------------
+    public boolean studentCanSeeResults()
+    {
+        return sheet == null
+            || sheet.status() == org.webcat.core.Status.CHECK;
+    }
+
+
+    // ----------------------------------------------------------
+    public WOActionResults pickOtherSubmission()
+    {
+//        saveGrading();
+
+        JavascriptGenerator js = new JavascriptGenerator();
+        js.dijit("pickSubmissionDialog").call("show");
+        return js;
+    }
+
+
+    // ----------------------------------------------------------
+    public String formatLabel()
+    {
+        return ScheduleSheet.FORMAT_STRINGS.objectAtIndex(aFormat);
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean gradingDone()
+    {
+        return sheet.status() == Status.CHECK;
+    }
+
+
+    // ----------------------------------------------------------
+    public void setGradingDone(boolean done)
+    {
+        if (done)
+        {
+            sheet.setStatus(Status.CHECK);
+//            for (ScheduleSheetSubmission sub : sheet.submissions())
+//            {
+//                sub.emailNotificationToStudent(
+//                    "has been updated by the course staff");
+//            }
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    @Override
+    public WOComponent next()
+    {
+        if (edit)
+        {
+            if (!applyLocalChanges())
+            {
+                return null;
+            }
+        }
+        return super.next();
+    }
+
+
+    // ----------------------------------------------------------
+    public void saveGrading()
+    {
+        sheet.addCommentByLineFor(user(), priorComments);
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean applyLocalChanges()
+    {
+        NSTimestamp now = new NSTimestamp();
+        saveGrading();
+        if (sheet.status() == Status.TO_DO)
+        {
+            if (sheet.taScoreRaw() != null
+                && sheet.taScore() != submission
+                    .assignmentOffering().assignment()
+                    .submissionProfile().taPoints())
+            {
+                sheet.setStatus(Status.UNFINISHED);
+            }
+        }
+        if (sheet.changedProperties().size() > 0)
+        {
+            sheet.setLastUpdated(now);
+        }
+        log.debug("Before commiting, result = " + sheet.snapshot());
+        return super.applyLocalChanges();
+    }
+
+
+    // ----------------------------------------------------------
+    public WOComponent regrade()
+    {
+        sheet.runAutomaticChecks();
+        applyLocalChanges();
+        return null;
+    }
+
+
+    // ----------------------------------------------------------
+    @Override
+    public WOComponent cancel()
+    {
+        WOComponent result = super.cancel();
+        if (nextPage != null)
+        {
+            result = nextPage;
+        }
+        return result;
+    }
+
+
     //~ Instance/static fields ................................................
 
     private ComponentFeature componentFeature;
+    private String priorComments;
+    static Logger log = Logger.getLogger(SheetFeedbackPage.class);
 }

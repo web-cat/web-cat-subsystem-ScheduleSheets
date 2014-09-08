@@ -173,6 +173,18 @@ public class ScheduleSheetAssignmentOffering
 
     // ----------------------------------------------------------
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean accessibleByUser(User user)
+    {
+        return courseOffering() != null
+            && courseOffering().accessibleByUser(user);
+    }
+
+
+    // ----------------------------------------------------------
+    /**
      * Determine the latest time when assignments are accepted.
      * @param user The user to check for
      * @return The final deadline as a timestamp
@@ -213,6 +225,10 @@ public class ScheduleSheetAssignmentOffering
         if (myAssignment != null)
         {
             result += myAssignment.titleString();
+            if (myAssignment.numberOfSheets() > 1)
+            {
+                result += ", Sheet " + (order() + 1);
+            }
         }
         return result;
     }
