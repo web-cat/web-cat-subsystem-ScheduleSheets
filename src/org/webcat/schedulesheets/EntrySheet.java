@@ -21,11 +21,13 @@
 
 package org.webcat.schedulesheets;
 
+import org.webcat.core.User;
 import org.webcat.grader.GraderComponent;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 import er.extensions.appserver.ERXDisplayGroup;
 
@@ -70,6 +72,9 @@ public class EntrySheet
     public SheetFeedbackItem msg;
     public int cfIndex;
     public int aIndex;
+
+    public ERXDisplayGroup<User> students;
+    public User student;
 
 
     //~ Methods ...............................................................
@@ -143,7 +148,22 @@ public class EntrySheet
             }
             componentFeatures.setMasterObject(sheet);
             feedback.setMasterObject(sheet);
-            inReportElapsedPhase = !isFirstSheet();
+            inReportElapsedPhase = !offering.isFirstSheet();
+        }
+        if (submission != null)
+        {
+            // Have to calculate this separately, since objects aren't
+            // committed to the db yet, so allPartners() and allUsers()
+            // won't return meaningful results.
+            // students.setMasterObject(submission);
+            NSArray<ScheduleSheetSubmission> subs = sheet.submissions();
+            NSMutableArray<User> users =
+                new NSMutableArray<User>(subs.count());
+            for (ScheduleSheetSubmission s : subs)
+            {
+                users.add(s.user());
+            }
+            students.setObjectArray(users);
         }
         super.beforeAppendToResponse(response, context);
     }
@@ -200,7 +220,7 @@ public class EntrySheet
             {
                 sub.markBestSubmissionForGrading();
             }
-            sheet.runAutomaticChecks();
+            sheet.runAutomaticChecks(!inReportElapsedPhase);
             applyLocalChanges();
             requireCheck = false;
             feedback.qualifyDataSource();
@@ -220,11 +240,27 @@ public class EntrySheet
         WOComponent result = check();
         if (result != null && !hasMessages())
         {
-            SheetFeedbackPage page = pageWithName(SheetFeedbackPage.class);
-            page.submission = submission;
-            result = page;
+            if (inReportElapsedPhase && !offering.isLastSheet())
+            {
+                inReportElapsedPhase = false;
+                requireCheck = true;
+            }
+            else
+            {
+                SheetFeedbackPage page = pageWithName(SheetFeedbackPage.class);
+                page.submission = submission;
+                result = page;
+            }
         }
         return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public WOComponent back()
+    {
+        inReportElapsedPhase = true;
+        return check();
     }
 
 
@@ -234,20 +270,6 @@ public class EntrySheet
     {
         super.cancel();
         return super.next();
-    }
-
-
-    // ----------------------------------------------------------
-    public boolean isFirstSheet()
-    {
-        return offering.order() == 0;
-    }
-
-
-    // ----------------------------------------------------------
-    public boolean isLastSheet()
-    {
-        return offering.order() == offering.assignment().numberOfSheets() - 1;
     }
 
 
@@ -272,6 +294,66 @@ public class EntrySheet
         componentFeature = cf;
         entries.setMasterObject(cf);
     }
+
+
+    // ----------------------------------------------------------
+    public boolean studentWorked()
+    {
+        return entry.workers().contains(student);
+    }
+
+
+    // ----------------------------------------------------------
+    public void setStudentWorked(boolean value)
+    {
+        if (value)
+        {
+            entry.addToWorkersRelationship(student);
+        }
+        else
+        {
+            entry.removeFromWorkersRelationship(student);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean studentResponsible()
+    {
+        return entry.responsible().contains(student);
+    }
+
+
+    // ----------------------------------------------------------
+    public void setStudentResponsible(boolean value)
+    {
+        if (value)
+        {
+            entry.addToResponsibleRelationship(student);
+        }
+        else
+        {
+            entry.removeFromResponsibleRelationship(student);
+        }
+    }
+
+
+    // TODO: list
+    // ----------
+    // pickOtherSubmission() in GradeScheduleSubmissionsPage
+    // add rule checks for partner assignments
+    //     one partner too much
+    // add rule checks for deadlines too soon
+    // add partner imbalance checks
+    // add three-vs-one component feature choice + edit
+    // add min components to assignment config
+    // add target effort to assignment config
+
+    // add component feature move support
+    // add component feature delete support
+    // save and goto next on grading sheet feedback page
+
+    // summary statistics/graphs/histograms?
 
 
     //~ Instance/static fields ................................................

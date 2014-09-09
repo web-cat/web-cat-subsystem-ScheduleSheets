@@ -21,6 +21,7 @@
 
 package org.webcat.schedulesheets;
 
+import org.webcat.core.User;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
@@ -75,6 +76,10 @@ public class SheetEntry
             }
             setPreviousDeadline(other.newDeadline());
             setPreviousEstimatedRemainingRaw(other.newEstimatedRemainingRaw());
+            for (User u : other.responsible())
+            {
+                addToWorkersRelationship(u);
+            }
         }
         else
         {
@@ -88,6 +93,14 @@ public class SheetEntry
 
             setNewTimeInvestedRaw(other.newTimeInvestedRaw());
             setNewEstimatedRemainingRaw(other.newEstimatedRemainingRaw());
+            for (User u : other.workers())
+            {
+                addToWorkersRelationship(u);
+            }
+            for (User u : other.responsible())
+            {
+                addToResponsibleRelationship(u);
+            }
         }
         setNewDeadline(other.newDeadline());
         setIsCompleteRaw(other.isCompleteRaw());
@@ -195,26 +208,9 @@ public class SheetEntry
 
 
     // ----------------------------------------------------------
-    public void runAutomaticChecks(int round)
+    public void runAutomaticChecks(int round, boolean checkEstimatePhase)
     {
-        // No estimated time to complete an entry
-        if (!isComplete()
-            && (previousDeadline() != null
-                || previousEstimatedRemaining() > 0
-                || previousTimeInvestedTotal() > 0)
-            && newEstimatedRemainingRaw() == null)
-        {
-            SheetFeedbackItem.create(editingContext(), round,
-                SheetFeedbackItem.ENTRY_MISSING_ESTIMATED_REMAINING, this);
-        }
-
-        if (!isComplete()
-            && newEstimatedRemaining() > 0
-            && newDeadline() == null)
-        {
-            SheetFeedbackItem.create(editingContext(), round,
-                SheetFeedbackItem.ENTRY_MISSING_NEW_DEADLINE, this);
-        }
+        // Entry-level checks for entry phase
 
         // An entry is overdue
         if (isOverdue())
@@ -231,6 +227,45 @@ public class SheetEntry
         {
             SheetFeedbackItem.create(editingContext(), round,
                 SheetFeedbackItem.ENTRY_IS_DUE_TOMORROW, this);
+        }
+
+        if (newTimeInvested() > 0
+            && workers().count() == 0
+            && componentFeature().sheet().submissions().count() > 1)
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_NO_WORKERS, this);
+        }
+
+        // Entry-level checks for estimate phase
+        if (checkEstimatePhase)
+        {
+            // No estimated time to complete an entry
+            if (!isComplete()
+                && (previousDeadline() != null
+                    || previousEstimatedRemaining() > 0
+                    || previousTimeInvestedTotal() > 0)
+                    && newEstimatedRemainingRaw() == null)
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.ENTRY_MISSING_ESTIMATED_REMAINING, this);
+            }
+
+            if (!isComplete()
+                && newEstimatedRemaining() > 0
+                && newDeadline() == null)
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.ENTRY_MISSING_NEW_DEADLINE, this);
+            }
+
+            if (newEstimatedRemaining() > 0
+                && responsible().count() == 0
+                && componentFeature().sheet().submissions().count() > 1)
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.ENTRY_NO_RESPONSIBLES, this);
+            }
         }
     }
 

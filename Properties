@@ -1,5 +1,5 @@
 #This file is automatically rewritten by ANT, so all formatting will be trashed.
-#Mon Sep 08 12:44:23 EDT 2014
+#Mon Sep 08 20:10:50 EDT 2014
 ScheduleSheets.copyright=(c) 2014 Virginia Tech Department of Computer Science
 ScheduleSheets.description=This subsystem supports scheduling assignments, where students are required to estimate out and schedule their time on an associated programming assignment.
 ScheduleSheets.info.url=http\://web-cat.org/WCWiki/ScheduleSheetsSubsystem
@@ -11,6 +11,6 @@ ScheduleSheets.version.revision=1
 ScheduleSheets.version.major=0
 ScheduleSheets.license=GNU Affero General Public License v.3
 ScheduleSheets.requires=Core, EOJDBCPrototypes, DBUpdateEngine, Grader
-ScheduleSheets.history.url=http\://web-cat.org/WCWiki/ScheduleSheetsSubsystem/ChangeHistory
-subsystem.ScheduleSheets=org.webcat.schedulesheets.ScheduleSheets
 ScheduleSheets.provider.url=http\://web-cat.org/updates
+subsystem.ScheduleSheets=org.webcat.schedulesheets.ScheduleSheets
+ScheduleSheets.history.url=http\://web-cat.org/WCWiki/ScheduleSheetsSubsystem/ChangeHistory

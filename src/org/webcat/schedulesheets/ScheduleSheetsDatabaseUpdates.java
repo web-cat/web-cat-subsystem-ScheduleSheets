@@ -137,6 +137,18 @@ public class ScheduleSheetsDatabaseUpdates
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Add the ComponentFeatureStudent table.
+     * @throws SQLException on error
+     */
+    public void updateIncrement5() throws SQLException
+    {
+        createEntryStudentPreviouslyWorkedTable();
+        createEntryStudentNewResponsibleTable();
+    }
+
+
     //~ Private Methods .......................................................
 
     // ----------------------------------------------------------
@@ -338,6 +350,46 @@ public class ScheduleSheetsDatabaseUpdates
             database().executeSQL(
                 "ALTER TABLE SheetFeedbackItem ADD PRIMARY KEY (OID)");
             createIndexFor("SheetFeedbackItem", "sheetEntryId");
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create the EntryStudentPreviouslyWorked table, if needed.
+     * @throws SQLException on error
+     */
+    private void createEntryStudentPreviouslyWorkedTable() throws SQLException
+    {
+        if (!database().hasTable("EntryStudentPreviouslyWorked", "id", "1"))
+        {
+            log.info("creating table EntryStudentPreviouslyWorked");
+            database().executeSQL(
+                "CREATE TABLE EntryStudentPreviouslyWorked "
+                + "(id INT NOT NULL, id1 INT NOT NULL)");
+            database().executeSQL(
+                "ALTER TABLE EntryStudentPreviouslyWorked ADD PRIMARY KEY "
+                + "(id, id1)");
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create the EntryStudentNewResponsible table, if needed.
+     * @throws SQLException on error
+     */
+    private void createEntryStudentNewResponsibleTable() throws SQLException
+    {
+        if (!database().hasTable("EntryStudentNewResponsible", "id", "1"))
+        {
+            log.info("creating table EntryStudentNewResponsible");
+            database().executeSQL(
+                "CREATE TABLE EntryStudentNewResponsible "
+                + "(id INT NOT NULL, id1 INT NOT NULL)");
+            database().executeSQL(
+                "ALTER TABLE EntryStudentNewResponsible ADD PRIMARY KEY "
+                + "(id, id1)");
         }
     }
 }

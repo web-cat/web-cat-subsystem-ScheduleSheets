@@ -18,12 +18,29 @@ half-hour (e.g., 6.5).
 <p>Indicate <strong>which tasks you have completed</strong> by checking
 the corresponding box.
 </p>
-<table><thead><tr>
-  <th>Component / Feature</th>
-  <th>Activity</th>
-  <th>Time Spent<br/>Since Last Schedule</th>
-  <th>Component / Feature<br/>Now Finished?</th>
-</tr></thead><tbody>
+<table><thead>
+  <wo:if condition="~students.displayedObjects.count gt 1">
+    <tr>
+      <th rowspan="2">Component / Feature</th>
+      <th rowspan="2">Activity</th>
+      <th rowspan="2">Time Worked Since<br/>Last Schedule</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Worked?</wo:WOGenericContainer>
+      <th rowspan="2">Component / Feature<br/>Now Finished?</th>
+    </tr>
+    <tr><wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop></tr>
+  </wo:if><wo:else>
+    <tr>
+      <th>Component / Feature</th>
+      <th>Activity</th>
+      <th>Time Worked Since<br/>Last Schedule</th>
+      <th>Component / Feature<br/>Now Finished?</th>
+    </tr>
+  </wo:else>
+</thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
   <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
@@ -36,13 +53,21 @@ the corresponding box.
       <td><wo:str value="$entry.activityName"/></td>
       <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
         value="$entry.newTimeInvestedRaw"/></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentWorked"/></td>
+        </wo:loop>
+      </wo:if>
       <td><wo:checkbox checked="$entry.isComplete"/></td>
     </wo:TableRow>
   </wo:loop>
 </wo:loop>
 
 <tr style="border-top:1px solid #115">
-  <td colspan="4"><wo:WCButton action="$add" label="+ Add Component/Feature"/></td>
+  <wo:WOGenericContainer elementName="td"
+    colspan="~4 + ((students.displayedObjects.count gt 1) ? students.displayedObjects.count : 0)">
+    <wo:WCButton action="$add" label="+ Add Component/Feature"/>
+  </wo:WOGenericContainer>
 </tr>
 
 </tbody></table>
@@ -65,15 +90,35 @@ numbers (e.g., 8) or decimal numbers rounded to the nearest half-hour
 represent <strong>your personal goal</strong> for when you plan to have
 that activity completed.
 </p>
-<table><thead><tr>
-  <th>Component / Feature</th>
-  <th>Activity</th>
-  <th>Previously Estimated<br/>Total Time</th>
-  <th>Previous<br/>Personal Deadline</th>
-  <th>Time Invested<br/>Since Last Schedule</th>
-  <th>Estimated Time<br/>Needed to Finish</th>
-  <th>Revised<br/>Personal Deadline</th>
-</tr></thead><tbody>
+<table><thead>
+  <wo:if condition="~students.displayedObjects.count gt 1">
+    <tr>
+      <th rowspan="2">Component / Feature</th>
+      <th rowspan="2">Activity</th>
+      <th rowspan="2">Total Time<br/>Estimated</th>
+      <th rowspan="2">Previous<br/>Personal Deadline</th>
+      <th rowspan="2">Time Worked Since<br/>Last Schedule</th>
+      <th rowspan="2">Estimated Time<br/>Needed to Finish</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Will Work?</wo:WOGenericContainer>
+      <th rowspan="2">Revised<br/>Personal Deadline</th>
+    </tr>
+    <tr><wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop></tr>
+  </wo:if><wo:else>
+    <tr>
+      <th>Component / Feature</th>
+      <th>Activity</th>
+      <th>Total Time<br/>Estimated</th>
+      <th>Previous<br/>Personal Deadline</th>
+      <th>Time Worked Since<br/>Last Schedule</th>
+      <th>Estimated Time<br/>Needed to Finish</th>
+      <th>Revised<br/>Personal Deadline</th>
+    </tr>
+  </wo:else>
+</thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
   <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
@@ -88,10 +133,17 @@ that activity completed.
       <td><wo:str value="$entry.previousDeadline" formatter="$session.timeFormatter"/></td>
       <td><wo:str value="$entry.newTimeInvestedRaw"/></td>
       <wo:if condition="$entry.isComplete">
-        <td colspan="2">-- completed --</td>
+        <wo:WOGenericContainer elementName="td"
+          colspan="~2 + ((students.displayedObjects.count gt 1) ? students.displayedObjects.count : 0)">
+          -- completed --</wo:WOGenericContainer>
       </wo:if><wo:else>
         <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
           value="$entry.newEstimatedRemainingRaw"/></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentResponsible"/></td>
+        </wo:loop>
+      </wo:if>
         <td><wo:WCDateTextBox value="$entry.newDeadline"/></td>
       </wo:else>
     </wo:TableRow>
@@ -99,7 +151,10 @@ that activity completed.
 </wo:loop>
 
 <tr class="o" style="border-top:1px solid #115">
-  <td colspan="4"><wo:WCButton action="$add" label="+ Add Component/Feature"/></td>
+  <wo:WOGenericContainer elementName="td"
+    colspan="~7 + ((students.displayedObjects.count gt 1) ? students.displayedObjects.count : 0)">
+    <wo:WCButton action="$add" label="+ Add Component/Feature"/>
+  </wo:WOGenericContainer>
 </tr>
 
 </tbody></table>
@@ -123,12 +178,29 @@ numbers (e.g., 8) or decimal numbers rounded to the nearest half-hour
 represent <strong>your personal goal</strong> for when you plan to have
 that activity completed.
 </p>
-<table><thead><tr>
-  <th>Component / Feature</th>
-  <th>Activity</th>
-  <th>Estimated Time<br/>Needed to Finish</th>
-  <th>Personal<br/>Deadline</th>
-</tr></thead><tbody>
+<table><thead>
+  <wo:if condition="~students.displayedObjects.count gt 1">
+    <tr>
+      <th rowspan="2">Component / Feature</th>
+      <th rowspan="2">Activity</th>
+      <th rowspan="2">Estimated Time<br/>Needed to Finish</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Will Work?</wo:WOGenericContainer>
+      <th rowspan="2">Personal<br/>Deadline</th>
+    </tr>
+    <tr><wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop></tr>
+  </wo:if><wo:else>
+    <tr>
+      <th>Component / Feature</th>
+      <th>Activity</th>
+      <th>Estimated Time<br/>Needed to Finish</th>
+      <th>Personal<br/>Deadline</th>
+    </tr>
+  </wo:else>
+</thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
   <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
@@ -141,13 +213,21 @@ that activity completed.
       <td><wo:str value="$entry.activityName"/></td>
       <td class="c"><wo:WCTextBox style="width: 6em" numberformat="0"
         value="$entry.newEstimatedRemainingRaw"/></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentResponsible"/></td>
+        </wo:loop>
+      </wo:if>
       <td><wo:WCDateTextBox value="$entry.newDeadline"/></td>
     </wo:TableRow>
   </wo:loop>
 </wo:loop>
 
 <tr style="border-top:1px solid #115">
-  <td colspan="4"><wo:WCButton action="$add" label="+ Add Component/Feature"/></td>
+  <wo:WOGenericContainer elementName="td"
+    colspan="~4 + ((students.displayedObjects.count gt 1) ? students.displayedObjects.count : 0)">
+    <wo:WCButton action="$add" label="+ Add Component/Feature"/>
+  </wo:WOGenericContainer>
 </tr>
 
 </tbody></table>
@@ -169,11 +249,18 @@ that activity completed.
 </wo:if>
 
 <div class="module right">
+<wo:if condition="~!inReportElapsedPhase and !offering.isFirstSheet">
+  <wo:WCButton action="$back" label="&lt; Back"/>
+</wo:if>
 <wo:if condition="$requireCheck">
   <wo:WCButton action="$check" class="pos" label="Check My Work"/>
 </wo:if><wo:else>
   <wo:WCButton action="$check" label="Check My Work"/>
-  <wo:WCButton action="$next" class="pos" label="Submit Schedule Sheet"/>
+  <wo:if condition="~inReportElapsedPhase and !offering.isLastSheet">
+    <wo:WCButton action="$next" class="pos" label="Next &gt;"/>
+  </wo:if><wo:else>
+    <wo:WCButton action="$next" class="pos" label="Submit Schedule Sheet"/>
+  </wo:else>
 </wo:not>
 <wo:WCButton action="$cancel" class="neg" label="Cancel"/>
 </div>

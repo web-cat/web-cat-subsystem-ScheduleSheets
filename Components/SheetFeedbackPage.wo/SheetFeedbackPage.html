@@ -25,12 +25,29 @@
 <wo:org.webcat.core.WCPageModule
   title="Your Initial Time Estimates and Deadlines">
 
-<table><thead><tr>
-  <th>Component / Feature</th>
-  <th>Activity</th>
-  <th>Estimated Time<br/>Needed to Finish</th>
-  <th>Personal<br/>Deadline</th>
-</tr></thead><tbody>
+<table><thead>
+  <wo:if condition="~students.displayedObjects.count gt 1">
+    <tr>
+      <th rowspan="2">Component / Feature</th>
+      <th rowspan="2">Activity</th>
+      <th rowspan="2">Estimated Time<br/>Needed to Finish</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Will Work?</wo:WOGenericContainer>
+      <th rowspan="2">Personal<br/>Deadline</th>
+    </tr>
+    <tr><wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop></tr>
+  </wo:if><wo:else>
+    <tr>
+      <th>Component / Feature</th>
+      <th>Activity</th>
+      <th>Estimated Time<br/>Needed to Finish</th>
+      <th>Personal<br/>Deadline</th>
+    </tr>
+  </wo:else>
+</thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
   <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
@@ -43,6 +60,11 @@
       <td><wo:str value="$entry.activityName"/></td>
       <td><wo:if condition="~entry.newEstimatedRemainingRaw != null"><wo:str numberformat="#.#"
         value="$entry.newEstimatedRemainingRaw"/> hours</wo:if></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentResponsible" disabled="true"/></td>
+        </wo:loop>
+      </wo:if>
       <td><wo:str value="$entry.newDeadline" dateformat="$user.dateFormat"/></td>
     </wo:TableRow>
   </wo:loop>
@@ -55,12 +77,29 @@
 
 <wo:org.webcat.core.WCPageModule title="Time You Reported">
 
-<table><thead><tr>
-  <th>Component / Feature</th>
-  <th>Activity</th>
-  <th>Time Spent<br/>Since Last Schedule</th>
-  <th>Component / Feature<br/>Now Finished?</th>
-</tr></thead><tbody>
+<table><thead>
+  <wo:if condition="~students.displayedObjects.count gt 1">
+    <tr>
+      <th rowspan="2">Component / Feature</th>
+      <th rowspan="2">Activity</th>
+      <th rowspan="2">Time Worked Since<br/>Last Schedule</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Worked?</wo:WOGenericContainer>
+      <th rowspan="2">Component / Feature<br/>Now Finished?</th>
+    </tr>
+    <tr><wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop></tr>
+  </wo:if><wo:else>
+    <tr>
+      <th>Component / Feature</th>
+      <th>Activity</th>
+      <th>Time Worked Since<br/>Last Schedule</th>
+      <th>Component / Feature<br/>Now Finished?</th>
+    </tr>
+  </wo:else>
+</thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
   <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
@@ -73,6 +112,11 @@
       <td><wo:str value="$entry.activityName"/></td>
       <td><wo:if condition="~entry.newTimeInvestedRaw ~= null"><wo:str numberformat="#.#"
         value="$entry.newTimeInvestedRaw"/> hours</wo:if></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentWorked" disabled="true"/></td>
+        </wo:loop>
+      </wo:if>
       <td><wo:checkbox checked="$entry.isComplete" disabled="~true"/></td>
     </wo:TableRow>
   </wo:loop>
@@ -85,15 +129,40 @@
 
 <wo:org.webcat.core.WCPageModule title="Time Spent with New Estimates">
 
-<table><thead><tr>
-  <th>Component / Feature</th>
-  <th>Activity</th>
-  <th>Previously Estimated<br/>Total Time</th>
-  <th>Previous<br/>Personal Deadline</th>
-  <th>Time Invested<br/>Since Last Schedule</th>
-  <th>Estimated Time<br/>Needed to Finish</th>
-  <th>Revised<br/>Personal Deadline</th>
-</tr></thead><tbody>
+<table><thead>  <wo:if condition="~students.displayedObjects.count gt 1">
+    <tr>
+      <th rowspan="2">Component / Feature</th>
+      <th rowspan="2">Activity</th>
+      <th rowspan="2">Total Time<br/>Estimated</th>
+      <th rowspan="2">Previous<br/>Personal Deadline</th>
+      <th rowspan="2">Time Worked Since<br/>Last Schedule</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Worked?</wo:WOGenericContainer>
+      <th rowspan="2">Estimated Time<br/>Needed to Finish</th>
+      <wo:WOGenericContainer elementName="th"
+        colspan="~students.displayedObjects.count" class="c">Who
+        Will Work?</wo:WOGenericContainer>
+      <th rowspan="2">Revised<br/>Personal Deadline</th>
+    </tr>
+    <tr><wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop>
+    <wo:loop list="$students.displayedObjects" item="$student">
+      <th><wo:str value="$student.name"/></th>
+    </wo:loop></tr>
+  </wo:if><wo:else>
+    <tr>
+      <th>Component / Feature</th>
+      <th>Activity</th>
+      <th>Total Time<br/>Estimated</th>
+      <th>Previous<br/>Personal Deadline</th>
+      <th>Time Worked Since<br/>Last Schedule</th>
+      <th>Estimated Time<br/>Needed to Finish</th>
+      <th>Revised<br/>Personal Deadline</th>
+    </tr>
+  </wo:else>
+</thead><tbody>
 
 <wo:loop list="$componentFeatures.displayedObjects" item="$componentFeature" index="$cfIndex">
   <wo:loop list="$entries.displayedObjects" item="$entry" index="$aIndex">
@@ -107,11 +176,24 @@
       <td><wo:str value="$entry.previousEstimatedTotal" numberformat="#.#"/> hours</td>
       <td><wo:str value="$entry.previousDeadline" dateformat="$user.dateFormat"/></td>
       <td><wo:if condition="~entry.newTimeInvestedRaw != null"><wo:str value="$entry.newTimeInvestedRaw" numberformat="#.#"/> hours</wo:if></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentWorked" disabled="true"/></td>
+        </wo:loop>
+      </wo:if>
       <wo:if condition="$entry.isComplete">
-        <td colspan="2">-- completed --</td>
+        <wo:WOGenericContainer elementName="td"
+          colspan="~2 + ((students.displayedObjects.count gt 1) ? students.displayedObjects.count : 0)">
+          -- completed --
+        </wo:WOGenericContainer>
       </wo:if><wo:else>
         <td><wo:if condition="~entry.newEstimatedRemainingRaw != null"><wo:str numberformat="#.#"
           value="$entry.newEstimatedRemainingRaw"/> hours</wo:if></td>
+      <wo:if condition="~students.displayedObjects.count gt 1">
+        <wo:loop list="$students.displayedObjects" item="$student">
+          <td class="c"><wo:checkbox checked="$studentResponsible" disabled="true"/></td>
+        </wo:loop>
+      </wo:if>
         <td><wo:str value="$entry.newDeadline" dateformat="$user.dateFormat"/></td>
       </wo:else>
     </wo:TableRow>

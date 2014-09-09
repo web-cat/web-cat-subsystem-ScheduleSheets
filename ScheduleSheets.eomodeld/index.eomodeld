@@ -1,29 +1,31 @@
 {
-    EOModelVersion = "2.1"; 
-    adaptorName = JDBC; 
-    connectionDictionary = {driver = "com.mysql.jdbc.Driver"; plugin = MySQL; }; 
+    EOModelVersion = "2.1";
+    adaptorName = JDBC;
+    connectionDictionary = {driver = "com.mysql.jdbc.Driver"; plugin = MySQL; };
     entities = (
         {
-            className = "org.webcat.schedulesheets.ComponentFeature"; 
-            name = ComponentFeature; 
-        }, 
-        {className = "org.webcat.schedulesheets.ScheduleSheet"; name = ScheduleSheet; }, 
+            className = "org.webcat.schedulesheets.ComponentFeature";
+            name = ComponentFeature;
+        },
+        {className = EOGenericRecord; name = EntryStudentNewResponsible; },
+        {className = EOGenericRecord; name = EntryStudentPreviouslyWorked; },
+        {className = "org.webcat.schedulesheets.ScheduleSheet"; name = ScheduleSheet; },
         {
-            className = "org.webcat.schedulesheets.ScheduleSheetAssignment"; 
-            name = ScheduleSheetAssignment; 
-        }, 
+            className = "org.webcat.schedulesheets.ScheduleSheetAssignment";
+            name = ScheduleSheetAssignment;
+        },
         {
-            className = "org.webcat.schedulesheets.ScheduleSheetAssignmentOffering"; 
-            name = ScheduleSheetAssignmentOffering; 
-        }, 
+            className = "org.webcat.schedulesheets.ScheduleSheetAssignmentOffering";
+            name = ScheduleSheetAssignmentOffering;
+        },
         {
-            className = "org.webcat.schedulesheets.ScheduleSheetSubmission"; 
-            name = ScheduleSheetSubmission; 
-        }, 
-        {className = "org.webcat.schedulesheets.SheetEntry"; name = SheetEntry; }, 
+            className = "org.webcat.schedulesheets.ScheduleSheetSubmission";
+            name = ScheduleSheetSubmission;
+        },
+        {className = "org.webcat.schedulesheets.SheetEntry"; name = SheetEntry; },
         {
-            className = "org.webcat.schedulesheets.SheetFeedbackItem"; 
-            name = SheetFeedbackItem; 
+            className = "org.webcat.schedulesheets.SheetFeedbackItem";
+            name = SheetFeedbackItem;
         }
-    ); 
+    );
 }

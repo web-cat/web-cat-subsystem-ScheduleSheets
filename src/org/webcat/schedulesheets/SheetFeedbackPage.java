@@ -30,6 +30,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.appserver.ERXDisplayGroup;
 import org.apache.log4j.Logger;
 import org.webcat.core.Status;
+import org.webcat.core.User;
 import org.webcat.grader.GraderComponent;
 import org.webcat.ui.generators.JavascriptGenerator;
 
@@ -76,6 +77,10 @@ public class SheetFeedbackPage
     public NSArray<Byte> formats = ScheduleSheet.FORMATS;
     public byte aFormat;
 
+    public ERXDisplayGroup<User> students;
+    public User student;
+
+
     //~ Methods ...............................................................
 
     // ----------------------------------------------------------
@@ -96,6 +101,7 @@ public class SheetFeedbackPage
         priorComments = sheet.comments();
         componentFeatures.setMasterObject(sheet);
         feedback.setMasterObject(sheet);
+        students.setMasterObject(submission);
     }
 
 
@@ -218,7 +224,7 @@ public class SheetFeedbackPage
     // ----------------------------------------------------------
     public WOComponent regrade()
     {
-        sheet.runAutomaticChecks();
+        sheet.runAutomaticChecks(true);
         applyLocalChanges();
         return null;
     }
@@ -234,6 +240,48 @@ public class SheetFeedbackPage
             result = nextPage;
         }
         return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean studentWorked()
+    {
+        return entry.workers().contains(student);
+    }
+
+
+    // ----------------------------------------------------------
+    public void setStudentWorked(boolean value)
+    {
+        if (value)
+        {
+            entry.addToWorkersRelationship(student);
+        }
+        else
+        {
+            entry.removeFromWorkersRelationship(student);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean studentResponsible()
+    {
+        return entry.responsible().contains(student);
+    }
+
+
+    // ----------------------------------------------------------
+    public void setStudentResponsible(boolean value)
+    {
+        if (value)
+        {
+            entry.addToResponsibleRelationship(student);
+        }
+        else
+        {
+            entry.removeFromResponsibleRelationship(student);
+        }
     }
 
 

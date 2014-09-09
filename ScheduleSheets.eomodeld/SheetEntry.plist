@@ -132,7 +132,9 @@
         previousEstimatedTotal,
         previousEstimatedRemaining,
         previousTimeInvestedTotal,
-        previousWasComplete
+        previousWasComplete,
+        responsible,
+        workers
     );
     externalName = SheetEntry;
     fetchSpecificationDictionary = {};
@@ -152,6 +154,26 @@
             joinSemantic = EOInnerJoin;
             joins = ({destinationAttribute = sheetEntryId; sourceAttribute = id; });
             name = feedbackItems;
-        }
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = EntryStudentPreviouslyWorked;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = id; });
+            name = entryStudents1;
+            propagatesPrimaryKey = Y;
+        },
+        {definition = "entryStudents1.user"; name = workers; },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = EntryStudentNewResponsible;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = id; });
+            name = entryStudents2;
+            propagatesPrimaryKey = Y;
+        },
+        {definition = "entryStudents2.user"; name = responsible; }
     );
 }

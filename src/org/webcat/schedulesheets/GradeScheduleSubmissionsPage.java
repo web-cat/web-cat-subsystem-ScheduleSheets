@@ -406,7 +406,7 @@ public class GradeScheduleSubmissionsPage
         {
             for (ScheduleSheetSubmission sub : o.submissions())
             {
-                sub.sheet().runAutomaticChecks();
+                sub.sheet().runAutomaticChecks(true);
             }
         }
         applyLocalChanges();
@@ -436,7 +436,7 @@ public class GradeScheduleSubmissionsPage
         {
             if (p.userHasSubmission())
             {
-                ScheduleSheetSubmission sub = pair.submission();
+                ScheduleSheetSubmission sub = p.submission();
 
                 if (sub.result().status() == Status.UNFINISHED
                     || (sub.result().status() != Status.CHECK

@@ -70,6 +70,8 @@ public class SheetFeedbackItem
 
     public static final int ENTRY_IS_DUE_TODAY = 11;
     public static final int ENTRY_IS_DUE_TOMORROW = 12;
+    public static final int ENTRY_NO_WORKERS = 13;
+    public static final int ENTRY_NO_RESPONSIBLES = 14;
 
 
     //~ Factory Methods .......................................................
@@ -296,6 +298,14 @@ public class SheetFeedbackItem
         // ENTRY_IS_DUE_TOMORROW
         new Message(INFORMATION,
             "The ${activity} activity for ${componentFeature} is due "
-            + "tomorrow.")
+            + "tomorrow."),
+        // ENTRY_NO_WORKERS
+        new Message(ERROR,
+            "No student has been identified who worked on the ${activity} "
+            + "activity for ${componentFeature}."),
+        // ENTRY_NO_RESPONSIBLES
+        new Message(ERROR,
+            "No student has been identified who is responsible for working "
+            + "on the ${activity} activity for ${componentFeature}.")
     };
 }

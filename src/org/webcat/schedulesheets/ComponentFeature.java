@@ -256,11 +256,11 @@ public class ComponentFeature
 
 
     // ----------------------------------------------------------
-    public void runAutomaticChecks(int round)
+    public void runAutomaticChecks(int round, boolean checkEstimatePhase)
     {
         for (SheetEntry entry : entries())
         {
-            entry.runAutomaticChecks(round);
+            entry.runAutomaticChecks(round, checkEstimatePhase);
         }
 
         // Component-level checks
@@ -268,56 +268,61 @@ public class ComponentFeature
         SheetEntry code = entryFor(SheetEntry.CODE);
         SheetEntry test = entryFor(SheetEntry.TEST);
 
-        // No design time estimated
-        if (!code.isComplete()
-            && code.newEstimatedRemaining() > 4
-            && design.newTimeInvestedTotal() == 0
-            && design.newEstimatedRemaining() == 0)
-        {
-            SheetFeedbackItem.create(editingContext(), round,
-                SheetFeedbackItem.CF_INSUFFICIENT_DESIGN, this);
-        }
+        // Component-level checks for entry phase
 
-        // No test time estimated
-        if (!code.isComplete()
-            && code.newEstimatedRemaining() > 0)
+        // Component-level checks for estimate phase
+        if (checkEstimatePhase)
         {
-            if (test.newEstimatedRemaining() == 0)
+            // No design time estimated
+            if (!code.isComplete()
+                && code.newEstimatedRemaining() > 4
+                && design.newTimeInvestedTotal() == 0
+                && design.newEstimatedRemaining() == 0)
             {
                 SheetFeedbackItem.create(editingContext(), round,
-                    SheetFeedbackItem.CF_INSUFFICIENT_TEST, this);
+                    SheetFeedbackItem.CF_INSUFFICIENT_DESIGN, this);
             }
-            else if (test.newEstimatedRemaining()
-                < code.newEstimatedRemaining() / 5)
+
+            // No test time estimated
+            if (!code.isComplete()
+                && code.newEstimatedRemaining() > 0)
+            {
+                if (test.newEstimatedRemaining() == 0)
+                {
+                    SheetFeedbackItem.create(editingContext(), round,
+                        SheetFeedbackItem.CF_INSUFFICIENT_TEST, this);
+                }
+                else if (test.newEstimatedRemaining()
+                    < code.newEstimatedRemaining() / 5)
+                {
+                    SheetFeedbackItem.create(editingContext(), round,
+                        SheetFeedbackItem.CF_INSUFFICIENT_TEST2, this);
+                }
+            }
+
+            // Design deadline falls after code deadline
+            if (!design.isComplete()
+                && !code.isComplete()
+                && code.newDeadline() != null
+                && design.newDeadline() != null
+                && design.newDeadline().after(code.newDeadline()))
             {
                 SheetFeedbackItem.create(editingContext(), round,
-                    SheetFeedbackItem.CF_INSUFFICIENT_TEST2, this);
+                    SheetFeedbackItem.CF_DESIGN_AFTER_CODE, this);
             }
-        }
 
-        // Design deadline falls after code deadline
-        if (!design.isComplete()
-            && !code.isComplete()
-            && code.newDeadline() != null
-            && design.newDeadline() != null
-            && design.newDeadline().after(code.newDeadline()))
-        {
-            SheetFeedbackItem.create(editingContext(), round,
-                SheetFeedbackItem.CF_DESIGN_AFTER_CODE, this);
-        }
-
-        // Code deadline falls after test deadline
-        if (!code.isComplete()
-            && !test.isComplete()
-            && test.newDeadline() != null
-            && code.newDeadline() != null
-            && code.newDeadline().after(test.newDeadline()))
-        {
-            SheetFeedbackItem.create(editingContext(), round,
-                SheetFeedbackItem.CF_CODE_AFTER_TEST, this);
+            // Code deadline falls after test deadline
+            if (!code.isComplete()
+                && !test.isComplete()
+                && test.newDeadline() != null
+                && code.newDeadline() != null
+                && code.newDeadline().after(test.newDeadline()))
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.CF_CODE_AFTER_TEST, this);
+            }
         }
     }
-
 
     //~ Instance/static fields ................................................
 }

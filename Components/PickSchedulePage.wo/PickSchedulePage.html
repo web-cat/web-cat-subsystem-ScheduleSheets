@@ -34,8 +34,7 @@ with which your schedule sheet is associated.</p>
       </td>
       <td><wo:str value="$sheet.availableFrom" formatter="$session.timeFormatter"/></td>
       <td><wo:str value="$sheet.dueDate" formatter="$session.timeFormatter"/></td>
-      <td><wo:if condition="~sheet.order == 0">
-          <wo:if condition="~sheet.mostRecentSubFor(user)">
+      <td><wo:if condition="~sheet.mostRecentSubFor(user)">
           <wo:link action="$view">view results</wo:link>
             <wo:if condition="~sheet.userCanSubmit(user)">
               |  <wo:link action="$submit">re-submit</wo:link>
@@ -51,7 +50,6 @@ with which your schedule sheet is associated.</p>
               </wo:else>
             </wo:else>
           </wo:else>
-          </wo:if>
       </td>
     </wo:WCTableRow>
   </wo:loop>

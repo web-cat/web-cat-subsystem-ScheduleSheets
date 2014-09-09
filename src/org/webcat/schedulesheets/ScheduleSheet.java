@@ -780,7 +780,21 @@ public class ScheduleSheet
 
 
     // ----------------------------------------------------------
-    public void runAutomaticChecks()
+    public boolean isFirstSheet()
+    {
+        return submission().assignmentOffering().isFirstSheet();
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isLastSheet()
+    {
+        return submission().assignmentOffering().isLastSheet();
+    }
+
+
+    // ----------------------------------------------------------
+    public void runAutomaticChecks(boolean checkEstimatePhase)
     {
         int round = numCheckRounds() + 1;
         setNumCheckRounds(round);
@@ -792,29 +806,34 @@ public class ScheduleSheet
             }
             else
             {
-                cf.runAutomaticChecks(round);
+                cf.runAutomaticChecks(round, checkEstimatePhase);
             }
         }
 
-        // Sheet-level checks
-        if (componentFeatures().count() == 1)
+        // Sheet-level checks for entry phase
+
+        // Sheet-level checks for estimate phase
+        if (checkEstimatePhase)
         {
-            SheetFeedbackItem.create(editingContext(), round,
-                SheetFeedbackItem.SHEET_ONLY_ONE_FEATURE, this);
-        }
-        else
-        {
-            double totalTime = newEstimatedRemaining();
-            for (ComponentFeature cf : componentFeatures())
+            if (componentFeatures().count() == 1)
             {
-                if (cf.newEstimatedRemaining() > 16
-                    || (componentFeatures().count() > 3
-                        && (cf.newEstimatedRemaining() > totalTime / 2
-                            || cf.newEstimatedRemaining() > 5 * totalTime /
-                                componentFeatures().count())))
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.SHEET_ONLY_ONE_FEATURE, this);
+            }
+            else
+            {
+                double totalTime = newEstimatedRemaining();
+                for (ComponentFeature cf : componentFeatures())
                 {
-                    SheetFeedbackItem.create(editingContext(), round,
-                        SheetFeedbackItem.CF_TOO_LARGE, cf);
+                    if (cf.newEstimatedRemaining() > 16
+                        || (componentFeatures().count() > 3
+                            && (cf.newEstimatedRemaining() > totalTime / 2
+                                || cf.newEstimatedRemaining() > 5 * totalTime /
+                                    componentFeatures().count())))
+                    {
+                        SheetFeedbackItem.create(editingContext(), round,
+                            SheetFeedbackItem.CF_TOO_LARGE, cf);
+                    }
                 }
             }
         }

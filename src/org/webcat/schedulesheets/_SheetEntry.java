@@ -182,6 +182,12 @@ public abstract class _SheetEntry
     public static final String FEEDBACK_ITEMS_KEY = "feedbackItems";
     public static final ERXKey<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems =
         new ERXKey<org.webcat.schedulesheets.SheetFeedbackItem>(FEEDBACK_ITEMS_KEY);
+    public static final String RESPONSIBLE_KEY = "responsible";
+    public static final ERXKey<org.webcat.core.User> responsible =
+        new ERXKey<org.webcat.core.User>(RESPONSIBLE_KEY);
+    public static final String WORKERS_KEY = "workers";
+    public static final ERXKey<org.webcat.core.User> workers =
+        new ERXKey<org.webcat.core.User>(WORKERS_KEY);
     // Fetch specifications ---
     public static final String ENTITY_NAME = "SheetEntry";
 
@@ -1041,6 +1047,362 @@ public abstract class _SheetEntry
         for (org.webcat.schedulesheets.SheetFeedbackItem object : feedbackItems())
         {
             deleteFeedbackItemsRelationship(object);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entities pointed to by the <code>responsible</code>
+     * relationship.
+     * @return an NSArray of the entities in the relationship
+     */
+    @SuppressWarnings("unchecked")
+    public NSArray<org.webcat.core.User> responsible()
+    {
+        return (NSArray)storedValueForKey( "responsible" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Replace the list of entities pointed to by the
+     * <code>responsible</code> relationship.
+     *
+     * @param value The new set of entities to relate to
+     */
+    public void setResponsible( NSMutableArray<org.webcat.core.User>  value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setResponsible("
+                + value + "): was " + responsible() );
+        }
+        takeStoredValueForKey( value, "responsible" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>responsible</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>addToResponsibleRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToResponsible( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToResponsible("
+                + value + "): was " + responsible() );
+        }
+        NSMutableArray<org.webcat.core.User> array =
+            (NSMutableArray<org.webcat.core.User>)responsible();
+        willChange();
+        array.addObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>responsible</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>removeFromResponsibleRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromResponsible( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "RemoveFromResponsible("
+                + value + "): was " + responsible() );
+        }
+        NSMutableArray<org.webcat.core.User> array =
+            (NSMutableArray<org.webcat.core.User>)responsible();
+        willChange();
+        array.removeObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>responsible</code>
+     * relationship.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToResponsibleRelationship( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToResponsibleRelationship("
+                + value + "): was " + responsible() );
+        }
+        addObjectToBothSidesOfRelationshipWithKey(
+            value, "responsible" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>responsible</code>
+     * relationship.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromResponsibleRelationship( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "removeFromResponsibleRelationship("
+                + value + "): was " + responsible() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "responsible" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create a brand new object that is a member of the
+     * <code>responsible</code> relationship.
+     *
+     * @return The new entity
+     */
+    public org.webcat.core.User createResponsibleRelationship()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "createResponsibleRelationship()" );
+        }
+        EOClassDescription eoClassDesc = EOClassDescription
+            .classDescriptionForEntityName( "User" );
+        EOEnterpriseObject eoObject = eoClassDesc
+            .createInstanceWithEditingContext( editingContext(), null );
+        editingContext().insertObject( eoObject );
+        addObjectToBothSidesOfRelationshipWithKey(
+            eoObject, "responsible" );
+        return (org.webcat.core.User)eoObject;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove and then delete a specific entity that is a member of the
+     * <code>responsible</code> relationship.
+     *
+     * @param value The entity to remove from the relationship and then delete
+     */
+    public void deleteResponsibleRelationship( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteResponsibleRelationship("
+                + value + "): was " + responsible() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "responsible" );
+        editingContext().deleteObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove (and then delete, if owned) all entities that are members of the
+     * <code>responsible</code> relationship.
+     */
+    public void deleteAllResponsibleRelationships()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteAllResponsibleRelationships(): was "
+                + responsible() );
+        }
+        for (org.webcat.core.User object : responsible())
+        {
+            deleteResponsibleRelationship(object);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entities pointed to by the <code>workers</code>
+     * relationship.
+     * @return an NSArray of the entities in the relationship
+     */
+    @SuppressWarnings("unchecked")
+    public NSArray<org.webcat.core.User> workers()
+    {
+        return (NSArray)storedValueForKey( "workers" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Replace the list of entities pointed to by the
+     * <code>workers</code> relationship.
+     *
+     * @param value The new set of entities to relate to
+     */
+    public void setWorkers( NSMutableArray<org.webcat.core.User>  value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setWorkers("
+                + value + "): was " + workers() );
+        }
+        takeStoredValueForKey( value, "workers" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>workers</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>addToWorkersRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToWorkers( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToWorkers("
+                + value + "): was " + workers() );
+        }
+        NSMutableArray<org.webcat.core.User> array =
+            (NSMutableArray<org.webcat.core.User>)workers();
+        willChange();
+        array.addObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>workers</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>removeFromWorkersRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromWorkers( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "RemoveFromWorkers("
+                + value + "): was " + workers() );
+        }
+        NSMutableArray<org.webcat.core.User> array =
+            (NSMutableArray<org.webcat.core.User>)workers();
+        willChange();
+        array.removeObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add a new entity to the <code>workers</code>
+     * relationship.
+     *
+     * @param value The new entity to relate to
+     */
+    public void addToWorkersRelationship( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "addToWorkersRelationship("
+                + value + "): was " + workers() );
+        }
+        addObjectToBothSidesOfRelationshipWithKey(
+            value, "workers" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove a specific entity from the <code>workers</code>
+     * relationship.
+     *
+     * @param value The entity to remove from the relationship
+     */
+    public void removeFromWorkersRelationship( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "removeFromWorkersRelationship("
+                + value + "): was " + workers() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "workers" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create a brand new object that is a member of the
+     * <code>workers</code> relationship.
+     *
+     * @return The new entity
+     */
+    public org.webcat.core.User createWorkersRelationship()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "createWorkersRelationship()" );
+        }
+        EOClassDescription eoClassDesc = EOClassDescription
+            .classDescriptionForEntityName( "User" );
+        EOEnterpriseObject eoObject = eoClassDesc
+            .createInstanceWithEditingContext( editingContext(), null );
+        editingContext().insertObject( eoObject );
+        addObjectToBothSidesOfRelationshipWithKey(
+            eoObject, "workers" );
+        return (org.webcat.core.User)eoObject;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove and then delete a specific entity that is a member of the
+     * <code>workers</code> relationship.
+     *
+     * @param value The entity to remove from the relationship and then delete
+     */
+    public void deleteWorkersRelationship( org.webcat.core.User value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteWorkersRelationship("
+                + value + "): was " + workers() );
+        }
+        removeObjectFromBothSidesOfRelationshipWithKey(
+            value, "workers" );
+        editingContext().deleteObject( value );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Remove (and then delete, if owned) all entities that are members of the
+     * <code>workers</code> relationship.
+     */
+    public void deleteAllWorkersRelationships()
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "deleteAllWorkersRelationships(): was "
+                + workers() );
+        }
+        for (org.webcat.core.User object : workers())
+        {
+            deleteWorkersRelationship(object);
         }
     }
 

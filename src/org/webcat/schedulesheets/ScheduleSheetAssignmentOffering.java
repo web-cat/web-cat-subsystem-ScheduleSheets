@@ -343,6 +343,20 @@ public class ScheduleSheetAssignmentOffering
     }
 
 
+    // ----------------------------------------------------------
+    public boolean isFirstSheet()
+    {
+        return order() == 0;
+    }
+
+
+    // ----------------------------------------------------------
+    public boolean isLastSheet()
+    {
+        return order() == assignment().numberOfSheets() - 1;
+    }
+
+
     //~ Instance/static fields ................................................
 
     private AssignmentOffering assignmentOffering;
