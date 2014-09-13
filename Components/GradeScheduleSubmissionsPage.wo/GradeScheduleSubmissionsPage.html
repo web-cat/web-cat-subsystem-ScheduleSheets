@@ -4,6 +4,8 @@
 
 <div class="module">
 <wo:WCForm><table class="actionlist"><tbody><tr>
+    <td>Sheet: <wo:select list="$sheetNos" item="$aSheetNo" selection="$sheetNo"/>
+      <wo:WCButton label="Go" action="$reload"/></td>
     <td><wo name="RegradeSubmissionsIcon"/></td>
     <td><wo:WCLink action="$regradeSubmissions">Regrade all
       submissions.</wo:WCLink></td>

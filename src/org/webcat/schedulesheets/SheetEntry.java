@@ -160,7 +160,7 @@ public class SheetEntry
     // ----------------------------------------------------------
     public boolean isOverdue()
     {
-        return msAfterDeadline() > DAY;
+        return !isComplete() && msAfterDeadline() > DAY;
     }
 
 
@@ -168,7 +168,7 @@ public class SheetEntry
     public boolean isDueToday()
     {
         long ms = msAfterDeadline();
-        return ms >= 0 && ms < DAY;
+        return !isComplete() && ms >= 0 && ms < DAY;
     }
 
 
@@ -176,7 +176,7 @@ public class SheetEntry
     public boolean isDueTomorrow()
     {
         long ms = msAfterDeadline();
-        return ms < 0 && ms >= -DAY;
+        return !isComplete() && ms < 0 && ms >= -DAY;
     }
 
 

@@ -66,6 +66,7 @@ public class GradeScheduleSubmissionsPage
 
     public ScheduleSheetAssignment assignment;
     public NSMutableArray<Integer> sheetNos;
+    public Integer aSheetNo;
 
     public ERXDisplayGroup<ScheduleSheetAssignmentOffering> offerings;
     public ScheduleSheetAssignmentOffering offering;
@@ -385,6 +386,13 @@ public class GradeScheduleSubmissionsPage
     public WOComponent editNewerSubmissionScore()
     {
         return editSubmissionScore(aNewerSubmission);
+    }
+
+
+    // ----------------------------------------------------------
+    public WOComponent reload()
+    {
+        return null;
     }
 
 
