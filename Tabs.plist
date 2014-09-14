@@ -12,13 +12,13 @@
       };
       Assignments = {
         children = {
-          "Sched Sheet Props" = {
+          "Edit Schedule Sheet" = {
             accessLevel = 50;
             priority = 120;
             pageName = org.webcat.schedulesheets.EditScheduleSheetAssignmentPage;
             id = ScheduleSheetProperties;
           };
-          "New Sched Sheet" = {
+          "New Schedule Sheet" = {
             accessLevel = 50;
             priority = 130;
             children = {
@@ -31,6 +31,28 @@
                     accessLevel = 50;
                     priority = 2;
                     config = { jumpTo = ScheduleSheetProperties; };
+                };
+            };
+          };
+          "Edit E-mail Alert(s)" = {
+            accessLevel = 100;
+            priority = 140;
+            pageName = org.webcat.schedulesheets.EditEmailAlertGroupForAssignmentPage;
+            id = EmailAlertProperties;
+          };
+          "New E-mail Alert(s)" = {
+            accessLevel = 100;
+            priority = 145;
+            children = {
+                "Create Email Alert(s)" = {
+                    pageName = org.webcat.schedulesheets.NewEmailAlertGroupForAssignmentPage;
+                    accessLevel = 100;
+                    priority = 1;
+                };
+                "Edit E-mail Alert(s)" = {
+                    accessLevel = 100;
+                    priority = 2;
+                    config = { jumpTo = EmailAlertProperties; };
                 };
             };
           };

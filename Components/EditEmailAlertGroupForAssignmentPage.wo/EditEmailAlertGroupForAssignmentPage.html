@@ -1,0 +1,40 @@
+<wo:org.webcat.grader.PageWithAssignmentNavigation
+  title="Edit E-mail Alerts">
+<wo:WCForm multipleSubmit="true">
+
+<wo:loop list="$batches.displayedObjects" item="$batch">
+
+<wo:WCPageModule title="~'Due Dates for E-Mail Alert ' + batchNo">
+<wo:WCContentPane id="~'offerings' + batchNo">
+<table>
+    <thead><tr>
+        <th class="sm">Course Offering</th>
+        <th>Send Date <wo:if condition="$areDatesLocked"><wo name="UnlockDates"/></wo:if><wo:else><wo name="LockDates"/></wo:else></th>
+    </tr></thead>
+    <tbody>
+        <wo:loop list="$offerings.displayedObjects" item="$offering" index="$offeringIndex">
+        <wo:tr index="$offeringIndex">
+            <td><strong><wo:str value="$offering.courseOffering.compactName"/></strong></td>
+            <td><wo:if condition="$shouldShowDatePicker">
+              <wo:if condition="$offering.sent">
+                <wo:str value="$sendTime" formatter="$session.timeFormatter"/>
+                (already sent)
+              </wo:if><wo:else>
+                <wo name="SendTime"/>
+              </wo:else>
+            </wo:if></td>
+        </wo:tr>
+        </wo:loop>
+    </tbody>
+</table>
+</wo:WCContentPane>
+</wo:WCPageModule>
+
+</wo:loop>
+
+<div class="module right">
+<wo:WCButton action="$apply" class="pos" label="Save All"/>
+<wo:WCButton action="$cancel" class="neg" label="Cancel"/>
+</div>
+</wo:WCForm>
+</wo:org.webcat.grader.PageWithAssignmentNavigation>

@@ -149,6 +149,38 @@ public class ScheduleSheetsDatabaseUpdates
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Add the e-mail alerts tables.
+     * @throws SQLException on error
+     */
+    public void updateIncrement6() throws SQLException
+    {
+        createEmailAlertGroupForAssignmentTable();
+        createEmailAlertForAssignmentTable();
+        createEmailAlertForAssignmentOfferingTable();
+        createEmailAlertForStudentTable();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Add flags for sent messages.
+     * @throws SQLException on error
+     */
+    public void updateIncrement7() throws SQLException
+    {
+        database().executeSQL(
+            "alter table EmailAlertForStudent add sent BIT NOT NULL");
+        database().executeSQL(
+            "alter table EmailAlertForAssignmentOffering "
+            + "change sent sendTime DATETIME");
+        database().executeSQL(
+            "alter table EmailAlertForAssignmentOffering "
+            + "add sent BIT NOT NULL");
+    }
+
+
     //~ Private Methods .......................................................
 
     // ----------------------------------------------------------
@@ -390,6 +422,112 @@ public class ScheduleSheetsDatabaseUpdates
             database().executeSQL(
                 "ALTER TABLE EntryStudentNewResponsible ADD PRIMARY KEY "
                 + "(id, id1)");
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create the EmailAlertGroupForAssignment table, if needed.
+     * @throws SQLException on error
+     */
+    private void createEmailAlertGroupForAssignmentTable() throws SQLException
+    {
+        if (!database().hasTable("EmailAlertGroupForAssignment", "id", "1"))
+        {
+            log.info("creating table EmailAlertGroupForAssignment");
+            database().executeSQL(
+                "CREATE TABLE EmailAlertGroupForAssignment ("
+                + "assignmentId INTEGER NOT NULL, "
+                + "authorId INTEGER, "
+                + "OID INTEGER NOT NULL, "
+                + "numberOfAlerts INTEGER"
+                + ")");
+            database().executeSQL(
+                "ALTER TABLE EmailAlertGroupForAssignment ADD PRIMARY KEY "
+                + "(OID)");
+            createIndexFor("EmailAlertGroupForAssignment", "assignmentId");
+            createIndexFor("EmailAlertGroupForAssignment", "authorId");
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create the EmailAlertForAssignment table, if needed.
+     * @throws SQLException on error
+     */
+    private void createEmailAlertForAssignmentTable() throws SQLException
+    {
+        if (!database().hasTable("EmailAlertForAssignment", "id", "1"))
+        {
+            log.info("creating table EmailAlertForAssignment");
+            database().executeSQL(
+                "CREATE TABLE EmailAlertForAssignment ("
+                + "groupId INTEGER NOT NULL, "
+                + "OID INTEGER NOT NULL, "
+                + "timeBeforeDue BIGINT"
+                + ")");
+            database().executeSQL(
+                "ALTER TABLE EmailAlertForAssignment ADD PRIMARY KEY "
+                + "(OID)");
+            createIndexFor("EmailAlertForAssignment", "groupId");
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create the EmailAlertForAssignmentOffering table, if needed.
+     * @throws SQLException on error
+     */
+    private void createEmailAlertForAssignmentOfferingTable()
+        throws SQLException
+    {
+        if (!database().hasTable("EmailAlertForAssignmentOffering", "id", "1"))
+        {
+            log.info("creating table EmailAlertForAssignmentOffering");
+            database().executeSQL(
+                "CREATE TABLE EmailAlertForAssignmentOffering ("
+                + "alertForAssignmentId INTEGER NOT NULL, "
+                + "courseOfferingId INTEGER NOT NULL, "
+                + "OID INTEGER NOT NULL, "
+                + "sent DATETIME"
+                + ")");
+            database().executeSQL(
+                "ALTER TABLE EmailAlertForAssignmentOffering ADD PRIMARY KEY "
+                + "(OID)");
+            createIndexFor("EmailAlertForAssignment", "alertForAssignmentId");
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create the EmailAlertForStudent table, if needed.
+     * @throws SQLException on error
+     */
+    private void createEmailAlertForStudentTable() throws SQLException
+    {
+        if (!database().hasTable("EmailAlertForStudent", "id", "1"))
+        {
+            log.info("creating table EmailAlertForStudent");
+            database().executeSQL(
+                "CREATE TABLE EmailAlertForStudent ("
+                + "alertOfferingId INTEGER NOT NULL, "
+                + "byteCodingRating TINYINT, "
+                + "byteCorrectnessRating TINYINT, "
+                + "byteStyleRating TINYINT, "
+                + "byteTestingRating TINYINT, "
+                + "OID INTEGER NOT NULL, "
+                + "userId INTEGER NOT NULL, "
+                + "submissionId INTEGER"
+                + ")");
+            database().executeSQL(
+                "ALTER TABLE EmailAlertForStudent ADD PRIMARY KEY (OID)");
+            createIndexFor("EmailAlertForStudent", "alertOfferingId");
+            createIndexFor("EmailAlertForStudent", "userId");
+            createIndexFor("EmailAlertForStudent", "submissionId");
         }
     }
 }

@@ -21,29 +21,29 @@
 
 package org.webcat.schedulesheets;
 
-import org.apache.log4j.Logger;
-import org.webcat.core.Course;
-import org.webcat.core.CourseOffering;
-import org.webcat.core.Semester;
-import org.webcat.grader.Assignment;
-import org.webcat.grader.GraderAssignmentsComponent;
-import org.webcat.grader.SubmissionProfile;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
+import org.apache.log4j.Logger;
+import org.webcat.core.Course;
+import org.webcat.core.CourseOffering;
+import org.webcat.core.Semester;
+import org.webcat.grader.Assignment;
+import org.webcat.grader.AssignmentOffering;
+import org.webcat.grader.GraderAssignmentsComponent;
 
 //-------------------------------------------------------------------------
 /**
- * Page to create a new schedule sheet assignment.
+ * Page to create a new group of e-mail alerts for an assignment.
  *
  * @author  Stephen Edwards
  * @author  Last changed by $Author$
  * @version $Revision$, $Date$
  */
-public class NewScheduleSheetAssignmentPage
+public class NewEmailAlertGroupForAssignmentPage
     extends GraderAssignmentsComponent
 {
     //~ Constructor ...........................................................
@@ -54,7 +54,7 @@ public class NewScheduleSheetAssignmentPage
      *
      * @param context The context to use
      */
-    public NewScheduleSheetAssignmentPage(WOContext context)
+    public NewEmailAlertGroupForAssignmentPage(WOContext context)
     {
         super(context);
     }
@@ -62,10 +62,7 @@ public class NewScheduleSheetAssignmentPage
 
     //~ KVC Attributes (must be public) .......................................
 
-    public String aName;
-    public boolean bindToAssignment = true;
-    public byte numberOfSheets = 3;
-    public String title;
+    public byte numberOfAlerts = 3;
     public boolean forAllSections = true;
     public Assignment assignment;
 
@@ -82,19 +79,13 @@ public class NewScheduleSheetAssignmentPage
     protected void beforeAppendToResponse(
         WOResponse response, WOContext context)
     {
-        if (bindToAssignment && (aName == null || aName.isEmpty()))
+        if (prefs().assignment() != null)
         {
-            if (prefs().assignment() != null)
-            {
-                assignment = prefs().assignment();
-                aName = assignment.name();
-            }
-            else if (prefs().assignmentOffering() != null)
-            {
-                assignment = prefs().assignmentOffering().assignment();
-                aName = assignment.name();
-            }
-            aName = "Schedule for " + aName;
+            assignment = prefs().assignment();
+        }
+        else if (prefs().assignmentOffering() != null)
+        {
+            assignment = prefs().assignmentOffering().assignment();
         }
         if (coreSelections().course() == null
             && coreSelections().courseOffering() == null)
@@ -119,14 +110,9 @@ public class NewScheduleSheetAssignmentPage
     @Override
     public WOComponent next()
     {
-        if (aName == null || aName.length() == 0)
+        if (numberOfAlerts < 1)
         {
-            error("Please enter a name for your assignment.");
-            return null;
-        }
-        if (numberOfSheets < 1)
-        {
-            error("Please enter a positive number of schedule sheets for "
+            error("Please enter a positive number of e-mail alerts for "
                 + "this assignment.");
             return null;
         }
@@ -171,78 +157,40 @@ public class NewScheduleSheetAssignmentPage
             return null;
         }
 
-        log.debug("creating new schedule sheet assignment");
-        ScheduleSheetAssignment newAssignment = ScheduleSheetAssignment
+        log.debug("creating new e-mail alert group");
+        EmailAlertGroupForAssignment group = EmailAlertGroupForAssignment
             .create(localContext());
-        newAssignment.setName(aName);
-        newAssignment.setShortDescription(title);
-        newAssignment.setAuthorRelationship(user());
-        newAssignment.setNumberOfSheets(numberOfSheets);
-        if (bindToAssignment && assignment != null)
+        group.setAuthorRelationship(user());
+        group.setNumberOfAlerts(numberOfAlerts);
+        group.setAssignmentRelationship(assignment);
+
+        long time = 1000 * 60 * 60 * 24;   // 1 days
+        for (int i = 0; i < numberOfAlerts; i++)
         {
-            newAssignment.setAssignmentRelationship(assignment);
-        }
-
-        SubmissionProfile profile = SubmissionProfile.create(
-            localContext(), false,false, false, false, false);
-        profile.setDeadTimeDelta(
-            SubmissionProfile.timeUnits[2].factor() * 2);
-        profile.setAvailableTimeDelta(
-            SubmissionProfile.timeUnits[2].factor() * 2);
-        profile.setToolPoints(100);
-        profile.setAvailablePoints(profile.toolPoints());
-
-        profile.setAllowPartners(false);
-        profile.setAutoAssignPartners(false);
-        profile.setAwardEarlyBonus(false);
-        profile.setDeductExcessSubmissionPenalty(false);
-        profile.setDeductLatePenalty(false);
-
-        profile.setEarlyBonusMaxPtsRaw(null);
-        profile.setEarlyBonusUnitPtsRaw(null);
-        profile.setEarlyBonusUnitTimeRaw(null);
-        profile.setExcessSubmissionsMaxPtsRaw(null);
-        profile.setExcessSubmissionsThresholdRaw(null);
-        profile.setExcessSubmissionsUnitPtsRaw(null);
-        profile.setExcessSubmissionsUnitSizeRaw(null);
-        profile.setLatePenaltyMaxPtsRaw(null);
-        profile.setLatePenaltyUnitPtsRaw(null);
-        profile.setLatePenaltyUnitTimeRaw(null);
-
-        newAssignment.setSubmissionProfileRelationship(profile);
-
-
-        NSTimestamp due = new NSTimestamp();
-        for (byte order = 0; order < numberOfSheets; order++)
-        {
-            due = due.timestampByAddingGregorianUnits(0, 0, 7, 0, 0, 0);
-            for (CourseOffering offering: offerings)
+            EmailAlertForAssignment eafa =
+                EmailAlertForAssignment.create(localContext(), group);
+            time *= 2;
+            eafa.setTimeBeforeDue(time);
+            for (CourseOffering co : offerings)
             {
-                log.debug("creating new schedule sheet assignment offering "
-                    + order + "for " + offering);
-                ScheduleSheetAssignmentOffering newOffering =
-                    ScheduleSheetAssignmentOffering
-                    .create(localContext(), false);
-                newOffering.setAssignmentRelationship(newAssignment);
-                newOffering.setCourseOfferingRelationship(offering);
-                newOffering.setDueDate(due);
-                newOffering.setClosedOnDate(due);
-                newOffering.setOrder(order);
+                EmailAlertForAssignmentOffering eafao =
+                    EmailAlertForAssignmentOffering
+                    .create(localContext(), false, eafa);
+                eafao.setCourseOfferingRelationship(co);
+                AssignmentOffering ao = AssignmentOffering
+                    .firstObjectMatchingQualifier(localContext(),
+                        AssignmentOffering.assignment.is(assignment).and(
+                        AssignmentOffering.courseOffering.is(co)), null);
+                eafao.setSendTime(
+                    new NSTimestamp(ao.dueDate().getTime() - time));
             }
         }
 
-        try
-        {
-            localContext().saveChanges();
-            profile.refetchObjectFromDBinEditingContext(localContext());
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
-        EditScheduleSheetAssignmentPage page =
-            pageWithName(EditScheduleSheetAssignmentPage.class);
-        page.assignment = newAssignment;
+        applyLocalChanges();
+
+        EditEmailAlertGroupForAssignmentPage page =
+            pageWithName(EditEmailAlertGroupForAssignmentPage.class);
+        page.group = group;
         return page;
     }
 
@@ -272,5 +220,6 @@ public class NewScheduleSheetAssignmentPage
 
     //~ Instance/static fields ................................................
 
-    static Logger log = Logger.getLogger(NewScheduleSheetAssignmentPage.class);
+    static Logger log =
+        Logger.getLogger(NewEmailAlertGroupForAssignmentPage.class);
 }

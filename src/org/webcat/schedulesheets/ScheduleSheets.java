@@ -23,6 +23,10 @@ package org.webcat.schedulesheets;
 
 import org.apache.log4j.Logger;
 import org.webcat.core.Subsystem;
+import org.webcat.woextensions.WCEC;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 
 //-------------------------------------------------------------------------
 /**
@@ -51,7 +55,133 @@ public class ScheduleSheets
 
     //~ Methods ...............................................................
 
+    // ----------------------------------------------------------
+    @Override
+    public void start()
+    {
+        super.start();
+        alerter = new Alerter();
+        alerter.start();
+    }
+
+
+    // ----------------------------------------------------------
+    public static void pingAlerter()
+    {
+        if (alerter != null)
+        {
+            alerter.ping();
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public class Alerter
+        extends Thread
+    {
+        private boolean sleeping = false;
+
+
+        // ----------------------------------------------------------
+        public void ping()
+        {
+            if (sleeping)
+            {
+                interrupt();
+            }
+        }
+
+
+        // ----------------------------------------------------------
+        @Override
+        public void run()
+        {
+            EOEditingContext ec = null;
+            while (true)
+            {
+                long sleepTime = 0;
+                if (ec == null)
+                {
+                    ec = WCEC.newEditingContext();
+                }
+                ec.lock();
+                try
+                {
+                    NSTimestamp now = new NSTimestamp();
+                    NSArray<EmailAlertForAssignmentOffering> offerings =
+                        EmailAlertForAssignmentOffering
+                        .objectsMatchingQualifier(ec,
+                        EmailAlertForAssignmentOffering.sent.isFalse().and(
+                        EmailAlertForAssignmentOffering.sendTime.before(now)),
+                        EmailAlertForAssignmentOffering.sendTime.ascs());
+
+                    if (offerings.count() == 0)
+                    {
+                        sleepTime = 1000 * 60 * 60 * 24;
+                    }
+                    else
+                    {
+                        for (EmailAlertForAssignmentOffering o : offerings)
+                        {
+                            log.debug("sending email alert for "
+                                + o.alertForAssignment().alertGroup()
+                                    .assignment()
+                                + " in "
+                                + o.courseOffering().compactName());
+                            o.send();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.error("Unexpected exception in Alerter", e);
+                    if (ec != null)
+                    {
+                        try
+                        {
+                            ec.unlock();
+                            ec.dispose();
+                        }
+                        catch (Exception ee)
+                        {
+                            log.error("Exception cleaning up bad editing "
+                                + "context", ee);
+                        }
+                    }
+                    ec = null;
+                }
+                finally
+                {
+                    if (ec != null)
+                    {
+                        ec.unlock();
+                    }
+                }
+
+                // sleep until next item becomes available
+                if (sleepTime > 0)
+                {
+                    sleeping = true;
+                    try
+                    {
+                        sleep(sleepTime);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        // ignore
+                    }
+                    finally
+                    {
+                        sleeping = false;
+                    }
+                }
+            }
+        }
+    }
+
+
     //~ Instance/static fields ................................................
 
+    private static Alerter alerter;
     static Logger log = Logger.getLogger(ScheduleSheets.class);
 }

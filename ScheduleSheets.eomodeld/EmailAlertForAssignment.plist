@@ -1,0 +1,57 @@
+{
+    attributes = (
+        {
+            allowsNull = N;
+            columnName = groupId;
+            name = groupId;
+            prototypeName = foreignId;
+        },
+        {allowsNull = N; name = id; prototypeName = id; },
+        {
+            columnName = timeBeforeDue;
+            name = timeBeforeDue;
+            prototypeName = long;
+            userInfo =
+            {
+                isScalar = true;
+                scalarConversionMethodName = longValue;
+                scalarDefault = 0L;
+                type = long;
+                valueClassName = Long;
+            };
+        }
+    );
+    attributesUsedForLocking = (
+        groupId,
+        id,
+        timeBeforeDue
+    );
+    className = "org.webcat.schedulesheets.EmailAlertForAssignment";
+    classProperties = (
+        alertGroup,
+        offerings,
+        timeBeforeDue
+    );
+    externalName = EmailAlertForAssignment;
+    fetchSpecificationDictionary = {};
+    name = EmailAlertForAssignment;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = EmailAlertGroupForAssignment;
+            isMandatory = Y;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = groupId; });
+            name = alertGroup;
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = EmailAlertForAssignmentOffering;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = alertForAssignmentId; sourceAttribute = id; });
+            name = offerings;
+        }
+    );
+}

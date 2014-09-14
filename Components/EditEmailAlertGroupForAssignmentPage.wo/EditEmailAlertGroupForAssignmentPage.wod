@@ -1,0 +1,24 @@
+SendTime: WCDateTimePicker {
+     value      = sendTime;
+     dateformat = user.dateFormat;
+     timeformat = user.timeFormat;
+     timeZone   = timeZone;
+}
+
+LockDates: WCImageButton {
+    filename  = "icons/lock-unlock.png";
+    framework = "Core";
+    action    = lockDates;
+    remote    = true;
+    title     = "Force all send dates to be the same";
+    alt       = "Force all send dates to be the same";
+}
+
+UnlockDates: WCImageButton {
+    filename  = "icons/lock.png";
+    framework = "Core";
+    action    = unlockDates;
+    remote    = true;
+    title     = "Allow offerings to have different send dates";
+    alt       = "Allow offerings to have different send dates";
+}

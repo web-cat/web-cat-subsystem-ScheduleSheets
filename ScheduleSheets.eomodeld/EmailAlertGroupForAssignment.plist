@@ -1,0 +1,65 @@
+{
+    attributes = (
+        {
+            allowsNull = N;
+            columnName = assignmentId;
+            name = assignmentId;
+            prototypeName = foreignId;
+        },
+        { columnName = authorId; name = authorId; prototypeName = foreignId; },
+        {allowsNull = N; name = id; prototypeName = id; },
+        {
+            columnName = numberOfAlerts;
+            name = numberOfAlerts;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        }
+    );
+    attributesUsedForLocking = (
+        assignmentId,
+        authorId,
+        id,
+        numberOfAlerts
+    );
+    className = "org.webcat.schedulesheets.EmailAlertGroupForAssignment";
+    classProperties = (
+        alerts,
+        assignment,
+        author,
+        numberOfAlerts
+    );
+    externalName = EmailAlertGroupForAssignment;
+    fetchSpecificationDictionary = {};
+    name = EmailAlertGroupForAssignment;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = EmailAlertForAssignment;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = groupId; sourceAttribute = id; });
+            name = alerts;
+        },
+        {
+            destination = Assignment;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = assignmentId; });
+            name = assignment;
+        },
+        {
+            destination = User;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = authorId; });
+            name = author;
+        }
+    );
+}

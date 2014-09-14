@@ -1,0 +1,4 @@
+NumberOfAlertsInfo: PopUpInfo {
+    title   = "NumberOfAlerts";
+    message = "How many e-mail alerts should students receive for this assignment?";
+}

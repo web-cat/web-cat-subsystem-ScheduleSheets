@@ -1,0 +1,127 @@
+{
+    attributes = (
+        {
+            allowsNull = N;
+            columnName = alertOfferingId;
+            name = alertOfferingId;
+            prototypeName = foreignId;
+        },
+        {
+            name = byteCodingRating;
+            columnName = byteCodingRating;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {
+            name = byteCorrectnessRating;
+            columnName = byteCorrectnessRating;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {
+            name = byteStyleRating;
+            columnName = byteStyleRating;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {
+            name = byteTestingRating;
+            columnName = byteTestingRating;
+            prototypeName = tinyInteger;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = byteValue;
+                scalarDefault = 0;
+                type = byte;
+                valueClassName = Byte;
+            };
+        },
+        {allowsNull = N; name = id; prototypeName = id; },
+        {
+            columnName = sent;
+            allowsNull = N;
+            name = sent;
+            prototypeName = boolean;
+            userInfo = {isScalar = true; scalarDefault = false; type = boolean; };
+        },
+        {
+            columnName = submissionId;
+            name = submissionId;
+            prototypeName = foreignId;
+        },
+        {
+            allowsNull = N;
+            columnName = userId;
+            name = userId;
+            prototypeName = foreignId;
+        }
+    );
+    attributesUsedForLocking = (
+        alertOfferingId,
+        byteCodingRating,
+        byteCorrectnessRating,
+        byteStyleRating,
+        byteTestingRating,
+        id,
+        sent,
+        submissionId,
+        userId
+    );
+    className = "org.webcat.schedulesheets.EmailAlertForStudent";
+    classProperties = (
+        alertOffering,
+        byteCodingRating,
+        byteCorrectnessRating,
+        byteStyleRating,
+        byteTestingRating,
+        sent,
+        submission,
+        user
+    );
+    externalName = EmailAlertForStudent;
+    fetchSpecificationDictionary = {};
+    name = EmailAlertForStudent;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = EmailAlertForAssignmentOffering;
+            isMandatory = Y;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = alertOfferingId; });
+            name = alertOffering;
+        },
+        {
+            destination = Submission;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = submissionId; });
+            name = submission;
+        },
+        {
+            destination = User;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = userId; });
+            name = user;
+        }
+    );
+}

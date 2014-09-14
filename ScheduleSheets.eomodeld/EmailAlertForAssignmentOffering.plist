@@ -1,0 +1,68 @@
+{
+    attributes = (
+        {
+            allowsNull = N;
+            columnName = alertForAssignmentId;
+            name = alertForAssignmentId;
+            prototypeName = foreignId;
+        },
+        {
+            allowsNull = N;
+            columnName = courseOfferingId;
+            name = courseOfferingId;
+            prototypeName = foreignId;
+        },
+        {allowsNull = N; name = id; prototypeName = id; },
+        {columnName = sendTime; name = sendTime; prototypeName = dateTime; },
+        {
+            columnName = sent;
+            allowsNull = N;
+            name = sent;
+            prototypeName = boolean;
+            userInfo = {isScalar = true; scalarDefault = false; type = boolean; };
+        }
+    );
+    attributesUsedForLocking = (
+        alertForAssignmentId,
+        courseOfferingId,
+        id,
+        sent
+    );
+    className = "org.webcat.schedulesheets.EmailAlertForAssignmentOffering";
+    classProperties = (
+        alertForAssignment,
+        alerts,
+        courseOffering,
+        sendTime,
+        sent
+    );
+    externalName = EmailAlertForAssignmentOffering;
+    fetchSpecificationDictionary = {};
+    name = EmailAlertForAssignmentOffering;
+    primaryKeyAttributes = (id);
+    relationships = (
+        {
+            destination = EmailAlertForAssignment;
+            isMandatory = Y;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = alertForAssignmentId; });
+            name = alertForAssignment;
+        },
+        {
+            destination = CourseOffering;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = courseOfferingId; });
+            name = courseOffering;
+        },
+        {
+            deleteRule = EODeleteRuleCascade;
+            destination = EmailAlertForStudent;
+            isToMany = Y;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = alertOfferingId; sourceAttribute = id; });
+            name = alerts;
+        }
+    );
+}

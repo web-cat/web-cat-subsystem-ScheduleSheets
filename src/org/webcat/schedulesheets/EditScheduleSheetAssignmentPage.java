@@ -24,7 +24,6 @@ package org.webcat.schedulesheets;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.TimeZone;
-import org.webcat.core.Application;
 import org.webcat.core.Course;
 import org.webcat.core.CourseOffering;
 import org.webcat.grader.Assignment;
@@ -53,7 +52,7 @@ import er.extensions.appserver.ERXDisplayGroup;
 public class EditScheduleSheetAssignmentPage
     extends GraderAssignmentsComponent
 {
-    //~ Constructors ..........................................................
+    //~ Constructor ...........................................................
 
     // ----------------------------------------------------------
     /**
@@ -480,10 +479,8 @@ public class EditScheduleSheetAssignmentPage
     // ----------------------------------------------------------
     public boolean applyLocalChanges()
     {
-        Application.enableSQLLogging();
         saveTimeFields();
         boolean result = super.applyLocalChanges();
-        Application.disableSQLLogging();
         return result;
     }
 

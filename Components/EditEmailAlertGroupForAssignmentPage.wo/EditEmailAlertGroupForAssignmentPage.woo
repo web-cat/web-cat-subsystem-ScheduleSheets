@@ -1,0 +1,34 @@
+{
+	"WebObjects Release" = "WebObjects 5.0";
+	encoding = "UTF-8";
+    variables = {
+        batches = {
+            class = ERXDisplayGroup;
+            dataSource = {
+                class = EODetailDataSource;
+                detailKey = alerts;
+                masterClassDescription = EmailAlertGroupForAssignment;
+            };
+            fetchesOnLoad = YES;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            numberOfObjectsPerBatch = 0;
+            selectsFirstObjectAfterFetch = YES;
+            sortOrdering = ({class = EOSortOrdering; key = timeBeforeDue; selectorName = "compareDescending:"; });
+        };
+        offerings = {
+            class = ERXDisplayGroup;
+            dataSource = {
+                class = EODetailDataSource;
+                detailKey = offerings;
+                masterClassDescription = EmailAlertForAssignment;
+            };
+            fetchesOnLoad = YES;
+            formatForLikeQualifier = "%@*";
+            localKeys = ();
+            numberOfObjectsPerBatch = 0;
+            selectsFirstObjectAfterFetch = YES;
+            sortOrdering = ({class = EOSortOrdering; key = courseOffering.compactName; selectorName = "compareAscending:"; });
+        };
+    };
+}
