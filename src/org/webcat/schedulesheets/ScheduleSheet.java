@@ -23,6 +23,7 @@ package org.webcat.schedulesheets;
 
 import org.webcat.core.Status;
 import org.webcat.core.User;
+import org.webcat.grader.AssignmentOffering;
 import org.webcat.grader.SubmissionProfile;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
@@ -822,6 +823,36 @@ public class ScheduleSheet
             }
             else
             {
+                if (submission().assignmentOffering().assignment()
+                    .minComponentFeatures() > 0
+                    && componentFeatures().count() <
+                        submission().assignmentOffering().assignment()
+                        .minComponentFeatures())
+                {
+                    SheetFeedbackItem.create(editingContext(), round,
+                        SheetFeedbackItem.SHEET_TOO_FEW_CFS, this);
+                }
+
+                double estimatedTotal = newEstimatedTotal();
+                int estimatedNcloc = submission().assignmentOffering()
+                    .assignment().expectedSize();
+                if (estimatedNcloc > 0)
+                {
+                    if (estimatedTotal < estimatedNcloc / 15.0 * 0.6)
+                    {
+                        SheetFeedbackItem.create(editingContext(), round,
+                            SheetFeedbackItem.SHEET_TOO_FEW_ESTIMATED_HOURS,
+                            this);
+                    }
+                    else if (estimatedTotal > estimatedNcloc / 10.0 * 2)
+                    {
+                        SheetFeedbackItem.create(editingContext(), round,
+                            SheetFeedbackItem.SHEET_TOO_MANY_ESTIMATED_HOURS,
+                            this);
+                    }
+                }
+
+                // Check for components that look suspiciously large
                 double totalTime = newEstimatedRemaining();
                 for (ComponentFeature cf : componentFeatures())
                 {
@@ -836,6 +867,19 @@ public class ScheduleSheet
                     }
                 }
             }
+
+            double hrsRemaining = calculateHoursAvailableBefore(
+                currentDeadline());
+            if (hrsRemaining / 2 < newEstimatedRemaining())
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.SHEET_NOT_ENOUGH_TIME, this);
+            }
+            else if (hrsRemaining / 4 < newEstimatedRemaining())
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.SHEET_TIME_TOO_TIGHT, this);
+            }
         }
 
         if (currentFeedback().count() == 0)
@@ -845,6 +889,18 @@ public class ScheduleSheet
         }
         currentFeedback = null;
         recalculateAutomatedScore();
+    }
+
+
+    // ----------------------------------------------------------
+    public NSTimestamp currentDeadline()
+    {
+        NSTimestamp deadline = newDeadline();
+        if (deadline == null)
+        {
+            deadline = previousDeadline();
+        }
+        return deadline;
     }
 
 
@@ -884,7 +940,32 @@ public class ScheduleSheet
     }
 
 
+    // ----------------------------------------------------------
+    public double calculateHoursAvailableBefore(NSTimestamp target)
+    {
+        if (target == null)
+        {
+            return 0;
+        }
+
+        NSTimestamp start = submission().submitTime();
+        if (start == null)
+        {
+            start = new NSTimestamp();
+        }
+        long diff = target.getTime() - start.getTime();
+
+        if (diff <= 0)
+        {
+            return 0;
+        }
+
+        return diff / HOUR;
+    }
+
+
     //~ Instance/static fields ................................................
 
+    private static final double HOUR = 1000 * 60 * 60;
     private NSArray<SheetFeedbackItem> currentFeedback;
 }

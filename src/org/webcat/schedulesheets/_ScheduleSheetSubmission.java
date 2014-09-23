@@ -701,7 +701,8 @@ public abstract class _ScheduleSheetSubmission
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.ScheduleSheetSubmission> partneredSubmissions()
     {
-        return (NSArray)storedValueForKey( "partneredSubmissions" );
+        return (NSArray<org.webcat.schedulesheets.ScheduleSheetSubmission>)
+            storedValueForKey("partneredSubmissions");
     }
 
 
@@ -712,14 +713,15 @@ public abstract class _ScheduleSheetSubmission
      *
      * @param value The new set of entities to relate to
      */
-    public void setPartneredSubmissions( NSMutableArray<org.webcat.schedulesheets.ScheduleSheetSubmission>  value )
+    public void setPartneredSubmissions(
+        NSMutableArray<org.webcat.schedulesheets.ScheduleSheetSubmission>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setPartneredSubmissions("
-                + value + "): was " + partneredSubmissions() );
+            log.debug("setPartneredSubmissions("
+                + value + "): was " + partneredSubmissions());
         }
-        takeStoredValueForKey( value, "partneredSubmissions" );
+        takeStoredValueForKey(value, "partneredSubmissions");
     }
 
 
@@ -935,8 +937,8 @@ public abstract class _ScheduleSheetSubmission
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheetSubmission> fspec =
+            new WCFetchSpecification<ScheduleSheetSubmission>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -959,8 +961,13 @@ public abstract class _ScheduleSheetSubmission
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<ScheduleSheetSubmission> fspec =
+            new WCFetchSpecification<ScheduleSheetSubmission>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<ScheduleSheetSubmission> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -1148,8 +1155,8 @@ public abstract class _ScheduleSheetSubmission
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheetSubmission> fspec =
+            new WCFetchSpecification<ScheduleSheetSubmission>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

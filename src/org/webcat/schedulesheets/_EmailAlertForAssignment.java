@@ -340,7 +340,8 @@ public abstract class _EmailAlertForAssignment
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.EmailAlertForAssignmentOffering> offerings()
     {
-        return (NSArray)storedValueForKey( "offerings" );
+        return (NSArray<org.webcat.schedulesheets.EmailAlertForAssignmentOffering>)
+            storedValueForKey("offerings");
     }
 
 
@@ -351,14 +352,15 @@ public abstract class _EmailAlertForAssignment
      *
      * @param value The new set of entities to relate to
      */
-    public void setOfferings( NSMutableArray<org.webcat.schedulesheets.EmailAlertForAssignmentOffering>  value )
+    public void setOfferings(
+        NSMutableArray<org.webcat.schedulesheets.EmailAlertForAssignmentOffering>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setOfferings("
-                + value + "): was " + offerings() );
+            log.debug("setOfferings("
+                + value + "): was " + offerings());
         }
-        takeStoredValueForKey( value, "offerings" );
+        takeStoredValueForKey(value, "offerings");
     }
 
 
@@ -574,8 +576,8 @@ public abstract class _EmailAlertForAssignment
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<EmailAlertForAssignment> fspec =
+            new WCFetchSpecification<EmailAlertForAssignment>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -598,8 +600,13 @@ public abstract class _EmailAlertForAssignment
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<EmailAlertForAssignment> fspec =
+            new WCFetchSpecification<EmailAlertForAssignment>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<EmailAlertForAssignment> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -787,8 +794,8 @@ public abstract class _EmailAlertForAssignment
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<EmailAlertForAssignment> fspec =
+            new WCFetchSpecification<EmailAlertForAssignment>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

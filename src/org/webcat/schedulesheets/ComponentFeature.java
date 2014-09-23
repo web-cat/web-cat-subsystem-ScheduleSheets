@@ -256,6 +256,18 @@ public class ComponentFeature
 
 
     // ----------------------------------------------------------
+    public NSTimestamp currentDeadline()
+    {
+        NSTimestamp deadline = newDeadline();
+        if (deadline == null)
+        {
+            deadline = previousDeadline();
+        }
+        return deadline;
+    }
+
+
+    // ----------------------------------------------------------
     public void runAutomaticChecks(int round, boolean checkEstimatePhase)
     {
         for (SheetEntry entry : entries())
@@ -302,7 +314,9 @@ public class ComponentFeature
 
             // Design deadline falls after code deadline
             if (!design.isComplete()
+                && design.newEstimatedRemaining() > 0
                 && !code.isComplete()
+                && code.newEstimatedRemaining() > 0
                 && code.newDeadline() != null
                 && design.newDeadline() != null
                 && design.newDeadline().after(code.newDeadline()))
@@ -313,13 +327,28 @@ public class ComponentFeature
 
             // Code deadline falls after test deadline
             if (!code.isComplete()
+                && code.newEstimatedRemaining() > 0
                 && !test.isComplete()
+                && test.newEstimatedRemaining() > 0
                 && test.newDeadline() != null
                 && code.newDeadline() != null
                 && code.newDeadline().after(test.newDeadline()))
             {
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.CF_CODE_AFTER_TEST, this);
+            }
+
+            double hrsRemaining = sheet().calculateHoursAvailableBefore(
+                currentDeadline());
+            if (hrsRemaining / 2 < newEstimatedRemaining())
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.CF_NOT_ENOUGH_TIME, this);
+            }
+            else if (hrsRemaining / 4 < newEstimatedRemaining())
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.CF_TIME_TOO_TIGHT, this);
             }
         }
     }

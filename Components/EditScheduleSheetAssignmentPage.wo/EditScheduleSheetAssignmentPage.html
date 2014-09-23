@@ -8,8 +8,16 @@
 <tr><td class="R"><label for="name">Name:</label></td>
     <td><wo:WCTextBox value="$assignment.name" id="name"/>
       <webobject name="NameInfo"/></td></tr>
-<tr><td class="R"><label for="name">Number of Sheets:</label></td>
+<tr><td class="R">Number of Sheets:</td>
     <td><wo:str value="$sheetNumbers.count"/></td></tr>
+<tr><td class="R"><label for="expectedSize">Estimated Project Size
+      (NCLOC):</label></td>
+    <td><wo:textfield value="$assignment.expectedSizeRaw"
+      numberformat="0" id="expectedSize" size="7"/></td></tr>
+<tr><td class="R"><label for="minComponentFeatures">Minimum
+      Components/Features:</label></td>
+    <td><wo:textfield value="$assignment.minComponentFeaturesRaw"
+      numberformat="0" id="minComponentFeatures" size="7"/></td></tr>
 <tr><td class="top R">Points available:</td>
     <td><table class="layout">
 <tr><td><webobject name="TaPoints"/></td>

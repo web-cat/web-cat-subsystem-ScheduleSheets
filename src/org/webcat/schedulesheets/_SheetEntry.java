@@ -882,7 +882,8 @@ public abstract class _SheetEntry
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems()
     {
-        return (NSArray)storedValueForKey( "feedbackItems" );
+        return (NSArray<org.webcat.schedulesheets.SheetFeedbackItem>)
+            storedValueForKey("feedbackItems");
     }
 
 
@@ -893,14 +894,15 @@ public abstract class _SheetEntry
      *
      * @param value The new set of entities to relate to
      */
-    public void setFeedbackItems( NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value )
+    public void setFeedbackItems(
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setFeedbackItems("
-                + value + "): was " + feedbackItems() );
+            log.debug("setFeedbackItems("
+                + value + "): was " + feedbackItems());
         }
-        takeStoredValueForKey( value, "feedbackItems" );
+        takeStoredValueForKey(value, "feedbackItems");
     }
 
 
@@ -1060,7 +1062,8 @@ public abstract class _SheetEntry
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.core.User> responsible()
     {
-        return (NSArray)storedValueForKey( "responsible" );
+        return (NSArray<org.webcat.core.User>)
+            storedValueForKey("responsible");
     }
 
 
@@ -1071,14 +1074,15 @@ public abstract class _SheetEntry
      *
      * @param value The new set of entities to relate to
      */
-    public void setResponsible( NSMutableArray<org.webcat.core.User>  value )
+    public void setResponsible(
+        NSMutableArray<org.webcat.core.User>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setResponsible("
-                + value + "): was " + responsible() );
+            log.debug("setResponsible("
+                + value + "): was " + responsible());
         }
-        takeStoredValueForKey( value, "responsible" );
+        takeStoredValueForKey(value, "responsible");
     }
 
 
@@ -1238,7 +1242,8 @@ public abstract class _SheetEntry
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.core.User> workers()
     {
-        return (NSArray)storedValueForKey( "workers" );
+        return (NSArray<org.webcat.core.User>)
+            storedValueForKey("workers");
     }
 
 
@@ -1249,14 +1254,15 @@ public abstract class _SheetEntry
      *
      * @param value The new set of entities to relate to
      */
-    public void setWorkers( NSMutableArray<org.webcat.core.User>  value )
+    public void setWorkers(
+        NSMutableArray<org.webcat.core.User>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setWorkers("
-                + value + "): was " + workers() );
+            log.debug("setWorkers("
+                + value + "): was " + workers());
         }
-        takeStoredValueForKey( value, "workers" );
+        takeStoredValueForKey(value, "workers");
     }
 
 
@@ -1472,8 +1478,8 @@ public abstract class _SheetEntry
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<SheetEntry> fspec =
+            new WCFetchSpecification<SheetEntry>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -1496,8 +1502,13 @@ public abstract class _SheetEntry
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<SheetEntry> fspec =
+            new WCFetchSpecification<SheetEntry>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<SheetEntry> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -1685,8 +1696,8 @@ public abstract class _SheetEntry
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<SheetEntry> fspec =
+            new WCFetchSpecification<SheetEntry>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

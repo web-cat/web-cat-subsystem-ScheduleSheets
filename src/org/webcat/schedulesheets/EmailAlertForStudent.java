@@ -169,9 +169,8 @@ public class EmailAlertForStudent
         }
 
         // Create a new one
-        alert = create(editingContext, false, offering);
+        alert = create(editingContext, false, offering, aUser);
 
-        alert.setUserRelationship(aUser);
         alert.setSubmissionRelationship(aSubmission);
         int daysLeft = alert.calculateDayOffset(assignment);
         alert.analyze(daysLeft);

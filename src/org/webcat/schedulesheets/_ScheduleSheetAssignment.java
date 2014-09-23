@@ -138,6 +138,12 @@ public abstract class _ScheduleSheetAssignment
     //~ Constants (for key names) .............................................
 
     // Attributes ---
+    public static final String EXPECTED_SIZE_KEY = "expectedSize";
+    public static final ERXKey<Integer> expectedSize =
+        new ERXKey<Integer>(EXPECTED_SIZE_KEY);
+    public static final String MIN_COMPONENT_FEATURES_KEY = "minComponentFeatures";
+    public static final ERXKey<Integer> minComponentFeatures =
+        new ERXKey<Integer>(MIN_COMPONENT_FEATURES_KEY);
     public static final String NAME_KEY = "name";
     public static final ERXKey<String> name =
         new ERXKey<String>(NAME_KEY);
@@ -217,6 +223,134 @@ public abstract class _ScheduleSheetAssignment
             return er.extensions.eof.ERXConstant.ZeroInteger;
         }
     }
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>expectedSize</code> value.
+     * @return the value of the attribute
+     */
+    public int expectedSize()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "expectedSize" );
+        return ( returnValue == null )
+            ? 0
+            : returnValue.intValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>expectedSize</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setExpectedSize( int value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setExpectedSize("
+                + value + "): was " + expectedSize() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value );
+            setExpectedSizeRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>expectedSize</code> value.
+     * @return the value of the attribute
+     */
+    public Integer expectedSizeRaw()
+    {
+        return (Integer)storedValueForKey( "expectedSize" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>expectedSize</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setExpectedSizeRaw( Integer value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setExpectedSizeRaw("
+                + value + "): was " + expectedSizeRaw() );
+        }
+        takeStoredValueForKey( value, "expectedSize" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>minComponentFeatures</code> value.
+     * @return the value of the attribute
+     */
+    public int minComponentFeatures()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "minComponentFeatures" );
+        return ( returnValue == null )
+            ? 0
+            : returnValue.intValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>minComponentFeatures</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setMinComponentFeatures( int value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setMinComponentFeatures("
+                + value + "): was " + minComponentFeatures() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value );
+            setMinComponentFeaturesRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>minComponentFeatures</code> value.
+     * @return the value of the attribute
+     */
+    public Integer minComponentFeaturesRaw()
+    {
+        return (Integer)storedValueForKey( "minComponentFeatures" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>minComponentFeatures</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setMinComponentFeaturesRaw( Integer value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setMinComponentFeaturesRaw("
+                + value + "): was " + minComponentFeaturesRaw() );
+        }
+        takeStoredValueForKey( value, "minComponentFeatures" );
+    }
+
 
     // ----------------------------------------------------------
     /**
@@ -561,7 +695,8 @@ public abstract class _ScheduleSheetAssignment
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.ScheduleSheetAssignmentOffering> offerings()
     {
-        return (NSArray)storedValueForKey( "offerings" );
+        return (NSArray<org.webcat.schedulesheets.ScheduleSheetAssignmentOffering>)
+            storedValueForKey("offerings");
     }
 
 
@@ -572,14 +707,15 @@ public abstract class _ScheduleSheetAssignment
      *
      * @param value The new set of entities to relate to
      */
-    public void setOfferings( NSMutableArray<org.webcat.schedulesheets.ScheduleSheetAssignmentOffering>  value )
+    public void setOfferings(
+        NSMutableArray<org.webcat.schedulesheets.ScheduleSheetAssignmentOffering>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setOfferings("
-                + value + "): was " + offerings() );
+            log.debug("setOfferings("
+                + value + "): was " + offerings());
         }
-        takeStoredValueForKey( value, "offerings" );
+        takeStoredValueForKey(value, "offerings");
     }
 
 
@@ -795,8 +931,8 @@ public abstract class _ScheduleSheetAssignment
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheetAssignment> fspec =
+            new WCFetchSpecification<ScheduleSheetAssignment>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -819,8 +955,13 @@ public abstract class _ScheduleSheetAssignment
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<ScheduleSheetAssignment> fspec =
+            new WCFetchSpecification<ScheduleSheetAssignment>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<ScheduleSheetAssignment> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -1008,8 +1149,8 @@ public abstract class _ScheduleSheetAssignment
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheetAssignment> fspec =
+            new WCFetchSpecification<ScheduleSheetAssignment>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

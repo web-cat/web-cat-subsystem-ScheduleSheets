@@ -372,7 +372,8 @@ public abstract class _ComponentFeature
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.SheetEntry> entries()
     {
-        return (NSArray)storedValueForKey( "entries" );
+        return (NSArray<org.webcat.schedulesheets.SheetEntry>)
+            storedValueForKey("entries");
     }
 
 
@@ -383,14 +384,15 @@ public abstract class _ComponentFeature
      *
      * @param value The new set of entities to relate to
      */
-    public void setEntries( NSMutableArray<org.webcat.schedulesheets.SheetEntry>  value )
+    public void setEntries(
+        NSMutableArray<org.webcat.schedulesheets.SheetEntry>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setEntries("
-                + value + "): was " + entries() );
+            log.debug("setEntries("
+                + value + "): was " + entries());
         }
-        takeStoredValueForKey( value, "entries" );
+        takeStoredValueForKey(value, "entries");
     }
 
 
@@ -550,7 +552,8 @@ public abstract class _ComponentFeature
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems()
     {
-        return (NSArray)storedValueForKey( "feedbackItems" );
+        return (NSArray<org.webcat.schedulesheets.SheetFeedbackItem>)
+            storedValueForKey("feedbackItems");
     }
 
 
@@ -561,14 +564,15 @@ public abstract class _ComponentFeature
      *
      * @param value The new set of entities to relate to
      */
-    public void setFeedbackItems( NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value )
+    public void setFeedbackItems(
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setFeedbackItems("
-                + value + "): was " + feedbackItems() );
+            log.debug("setFeedbackItems("
+                + value + "): was " + feedbackItems());
         }
-        takeStoredValueForKey( value, "feedbackItems" );
+        takeStoredValueForKey(value, "feedbackItems");
     }
 
 
@@ -784,8 +788,8 @@ public abstract class _ComponentFeature
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ComponentFeature> fspec =
+            new WCFetchSpecification<ComponentFeature>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -808,8 +812,13 @@ public abstract class _ComponentFeature
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<ComponentFeature> fspec =
+            new WCFetchSpecification<ComponentFeature>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<ComponentFeature> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -997,8 +1006,8 @@ public abstract class _ComponentFeature
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ComponentFeature> fspec =
+            new WCFetchSpecification<ComponentFeature>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

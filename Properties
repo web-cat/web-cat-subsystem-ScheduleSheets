@@ -1,12 +1,12 @@
 #This file is automatically rewritten by ANT, so all formatting will be trashed.
-#Sun Sep 14 11:53:09 EDT 2014
+#Mon Sep 22 21:08:16 EDT 2014
 ScheduleSheets.copyright=(c) 2014 Virginia Tech Department of Computer Science
 ScheduleSheets.description=This subsystem supports scheduling assignments, where students are required to estimate out and schedule their time on an associated programming assignment.
 ScheduleSheets.info.url=http\://web-cat.org/WCWiki/ScheduleSheetsSubsystem
 ScheduleSheets.version.minor=0
 ScheduleSheets.provider=Virginia Tech Computer Science
 ScheduleSheets.license.url=http\://www.gnu.org/licenses/agpl.html
-ScheduleSheets.version.date=20140914
+ScheduleSheets.version.date=20140922
 ScheduleSheets.version.revision=1
 ScheduleSheets.version.major=0
 ScheduleSheets.license=GNU Affero General Public License v.3

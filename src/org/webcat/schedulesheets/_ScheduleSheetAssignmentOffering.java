@@ -535,7 +535,8 @@ public abstract class _ScheduleSheetAssignmentOffering
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.ScheduleSheetSubmission> submissions()
     {
-        return (NSArray)storedValueForKey( "submissions" );
+        return (NSArray<org.webcat.schedulesheets.ScheduleSheetSubmission>)
+            storedValueForKey("submissions");
     }
 
 
@@ -546,14 +547,15 @@ public abstract class _ScheduleSheetAssignmentOffering
      *
      * @param value The new set of entities to relate to
      */
-    public void setSubmissions( NSMutableArray<org.webcat.schedulesheets.ScheduleSheetSubmission>  value )
+    public void setSubmissions(
+        NSMutableArray<org.webcat.schedulesheets.ScheduleSheetSubmission>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setSubmissions("
-                + value + "): was " + submissions() );
+            log.debug("setSubmissions("
+                + value + "): was " + submissions());
         }
-        takeStoredValueForKey( value, "submissions" );
+        takeStoredValueForKey(value, "submissions");
     }
 
 
@@ -769,8 +771,8 @@ public abstract class _ScheduleSheetAssignmentOffering
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheetAssignmentOffering> fspec =
+            new WCFetchSpecification<ScheduleSheetAssignmentOffering>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -793,8 +795,13 @@ public abstract class _ScheduleSheetAssignmentOffering
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<ScheduleSheetAssignmentOffering> fspec =
+            new WCFetchSpecification<ScheduleSheetAssignmentOffering>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<ScheduleSheetAssignmentOffering> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -982,8 +989,8 @@ public abstract class _ScheduleSheetAssignmentOffering
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheetAssignmentOffering> fspec =
+            new WCFetchSpecification<ScheduleSheetAssignmentOffering>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

@@ -66,12 +66,14 @@ public abstract class _EmailAlertForAssignmentOffering
      * inserted
      * @param sentValue
      * @param alertForAssignmentValue
+     * @param courseOfferingValue
      * @return The newly created object
      */
     public static EmailAlertForAssignmentOffering create(
         EOEditingContext editingContext,
         boolean sentValue,
-        org.webcat.schedulesheets.EmailAlertForAssignment alertForAssignmentValue
+        org.webcat.schedulesheets.EmailAlertForAssignment alertForAssignmentValue,
+        org.webcat.core.CourseOffering courseOfferingValue
         )
     {
         EmailAlertForAssignmentOffering eoObject = (EmailAlertForAssignmentOffering)
@@ -80,6 +82,7 @@ public abstract class _EmailAlertForAssignmentOffering
                 _EmailAlertForAssignmentOffering.ENTITY_NAME);
         eoObject.setSent(sentValue);
         eoObject.setAlertForAssignmentRelationship(alertForAssignmentValue);
+        eoObject.setCourseOfferingRelationship(courseOfferingValue);
         return eoObject;
     }
 
@@ -439,7 +442,8 @@ public abstract class _EmailAlertForAssignmentOffering
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.EmailAlertForStudent> alerts()
     {
-        return (NSArray)storedValueForKey( "alerts" );
+        return (NSArray<org.webcat.schedulesheets.EmailAlertForStudent>)
+            storedValueForKey("alerts");
     }
 
 
@@ -450,14 +454,15 @@ public abstract class _EmailAlertForAssignmentOffering
      *
      * @param value The new set of entities to relate to
      */
-    public void setAlerts( NSMutableArray<org.webcat.schedulesheets.EmailAlertForStudent>  value )
+    public void setAlerts(
+        NSMutableArray<org.webcat.schedulesheets.EmailAlertForStudent>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setAlerts("
-                + value + "): was " + alerts() );
+            log.debug("setAlerts("
+                + value + "): was " + alerts());
         }
-        takeStoredValueForKey( value, "alerts" );
+        takeStoredValueForKey(value, "alerts");
     }
 
 
@@ -673,8 +678,8 @@ public abstract class _EmailAlertForAssignmentOffering
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<EmailAlertForAssignmentOffering> fspec =
+            new WCFetchSpecification<EmailAlertForAssignmentOffering>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -697,8 +702,13 @@ public abstract class _EmailAlertForAssignmentOffering
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<EmailAlertForAssignmentOffering> fspec =
+            new WCFetchSpecification<EmailAlertForAssignmentOffering>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<EmailAlertForAssignmentOffering> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -886,8 +896,8 @@ public abstract class _EmailAlertForAssignmentOffering
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<EmailAlertForAssignmentOffering> fspec =
+            new WCFetchSpecification<EmailAlertForAssignmentOffering>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

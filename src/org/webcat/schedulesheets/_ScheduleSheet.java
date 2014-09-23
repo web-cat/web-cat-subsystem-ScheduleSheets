@@ -678,7 +678,8 @@ public abstract class _ScheduleSheet
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.ComponentFeature> componentFeatures()
     {
-        return (NSArray)storedValueForKey( "componentFeatures" );
+        return (NSArray<org.webcat.schedulesheets.ComponentFeature>)
+            storedValueForKey("componentFeatures");
     }
 
 
@@ -689,14 +690,15 @@ public abstract class _ScheduleSheet
      *
      * @param value The new set of entities to relate to
      */
-    public void setComponentFeatures( NSMutableArray<org.webcat.schedulesheets.ComponentFeature>  value )
+    public void setComponentFeatures(
+        NSMutableArray<org.webcat.schedulesheets.ComponentFeature>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setComponentFeatures("
-                + value + "): was " + componentFeatures() );
+            log.debug("setComponentFeatures("
+                + value + "): was " + componentFeatures());
         }
-        takeStoredValueForKey( value, "componentFeatures" );
+        takeStoredValueForKey(value, "componentFeatures");
     }
 
 
@@ -856,7 +858,8 @@ public abstract class _ScheduleSheet
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.SheetFeedbackItem> feedbackItems()
     {
-        return (NSArray)storedValueForKey( "feedbackItems" );
+        return (NSArray<org.webcat.schedulesheets.SheetFeedbackItem>)
+            storedValueForKey("feedbackItems");
     }
 
 
@@ -867,14 +870,15 @@ public abstract class _ScheduleSheet
      *
      * @param value The new set of entities to relate to
      */
-    public void setFeedbackItems( NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value )
+    public void setFeedbackItems(
+        NSMutableArray<org.webcat.schedulesheets.SheetFeedbackItem>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setFeedbackItems("
-                + value + "): was " + feedbackItems() );
+            log.debug("setFeedbackItems("
+                + value + "): was " + feedbackItems());
         }
-        takeStoredValueForKey( value, "feedbackItems" );
+        takeStoredValueForKey(value, "feedbackItems");
     }
 
 
@@ -1034,7 +1038,8 @@ public abstract class _ScheduleSheet
     @SuppressWarnings("unchecked")
     public NSArray<org.webcat.schedulesheets.ScheduleSheetSubmission> submissions()
     {
-        return (NSArray)storedValueForKey( "submissions" );
+        return (NSArray<org.webcat.schedulesheets.ScheduleSheetSubmission>)
+            storedValueForKey("submissions");
     }
 
 
@@ -1045,14 +1050,15 @@ public abstract class _ScheduleSheet
      *
      * @param value The new set of entities to relate to
      */
-    public void setSubmissions( NSMutableArray<org.webcat.schedulesheets.ScheduleSheetSubmission>  value )
+    public void setSubmissions(
+        NSMutableArray<org.webcat.schedulesheets.ScheduleSheetSubmission>  value)
     {
         if (log.isDebugEnabled())
         {
-            log.debug( "setSubmissions("
-                + value + "): was " + submissions() );
+            log.debug("setSubmissions("
+                + value + "): was " + submissions());
         }
-        takeStoredValueForKey( value, "submissions" );
+        takeStoredValueForKey(value, "submissions");
     }
 
 
@@ -1268,8 +1274,8 @@ public abstract class _ScheduleSheet
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheet> fspec =
+            new WCFetchSpecification<ScheduleSheet>(
                 ENTITY_NAME, qualifier, sortOrderings);
         fspec.setUsesDistinct(true);
         return objectsWithFetchSpecification(context, fspec);
@@ -1292,8 +1298,13 @@ public abstract class _ScheduleSheet
         EOQualifier qualifier,
         NSArray<EOSortOrdering> sortOrderings)
     {
+        WCFetchSpecification<ScheduleSheet> fspec =
+            new WCFetchSpecification<ScheduleSheet>(
+                ENTITY_NAME, qualifier, sortOrderings);
+        fspec.setUsesDistinct(true);
+        fspec.setFetchLimit(1);
         NSArray<ScheduleSheet> objects =
-            objectsMatchingQualifier(context, qualifier, sortOrderings);
+            objectsWithFetchSpecification(context, fspec);
         return (objects.size() > 0)
             ? objects.get(0)
             : null;
@@ -1481,8 +1492,8 @@ public abstract class _ScheduleSheet
         NSArray<EOSortOrdering> sortOrderings,
         NSDictionary<String, Object> keysAndValues)
     {
-        @SuppressWarnings("unchecked")
-        EOFetchSpecification fspec = new WCFetchSpecification(
+        WCFetchSpecification<ScheduleSheet> fspec =
+            new WCFetchSpecification<ScheduleSheet>(
                 ENTITY_NAME,
                 EOQualifier.qualifierToMatchAllValues(keysAndValues),
                 sortOrderings);

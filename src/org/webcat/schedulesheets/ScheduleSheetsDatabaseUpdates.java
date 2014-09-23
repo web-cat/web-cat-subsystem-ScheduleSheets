@@ -181,6 +181,22 @@ public class ScheduleSheetsDatabaseUpdates
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Add expected size and min number of components fields to
+     * schedule sheet assignments.
+     * @throws SQLException on error
+     */
+    public void updateIncrement8() throws SQLException
+    {
+        database().executeSQL(
+            "alter table ScheduleSheetAssignment add expectedSize INT");
+        database().executeSQL(
+            "alter table ScheduleSheetAssignment add "
+            + "minComponentFeatures INT");
+    }
+
+
     //~ Private Methods .......................................................
 
     // ----------------------------------------------------------

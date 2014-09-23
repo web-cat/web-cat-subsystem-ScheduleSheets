@@ -110,7 +110,7 @@
         </wo:WOGenericContainer>
       </wo:not>
       <td><wo:str value="$entry.activityName"/></td>
-      <td><wo:if condition="~entry.newTimeInvestedRaw ~= null"><wo:str numberformat="#.#"
+      <td><wo:if condition="~entry.newTimeInvestedRaw != null"><wo:str numberformat="#.#"
         value="$entry.newTimeInvestedRaw"/> hours</wo:if></td>
       <wo:if condition="~students.displayedObjects.count gt 1">
         <wo:loop list="$students.displayedObjects" item="$student">

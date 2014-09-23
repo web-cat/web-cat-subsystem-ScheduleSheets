@@ -2,7 +2,31 @@
     attributes = (
         {columnName = assignmentId; name = assignmentId; prototypeName = foreignId; },
         {columnName = authorId; name = authorId; prototypeName = foreignId; },
+        {
+            columnName = expectedSize;
+            name = expectedSize;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
         {name = id; prototypeName = id; },
+        {
+            columnName = minComponentFeatures;
+            name = minComponentFeatures;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
         {columnName = name; name = name; prototypeName = tinyText; },
         {
             columnName = numberOfSheets;
@@ -31,6 +55,8 @@
     attributesUsedForLocking = (
         assignmentId,
         authorId,
+        expectedSize,
+        minComponentFeatures,
         name,
         numberOfSheets,
         shortDescription,
@@ -41,6 +67,8 @@
     classProperties = (
         assignment,
         author,
+        expectedSize,
+        minComponentFeatures,
         name,
         numberOfSheets,
         offerings,

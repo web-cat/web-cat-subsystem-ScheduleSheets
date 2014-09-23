@@ -159,10 +159,9 @@ public class NewEmailAlertGroupForAssignmentPage
 
         log.debug("creating new e-mail alert group");
         EmailAlertGroupForAssignment group = EmailAlertGroupForAssignment
-            .create(localContext());
+            .create(localContext(), assignment);
         group.setAuthorRelationship(user());
         group.setNumberOfAlerts(numberOfAlerts);
-        group.setAssignmentRelationship(assignment);
 
         long time = 1000 * 60 * 60 * 24;   // 1 days
         for (int i = 0; i < numberOfAlerts; i++)
@@ -175,8 +174,7 @@ public class NewEmailAlertGroupForAssignmentPage
             {
                 EmailAlertForAssignmentOffering eafao =
                     EmailAlertForAssignmentOffering
-                    .create(localContext(), false, eafa);
-                eafao.setCourseOfferingRelationship(co);
+                    .create(localContext(), false, eafa, co);
                 AssignmentOffering ao = AssignmentOffering
                     .firstObjectMatchingQualifier(localContext(),
                         AssignmentOffering.assignment.is(assignment).and(

@@ -211,9 +211,16 @@ public class SheetEntry
     public void runAutomaticChecks(int round, boolean checkEstimatePhase)
     {
         // Entry-level checks for entry phase
+        boolean isLast = componentFeature().sheet().isLastSheet();
 
         // An entry is overdue
-        if (isOverdue())
+        if (isLast && !isComplete())
+        {
+            SheetFeedbackItem.create(editingContext(), round,
+                SheetFeedbackItem.ENTRY_NOT_COMPLETE, this);
+        }
+
+        if (!isLast && isOverdue())
         {
             SheetFeedbackItem.create(editingContext(), round,
                 SheetFeedbackItem.ENTRY_IS_OVERDUE, this);
@@ -265,6 +272,19 @@ public class SheetEntry
             {
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.ENTRY_NO_RESPONSIBLES, this);
+            }
+
+            double hrsRemaining = componentFeature().sheet()
+                .calculateHoursAvailableBefore(currentDeadline());
+            if (hrsRemaining / 2 < newEstimatedRemaining())
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.ENTRY_NOT_ENOUGH_TIME, this);
+            }
+            else if (hrsRemaining / 4 < newEstimatedRemaining())
+            {
+                SheetFeedbackItem.create(editingContext(), round,
+                    SheetFeedbackItem.ENTRY_TIME_TOO_TIGHT, this);
             }
         }
     }

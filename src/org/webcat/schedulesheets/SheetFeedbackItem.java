@@ -72,6 +72,18 @@ public class SheetFeedbackItem
     public static final int ENTRY_IS_DUE_TOMORROW = 12;
     public static final int ENTRY_NO_WORKERS = 13;
     public static final int ENTRY_NO_RESPONSIBLES = 14;
+    public static final int ENTRY_NOT_COMPLETE = 15;
+
+    public static final int SHEET_TOO_FEW_CFS = 16;
+    public static final int SHEET_TOO_FEW_ESTIMATED_HOURS = 17;
+    public static final int SHEET_TOO_MANY_ESTIMATED_HOURS = 18;
+
+    public static final int ENTRY_NOT_ENOUGH_TIME = 19;
+    public static final int ENTRY_TIME_TOO_TIGHT = 20;
+    public static final int CF_NOT_ENOUGH_TIME = 21;
+    public static final int CF_TIME_TOO_TIGHT = 22;
+    public static final int SHEET_NOT_ENOUGH_TIME = 23;
+    public static final int SHEET_TIME_TOO_TIGHT = 24;
 
 
     //~ Factory Methods .......................................................
@@ -306,6 +318,56 @@ public class SheetFeedbackItem
         // ENTRY_NO_RESPONSIBLES
         new Message(ERROR,
             "No student has been identified who is responsible for working "
-            + "on the ${activity} activity for ${componentFeature}.")
+            + "on the ${activity} activity for ${componentFeature}."),
+        // ENTRY_NOT_COMPLETE
+        new Message(ERROR,
+            "The ${activity} activity for ${componentFeature} is not "
+            + "complete.  Please resubmit your schedule once you "
+            + "have completed everything."),
+        // SHEET_TOO_FEW_CFS
+        new Message(ERROR,
+            "For a project of this size, you have not broken your plan down "
+            + "into enough components or features.  Reconsider your plan and "
+            + "divide your tasks into smaller, more manageable units."),
+        // SHEET_TOO_FEW_ESTIMATED_HOURS
+        new Message(ERROR,
+            "For a project of this size, you have not estimated enough "
+            + "hours to complete the work.  Reconsider your plan and "
+            + "consider how much time it will take to complete each "
+            + "component or feature."),
+        // SHEET_TOO_MANY_ESTIMATED_HOURS
+        new Message(WARNING,
+            "For a project of this size, you have estimated a very large "
+            + "number of hours to complete the work.  You may wish to "
+            + "reconsider whether the tasks you have defined will take as "
+            + "much time as you have estimated."),
+        // ENTRY_NOT_ENOUGH_TIME
+        new Message(ERROR,
+            "The ${activity} activity for ${componentFeature} has a deadline "
+            + "that is too soon to realistically complete the number of hours "
+            + "you have estimated."),
+        // ENTRY_TIME_TOO_TIGHT
+        new Message(WARNING,
+            "The ${activity} activity for ${componentFeature} has a deadline "
+            + "that is too soon to complete the number of hours "
+            + "you have estimated without serious overtime."),
+        // CF_NOT_ENOUGH_TIME
+        new Message(ERROR,
+            "The ${componentFeature} has deadline(s) that are too soon to "
+            + "realistically complete the number of hours you have estimated."),
+        // CF_TIME_TOO_TIGHT
+        new Message(WARNING,
+            "The ${componentFeature} has deadline(s) that are too soon to "
+            + "complete the number of hours "
+            + "you have estimated without serious overtime."),
+        // SHEET_NOT_ENOUGH_TIME
+        new Message(ERROR,
+            "This schedule has deadline(s) that are too soon to "
+            + "realistically complete the number of hours you have estimated."),
+        // SHEET_TIME_TOO_TIGHT
+        new Message(WARNING,
+            "This schedule has deadline(s) that are too soon to "
+            + "complete the number of hours "
+            + "you have estimated without serious overtime.")
     };
 }

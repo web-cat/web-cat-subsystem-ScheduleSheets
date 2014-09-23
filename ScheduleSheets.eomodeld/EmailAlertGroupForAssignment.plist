@@ -49,6 +49,7 @@
         },
         {
             destination = Assignment;
+            isMandatory = Y;
             isToMany = N;
             joinSemantic = EOInnerJoin;
             joins = ({destinationAttribute = id; sourceAttribute = assignmentId; });
