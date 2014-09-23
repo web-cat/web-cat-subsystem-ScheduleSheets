@@ -870,12 +870,13 @@ public class ScheduleSheet
 
             double hrsRemaining = calculateHoursAvailableBefore(
                 currentDeadline());
-            if (hrsRemaining / 2 < newEstimatedRemaining())
+            int students = submissions().count();
+            if (hrsRemaining / 2 * students < newEstimatedRemaining())
             {
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.SHEET_NOT_ENOUGH_TIME, this);
             }
-            else if (hrsRemaining / 4 < newEstimatedRemaining())
+            else if (hrsRemaining / 4 * students < newEstimatedRemaining())
             {
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.SHEET_TIME_TOO_TIGHT, this);

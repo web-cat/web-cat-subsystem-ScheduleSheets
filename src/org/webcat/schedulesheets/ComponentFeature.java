@@ -340,12 +340,13 @@ public class ComponentFeature
 
             double hrsRemaining = sheet().calculateHoursAvailableBefore(
                 currentDeadline());
-            if (hrsRemaining / 2 < newEstimatedRemaining())
+            int students = sheet().submissions().count();
+            if (hrsRemaining / 2 * students < newEstimatedRemaining())
             {
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.CF_NOT_ENOUGH_TIME, this);
             }
-            else if (hrsRemaining / 4 < newEstimatedRemaining())
+            else if (hrsRemaining / 4 * students < newEstimatedRemaining())
             {
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.CF_TIME_TOO_TIGHT, this);
