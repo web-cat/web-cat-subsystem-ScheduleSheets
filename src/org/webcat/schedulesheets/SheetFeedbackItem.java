@@ -80,8 +80,8 @@ public class SheetFeedbackItem
 
     public static final int ENTRY_NOT_ENOUGH_TIME = 19;
     public static final int ENTRY_TIME_TOO_TIGHT = 20;
-    public static final int CF_NOT_ENOUGH_TIME = 21;
-    public static final int CF_TIME_TOO_TIGHT = 22;
+//    public static final int CF_NOT_ENOUGH_TIME = 21;
+//    public static final int CF_TIME_TOO_TIGHT = 22;
     public static final int SHEET_NOT_ENOUGH_TIME = 23;
     public static final int SHEET_TIME_TOO_TIGHT = 24;
 

@@ -337,20 +337,6 @@ public class ComponentFeature
                 SheetFeedbackItem.create(editingContext(), round,
                     SheetFeedbackItem.CF_CODE_AFTER_TEST, this);
             }
-
-            double hrsRemaining = sheet().calculateHoursAvailableBefore(
-                currentDeadline());
-            int students = sheet().submissions().count();
-            if (hrsRemaining / 2 * students < newEstimatedRemaining())
-            {
-                SheetFeedbackItem.create(editingContext(), round,
-                    SheetFeedbackItem.CF_NOT_ENOUGH_TIME, this);
-            }
-            else if (hrsRemaining / 4 * students < newEstimatedRemaining())
-            {
-                SheetFeedbackItem.create(editingContext(), round,
-                    SheetFeedbackItem.CF_TIME_TOO_TIGHT, this);
-            }
         }
     }
 

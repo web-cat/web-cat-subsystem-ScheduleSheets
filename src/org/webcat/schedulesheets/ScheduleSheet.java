@@ -21,11 +21,13 @@
 
 package org.webcat.schedulesheets;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.webcat.core.Status;
 import org.webcat.core.User;
-import org.webcat.grader.AssignmentOffering;
 import org.webcat.grader.SubmissionProfile;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 import er.extensions.foundation.ERXArrayUtilities;
 
@@ -868,18 +870,80 @@ public class ScheduleSheet
                 }
             }
 
-            double hrsRemaining = calculateHoursAvailableBefore(
-                currentDeadline());
-            int students = submissions().count();
-            if (hrsRemaining / 2 * students < newEstimatedRemaining())
+            Map<User, Double> load = new HashMap<User, Double>();
+            for (ScheduleSheetSubmission s : submissions())
             {
-                SheetFeedbackItem.create(editingContext(), round,
-                    SheetFeedbackItem.SHEET_NOT_ENOUGH_TIME, this);
+                load.put(s.user(), 0.0);
             }
-            else if (hrsRemaining / 4 * students < newEstimatedRemaining())
+
+            NSMutableArray<SheetEntry> myEntries =
+                new NSMutableArray<SheetEntry>();
+            // build this array the hard way, since we need for this to work
+            // even if this object hasn't been saved to the database yet.
+            for (ComponentFeature cf : componentFeatures())
             {
-                SheetFeedbackItem.create(editingContext(), round,
-                    SheetFeedbackItem.SHEET_TIME_TOO_TIGHT, this);
+                myEntries.addObjectsFromArray(cf.entries());
+            }
+            ERXArrayUtilities.sortArrayWithKey(myEntries, "currentDeadline");
+
+            for (SheetEntry entry : myEntries)
+            {
+                if (entry.responsible().count() > 0)
+                {
+                    double hrs = entry.newEstimatedRemaining()
+                        / entry.responsible().count();
+                    for (User u : entry.responsible())
+                    {
+                        if (!load.containsKey(u))
+                        {
+                            // Already determined this person is over-scheduled
+                            continue;
+                        }
+
+                        double newLoad = load.get(u) + hrs;
+                        load.put(u, newLoad);
+                        double hrsRemaining = calculateHoursAvailableBefore(
+                            entry.currentDeadline());
+                        if (hrsRemaining < 0.1)
+                        {
+                            // Silently ignore items without deadlines,
+                            // which will generate other errors elsewhere
+                            // anyway
+                        }
+                        else if (hrsRemaining / 2 < newLoad)
+                        {
+                            SheetFeedbackItem.create(editingContext(), round,
+                                SheetFeedbackItem.SHEET_NOT_ENOUGH_TIME, entry)
+                                .setMessage("This schedule has deadline(s) "
+                                    + " that are too soon for "
+                                    + u.name()
+                                    + " to realistically complete the number "
+                                    + "of estimated hours assigned.");
+                            load.remove(u);
+                            if (load.size() == 0)
+                            {
+                                break;
+                            }
+                        }
+                        else if (hrsRemaining / 4 < newLoad)
+                        {
+                            SheetFeedbackItem.create(editingContext(), round,
+                                SheetFeedbackItem.SHEET_TIME_TOO_TIGHT, entry)
+                                .setMessage("This schedule has deadline(s) "
+                                    + " that are too soon for "
+                                    + u.name()
+                                    + " to complete the number of estimated "
+                                    + "hours assigned without serious "
+                                    + "overtime.");
+                        }
+                    }
+                }
+                else
+                {
+                    // assume the submitter is the responsible one
+                    User u = submission().user();
+                    load.put(u, load.get(u) + entry.newEstimatedRemaining());
+                }
             }
         }
 
