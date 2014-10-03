@@ -57,7 +57,7 @@ public class EmailAlertForAssignment
         {
             NSArray<EmailAlertForAssignment> alerts =
                 timeBeforeDue.desc().sorted(alertGroup().alerts());
-            setAlertNo(alerts.indexOf(this));
+            setAlertNoRaw(alerts.indexOf(this));
         }
         return super.alertNo();
     }

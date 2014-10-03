@@ -14,7 +14,7 @@
             localKeys = ();
             numberOfObjectsPerBatch = 0;
             selectsFirstObjectAfterFetch = YES;
-            sortOrdering = ({class = EOSortOrdering; key = timeBeforeDue; selectorName = "compareDescending:"; });
+            sortOrdering = ({class = EOSortOrdering; key = alertNo; selectorName = "compareAscending:"; });
         };
         offerings = {
             class = ERXDisplayGroup;

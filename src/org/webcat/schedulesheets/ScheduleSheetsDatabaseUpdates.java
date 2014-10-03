@@ -209,6 +209,19 @@ public class ScheduleSheetsDatabaseUpdates
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Add overrideProfileId to ScheduleSheetAssignmentOffering.
+     * @throws SQLException on error
+     */
+    public void updateIncrement10() throws SQLException
+    {
+        database().executeSQL(
+            "alter table ScheduleSheetAssignmentOffering "
+            + "add overrideProfileId INT");
+    }
+
+
     //~ Private Methods .......................................................
 
     // ----------------------------------------------------------
