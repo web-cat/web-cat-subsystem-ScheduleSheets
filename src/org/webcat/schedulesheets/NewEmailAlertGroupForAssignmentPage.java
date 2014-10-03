@@ -168,6 +168,7 @@ public class NewEmailAlertGroupForAssignmentPage
         {
             EmailAlertForAssignment eafa =
                 EmailAlertForAssignment.create(localContext(), group);
+            eafa.setAlertNo(numberOfAlerts - 1 - i);
             time *= 2;
             eafa.setTimeBeforeDue(time);
             for (CourseOffering co : offerings)
