@@ -141,6 +141,9 @@ public abstract class _EmailAlertForAssignment
     //~ Constants (for key names) .............................................
 
     // Attributes ---
+    public static final String ALERT_NO_KEY = "alertNo";
+    public static final ERXKey<Integer> alertNo =
+        new ERXKey<Integer>(ALERT_NO_KEY);
     public static final String TIME_BEFORE_DUE_KEY = "timeBeforeDue";
     public static final ERXKey<Long> timeBeforeDue =
         new ERXKey<Long>(TIME_BEFORE_DUE_KEY);
@@ -205,6 +208,70 @@ public abstract class _EmailAlertForAssignment
             return er.extensions.eof.ERXConstant.ZeroInteger;
         }
     }
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>alertNo</code> value.
+     * @return the value of the attribute
+     */
+    public int alertNo()
+    {
+        Integer returnValue =
+            (Integer)storedValueForKey( "alertNo" );
+        return ( returnValue == null )
+            ? 0
+            : returnValue.intValue();
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>alertNo</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setAlertNo( int value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setAlertNo("
+                + value + "): was " + alertNo() );
+        }
+        Integer actual =
+            er.extensions.eof.ERXConstant.integerForInt( value );
+            setAlertNoRaw( actual );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve this object's <code>alertNo</code> value.
+     * @return the value of the attribute
+     */
+    public Integer alertNoRaw()
+    {
+        return (Integer)storedValueForKey( "alertNo" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Change the value of this object's <code>alertNo</code>
+     * property.
+     *
+     * @param value The new value for this property
+     */
+    public void setAlertNoRaw( Integer value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setAlertNoRaw("
+                + value + "): was " + alertNoRaw() );
+        }
+        takeStoredValueForKey( value, "alertNo" );
+    }
+
 
     // ----------------------------------------------------------
     /**

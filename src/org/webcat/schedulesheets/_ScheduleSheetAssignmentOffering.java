@@ -160,6 +160,9 @@ public abstract class _ScheduleSheetAssignmentOffering
     public static final String COURSE_OFFERING_KEY = "courseOffering";
     public static final ERXKey<org.webcat.core.CourseOffering> courseOffering =
         new ERXKey<org.webcat.core.CourseOffering>(COURSE_OFFERING_KEY);
+    public static final String OVERRIDE_PROFILE_KEY = "overrideProfile";
+    public static final ERXKey<org.webcat.grader.SubmissionProfile> overrideProfile =
+        new ERXKey<org.webcat.grader.SubmissionProfile>(OVERRIDE_PROFILE_KEY);
     // To-many relationships ---
     public static final String SUBMISSIONS_KEY = "submissions";
     public static final ERXKey<org.webcat.schedulesheets.ScheduleSheetSubmission> submissions =
@@ -522,6 +525,67 @@ public abstract class _ScheduleSheetAssignmentOffering
         else
         {
             addObjectToBothSidesOfRelationshipWithKey( value, "courseOffering" );
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Retrieve the entity pointed to by the <code>overrideProfile</code>
+     * relationship.
+     * @return the entity in the relationship
+     */
+    public org.webcat.grader.SubmissionProfile overrideProfile()
+    {
+        return (org.webcat.grader.SubmissionProfile)storedValueForKey( "overrideProfile" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the entity pointed to by the <code>overrideProfile</code>
+     * relationship (DO NOT USE--instead, use
+     * <code>setOverrideProfileRelationship()</code>.
+     * This method is provided for WebObjects use.
+     *
+     * @param value The new entity to relate to
+     */
+    public void setOverrideProfile( org.webcat.grader.SubmissionProfile value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setOverrideProfile("
+                + value + "): was " + overrideProfile() );
+        }
+        takeStoredValueForKey( value, "overrideProfile" );
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the entity pointed to by the <code>overrideProfile</code>
+     * relationship.  This method is a type-safe version of
+     * <code>addObjectToBothSidesOfRelationshipWithKey()</code>.
+     *
+     * @param value The new entity to relate to
+     */
+    public void setOverrideProfileRelationship(
+        org.webcat.grader.SubmissionProfile value )
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug( "setOverrideProfileRelationship("
+                + value + "): was " + overrideProfile() );
+        }
+        if ( value == null )
+        {
+            org.webcat.grader.SubmissionProfile object = overrideProfile();
+            if ( object != null )
+                removeObjectFromBothSidesOfRelationshipWithKey( object, "overrideProfile" );
+        }
+        else
+        {
+            addObjectToBothSidesOfRelationshipWithKey( value, "overrideProfile" );
         }
     }
 

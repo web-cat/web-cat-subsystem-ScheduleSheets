@@ -357,6 +357,51 @@ public class ScheduleSheetAssignmentOffering
     }
 
 
+    // ----------------------------------------------------------
+    public double availablePoints()
+    {
+        return submissionProfile().availablePoints();
+    }
+
+
+    // ----------------------------------------------------------
+    public void setAvailablePoints(double value)
+    {
+        if (value != availablePoints())
+        {
+            if (overrideProfile() == null)
+            {
+                SubmissionProfile master = assignment().submissionProfile();
+                SubmissionProfile override = SubmissionProfile.create(
+                    editingContext(),
+                    master.allowPartners(),
+                    master.autoAssignPartners(),
+                    master.awardEarlyBonus(),
+                    master.deductExcessSubmissionPenalty(),
+                    master.deductLatePenalty());
+                // Copy all the original's fields
+                for (String key : master.allPropertyKeys())
+                {
+                    override.takeValueForKey(master.valueForKey(key), key);
+                }
+            }
+            overrideProfile().setAvailablePoints(value);
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public SubmissionProfile submissionProfile()
+    {
+        SubmissionProfile result = overrideProfile();
+        if (result == null)
+        {
+            result = assignment().submissionProfile();
+        }
+        return result;
+    }
+
+
     //~ Instance/static fields ................................................
 
     private AssignmentOffering assignmentOffering;

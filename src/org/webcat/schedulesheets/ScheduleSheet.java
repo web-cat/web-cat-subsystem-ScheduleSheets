@@ -195,7 +195,7 @@ public class ScheduleSheet
         long submitTime = submission.submitTime().getTime();
         long dueTime = submission.assignmentOffering().dueDate().getTime();
         SubmissionProfile profile =
-            submission.assignmentOffering().assignment().submissionProfile();
+            submission.assignmentOffering().submissionProfile();
 
         if ( profile.awardEarlyBonus()
              && dueTime > submitTime
@@ -267,7 +267,7 @@ public class ScheduleSheet
         ScheduleSheetSubmission submission = submission();
         int number = submission.submitNumber();
         SubmissionProfile profile =
-            submission.assignmentOffering().assignment().submissionProfile();
+            submission.assignmentOffering().submissionProfile();
 
         if (profile.deductExcessSubmissionPenalty()
             && profile.excessSubmissionsUnitPtsRaw() != null
@@ -1000,8 +1000,8 @@ public class ScheduleSheet
         }
         deductions = Math.min(100, deductions);
 
-        setToolScore(assignment.submissionProfile().toolPoints()
-            * (100 - deductions) / 100.0);
+        setToolScore(submission().assignmentOffering().submissionProfile()
+            .toolPoints() * (100 - deductions) / 100.0);
     }
 
 

@@ -1,6 +1,18 @@
 {
     attributes = (
         {
+            columnName = alertNo;
+            name = alertNo;
+            prototypeName = integer;
+            userInfo = {
+                isScalar = true;
+                scalarConversionMethodName = intValue;
+                scalarDefault = 0;
+                type = int;
+                valueClassName = Integer;
+            };
+        },
+        {
             allowsNull = N;
             columnName = groupId;
             name = groupId;
@@ -22,12 +34,14 @@
         }
     );
     attributesUsedForLocking = (
+        alertNo,
         groupId,
         id,
         timeBeforeDue
     );
     className = "org.webcat.schedulesheets.EmailAlertForAssignment";
     classProperties = (
+        alertNo,
         alertGroup,
         offerings,
         timeBeforeDue

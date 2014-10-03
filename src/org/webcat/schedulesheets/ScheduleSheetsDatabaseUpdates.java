@@ -197,6 +197,18 @@ public class ScheduleSheetsDatabaseUpdates
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Add alertNo to email alerts for assignment.
+     * @throws SQLException on error
+     */
+    public void updateIncrement9() throws SQLException
+    {
+        database().executeSQL(
+            "alter table EmailAlertForAssignment add alertNo INT");
+    }
+
+
     //~ Private Methods .......................................................
 
     // ----------------------------------------------------------

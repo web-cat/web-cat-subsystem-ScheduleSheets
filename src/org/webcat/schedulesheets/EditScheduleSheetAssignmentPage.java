@@ -480,8 +480,71 @@ public class EditScheduleSheetAssignmentPage
     public boolean applyLocalChanges()
     {
         saveTimeFields();
+        SubmissionProfile master = assignment.submissionProfile();
+        for (ScheduleSheetAssignmentOffering o : assignment.offerings())
+        {
+            SubmissionProfile override = o.overrideProfile();
+            if (override != null)
+            {
+                double availablePoints = o.availablePoints();
+
+                // Copy this profile over top of overrides
+                for (String key :
+                    assignment.submissionProfile().allPropertyKeys())
+                {
+                    override.takeValueForKey(master.valueForKey(key), key);
+                }
+
+                if (availablePoints != master.availablePoints())
+                {
+                    override.setAvailablePoints(availablePoints);
+                    override.setToolPoints(master.toolPoints() *
+                        availablePoints / master.availablePoints());
+                    override.setTaPoints(
+                        availablePoints - override.toolPoints());
+                }
+            }
+        }
         boolean result = super.applyLocalChanges();
         return result;
+    }
+
+
+    // ----------------------------------------------------------
+    public Double availablePointsOverride()
+    {
+        if (offering == null || offering.overrideProfile() == null)
+        {
+            return null;
+        }
+        else
+        {
+            return offering.availablePoints();
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    public void setAvailablePointsOverride(Double value)
+    {
+        if (offering == null)
+        {
+            return;
+        }
+
+        if (value == null
+            || value == assignment.submissionProfile().availablePoints())
+        {
+            if (offering.overrideProfile() != null)
+            {
+                offering.overrideProfile().delete();
+                offering.setOverrideProfileRelationship(null);
+            }
+        }
+        else
+        {
+            offering.setAvailablePoints(value);
+        }
     }
 
 

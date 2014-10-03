@@ -131,7 +131,10 @@ public class ScheduleSheetSummaryBlock
             s.partnerWith(partnersToAdd);
         }
 
-        submission.setSubmitTime(now);
+        if (user() == submission.user())
+        {
+            submission.setSubmitTime(now);
+        }
 
         originalPartners = partnersWithoutPrincipal;
         partnersForEditing = partnersWithoutPrincipal;

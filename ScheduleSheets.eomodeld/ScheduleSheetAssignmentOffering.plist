@@ -22,6 +22,11 @@
             };
         },
         {
+            columnName = overrideProfileId;
+            name = overrideProfileId;
+            prototypeName = foreignId;
+        },
+        {
             columnName = publish;
             allowsNull = N;
             name = publish;
@@ -33,6 +38,7 @@
         assignmentId,
         courseOfferingId,
         order,
+        overrideProfileId,
         publish
     );
     className = "org.webcat.schedulesheets.ScheduleSheetAssignmentOffering";
@@ -42,6 +48,7 @@
         courseOffering,
         dueDate,
         order,
+        overrideProfile,
         publish,
         submissions
     );
@@ -71,6 +78,13 @@
             joinSemantic = EOInnerJoin;
             joins = ({destinationAttribute = assignmentOfferingId; sourceAttribute = id; });
             name = submissions;
+        },
+        {
+            destination = SubmissionProfile;
+            isToMany = N;
+            joinSemantic = EOInnerJoin;
+            joins = ({destinationAttribute = id; sourceAttribute = overrideProfileId; });
+            name = overrideProfile;
         }
     );
 }
