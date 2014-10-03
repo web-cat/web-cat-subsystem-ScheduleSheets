@@ -21,11 +21,14 @@
 
 package org.webcat.schedulesheets;
 
+import com.webobjects.foundation.NSArray;
+
 // -------------------------------------------------------------------------
 /**
- * TODO: place a real description here.
+ * Represents a single batch of alerts sent all together at the same time
+ * to all students in a course.
  *
- * @author
+ * @author Stephen Edwards
  * @author  Last changed by: $Author$
  * @version $Revision$, $Date$
  */
@@ -46,4 +49,16 @@ public class EmailAlertForAssignment
 
     //~ Methods ...............................................................
 
+    // ----------------------------------------------------------
+    @Override
+    public int alertNo()
+    {
+        if (alertNoRaw() == null)
+        {
+            NSArray<EmailAlertForAssignment> alerts =
+                timeBeforeDue.desc().sorted(alertGroup().alerts());
+            setAlertNo(alerts.indexOf(this));
+        }
+        return super.alertNo();
+    }
 }
