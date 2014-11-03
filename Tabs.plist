@@ -4,7 +4,7 @@
       Grading = {
         children = {
           "View Schedule Sheets" = {
-            accessLevel = 50;
+            accessLevel = 40;
             priority = 50;
             pageName = org.webcat.schedulesheets.GradeScheduleSubmissionsPage;
           };

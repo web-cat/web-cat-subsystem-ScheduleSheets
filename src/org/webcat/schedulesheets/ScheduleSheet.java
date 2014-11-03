@@ -942,7 +942,12 @@ public class ScheduleSheet
                 {
                     // assume the submitter is the responsible one
                     User u = submission().user();
-                    load.put(u, load.get(u) + entry.newEstimatedRemaining());
+                    Double uLoad = load.get(u);
+                    if (uLoad == null)
+                    {
+                        uLoad = 0.0;
+                    }
+                    load.put(u, uLoad + entry.newEstimatedRemaining());
                 }
             }
         }
