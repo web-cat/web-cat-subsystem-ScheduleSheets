@@ -4,7 +4,7 @@
       Grading = {
         children = {
           "View Schedule Sheets" = {
-            accessLevel = 40;
+            accessLevel = 100;
             priority = 50;
             pageName = org.webcat.schedulesheets.GradeScheduleSubmissionsPage;
           };
@@ -13,22 +13,22 @@
       Assignments = {
         children = {
           "Edit Schedule Sheet" = {
-            accessLevel = 50;
+            accessLevel = 100;
             priority = 120;
             pageName = org.webcat.schedulesheets.EditScheduleSheetAssignmentPage;
             id = ScheduleSheetProperties;
           };
           "New Schedule Sheet" = {
-            accessLevel = 50;
+            accessLevel = 100;
             priority = 130;
             children = {
                 "Create a Schedule Assignment" = {
                     pageName = org.webcat.schedulesheets.NewScheduleSheetAssignmentPage;
-                    accessLevel = 50;
+                    accessLevel = 100;
                     priority = 1;
                 };
                 "Edit Schedule Sheet Properties" = {
-                    accessLevel = 50;
+                    accessLevel = 100;
                     priority = 2;
                     config = { jumpTo = ScheduleSheetProperties; };
                 };
@@ -63,6 +63,7 @@
   student = {
     children = {
       Submit = {
+        accesLevel = 100;
         priority = 200;
         children = {
           "Schedule Sheet" = {

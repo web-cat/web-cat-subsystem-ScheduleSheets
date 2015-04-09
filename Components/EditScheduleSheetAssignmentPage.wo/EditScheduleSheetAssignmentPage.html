@@ -97,7 +97,15 @@
                 <span class="alert">hidden</span>
                 (<wo:WCLink action="$togglePublished" remote="~true">publish</wo:WCLink>)
               </wo:else>
-            </wo:if></td>
+            </wo:if>
+            <wo:if condition="$user.hasAdminPrivileges">
+            <wo:if condition="$offering.overrideProfile">
+            [has override] <wo:link action="$removeOverride">remove override</wo:link>
+            </wo:if><wo:else>
+            [no override]
+            </wo:else>
+            </wo:if>
+            </td>
         </wo:tr>
         </wo:loop>
     </tbody>

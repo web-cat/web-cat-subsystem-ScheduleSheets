@@ -402,6 +402,15 @@ public class ScheduleSheetAssignmentOffering
     }
 
 
+    // ----------------------------------------------------------
+    @Override
+    public NSTimestamp closedOnDate()
+    {
+        return new NSTimestamp(dueDate().getTime()
+            + submissionProfile().deadTimeDelta());
+    }
+
+
     //~ Instance/static fields ................................................
 
     private AssignmentOffering assignmentOffering;

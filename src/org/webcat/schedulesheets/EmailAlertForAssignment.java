@@ -53,7 +53,7 @@ public class EmailAlertForAssignment
     @Override
     public int alertNo()
     {
-        if (alertNoRaw() == null)
+        if (alertNoRaw() == null && alertGroup() != null)
         {
             NSArray<EmailAlertForAssignment> alerts =
                 timeBeforeDue.desc().sorted(alertGroup().alerts());

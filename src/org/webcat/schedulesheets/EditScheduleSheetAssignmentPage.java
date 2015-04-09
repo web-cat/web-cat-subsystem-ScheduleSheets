@@ -562,6 +562,19 @@ public class EditScheduleSheetAssignmentPage
     }
 
 
+    // ----------------------------------------------------------
+    public WOComponent removeOverride()
+    {
+        if (offering.overrideProfile() != null)
+        {
+            offering.overrideProfile().delete();
+            offering.setOverrideProfile(null);
+            applyLocalChanges();
+        }
+        return null;
+    }
+
+
     //~ Instance/static fields ................................................
 
     private static final String INLINE_JAVASCRIPT =
